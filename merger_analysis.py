@@ -23,7 +23,6 @@ simfolder = '../progen_analysis/m50n512'#input('SIMBA simulation progen folder: 
 sys.path.insert(0, str(simfolder))
 simname = 'm50n512'#input('SIMBA simulation version: ')
 results_folder = '../mergers/'+str(simname)+'/'
-sys.path.insert(0, str(simfolder))
 
 d, ngal = importApp(str(simfolder))
 galaxies = []
@@ -50,8 +49,8 @@ def SF_Budget(mergers, msq_galaxies, n_bins):
         sfr_nm = 0
         for j in range(0, len(mergers)):
             merger = mergers[j]
-            if z_bins[i]<= merger.z_gal < z_bins[i+1]:
-                sfr_m = sfr_m + merger.sfr_gal
+            if z_bins[i]<= merger.z_gal[1] < z_bins[i+1]:
+                sfr_m = sfr_m + merger.sfr_gal[1]
         for k in range(0, len(msq_galaxies)):
             msq = msq_galaxies[k]
             if z_bins[i]<= msq.z_gal < z_bins[i+1]:
@@ -77,8 +76,8 @@ def SFR_Evolution(mergers, msq_galaxies, n_bins):
         sfr_nm = []
         for j in range(0, len(mergers)):
             merger = mergers[j]
-            if z_bins[i]<= merger.z_gal < z_bins[i+1]:
-                sfr_m.append(np.log10(merger.sfr_gal/merger.m_gal))
+            if z_bins[i]<= merger.z_gal[1] < z_bins[i+1]:
+                sfr_m.append(np.log10(merger.sfr_gal[1]/merger.m_gal[1]))
         for k in range(0, len(msq_galaxies)):
             msq = msq_galaxies[k]
             if z_bins[i]<= msq.z_gal < z_bins[i+1]:
@@ -113,9 +112,9 @@ def SFR_Evolution2(mergers, msq_galaxies, n_bins):
         msq_idx = []
         for j in range(0, len(mergers)):
             merger = mergers[j]
-            if z_bins[i]<= merger.z_gal < z_bins[i+1]:
-                ssfr_m.append(np.log10(merger.sfr_gal/merger.m_gal))
-                mergers_m.append(np.log10(merger.m_gal))
+            if z_bins[i]<= merger.z_gal[1] < z_bins[i+1]:
+                ssfr_m.append(np.log10(merger.sfr_gal[1]/merger.m_gal[1]))
+                mergers_m.append(np.log10(merger.m_gal[1]))
         for k in range(0, len(msq_galaxies)):
             msq = msq_galaxies[k]
             if z_bins[i]<= msq.z_gal < z_bins[i+1]:
@@ -173,7 +172,7 @@ def Merger_Fraction(mergers, msq_galaxies, n_bins):
         nm_counter = 0
         for j in range(0, len(mergers)):
             merger = mergers[j]
-            if z_bins[i]<= merger.z_gal < z_bins[i+1]:
+            if z_bins[i]<= merger.z_gal[1] < z_bins[i+1]:
                 m_counter = m_counter + 1
         for k in range(0, len(msq_galaxies)):
             msq = msq_galaxies[k]
@@ -198,8 +197,8 @@ def Merger_Contribution(mergers, msq_galaxies, n_bins):
         sfr_nm = 0
         for j in range(0, len(mergers)):
             merger = mergers[j]
-            if z_bins[i]<= merger.z_gal < z_bins[i+1]:
-                sfr_m = sfr_m + merger.sfr_gal
+            if z_bins[i]<= merger.z_gal[1] < z_bins[i+1]:
+                sfr_m = sfr_m + merger.sfr_gal[1]
                 m_counter = m_counter + 1
         for k in range(0, len(msq_galaxies)):
             msq = msq_galaxies[k]
@@ -235,9 +234,9 @@ def Fgas_mean(mergers, msq_galaxies, n_bins):
         mass = []
         for j in range(0, len(mergers)):
             merger = mergers[j]
-            if z_bins[i]<= merger.z_gal < z_bins[i+1]:
-                fgas.append(merger.fgas_gal)
-                mass.append(merger.m_gal)
+            if z_bins[i]<= merger.z_gal[1] < z_bins[i+1]:
+                fgas.append(merger.fgas_gal[1])
+                mass.append(merger.m_gal[1])
         mass = np.asarray(mass)
         m_ave[i] = np.average(mass)
         fgas = np.asarray(fgas)
@@ -278,9 +277,9 @@ def Frac_Merger_rate(mergers, msq_galaxies, n_bins):
         times = []
         for j in range(0, len(mergers)):
             merger = mergers[j]
-            if z_bins[i]<= merger.z_gal < z_bins[i+1]:
+            if z_bins[i]<= merger.z_gal[1] < z_bins[i+1]:
                 m_counter = m_counter + 1
-                times.append(merger.galaxy_t)
+                times.append(merger.galaxy_t[1])
         for k in range(0, len(msq_galaxies)):
             msq = msq_galaxies[k]
             if z_bins[i]<= msq.z_gal < z_bins[i+1]:
