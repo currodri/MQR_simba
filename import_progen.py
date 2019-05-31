@@ -29,7 +29,7 @@ def numGal(filename):
 def importApp(foldername):
     sys.path.insert(0, foldername)
     # Generate initial numpy array from txt file
-    filename = 'progen_mass.txt'
+    filename = '/progen_mass.txt'
     data0 = []
     delimiters = []
     i = 0
@@ -61,7 +61,7 @@ def importApp(foldername):
                 d["galaxy_t" + str(j)][k] = float(data0[delimiters[j-1]+1+k][0])
                 d["m_gal" + str(j)][k] = float(data0[delimiters[j-1]+1+k][1])
     # Generate initial numpy array from txt file
-    filename = 'progen_sfr.txt'
+    filename = '/progen_sfr.txt'
     data0 = []
     delimiters = []
     i = 0
@@ -90,7 +90,7 @@ def importApp(foldername):
                 d["sfr_gal" + str(j)][k] = float(data0[delimiters[j-1]+1+k][1])
 
     # Generate initial numpy array from txt file
-    filename = 'progen_fgas.txt'
+    filename = '/progen_fgas.txt'
     data0 = []
     delimiters = []
     i = 0
@@ -118,7 +118,7 @@ def importApp(foldername):
                 d["fgas_gal" + str(j)][k] = float(data0[delimiters[j-1]+1+k][1])
 
     # Generate initial numpy array from txt file
-    filename = 'progen_h1_gal.txt'
+    filename = '/progen_h1_gal.txt'
     data0 = []
     delimiters = []
     i = 0
@@ -145,7 +145,7 @@ def importApp(foldername):
             for k in range(0, n-1):
                 d["h1_gal" + str(j)][k] = float(data0[delimiters[j-1]+1+k][1])
     # Generate initial numpy array from txt file
-    filename = 'progen_h2_gal.txt'
+    filename = '/progen_h2_gal.txt'
     data0 = []
     delimiters = []
     i = 0
@@ -173,7 +173,7 @@ def importApp(foldername):
                 d["h2_gal" + str(j)][k] = float(data0[delimiters[j-1]+1+k][1])
 
     # Generate initial numpy array from txt file
-    filename = 'progen_z.txt'
+    filename = '/progen_z.txt'
     data0 = []
     delimiters = []
     i = 0
@@ -201,7 +201,7 @@ def importApp(foldername):
                 d["z_gal" + str(j)][k] = float(data0[delimiters[j-1]+1+k][1])
 
     # Generate initial numpy array from txt file
-    filename = 'progen_sfe.txt'
+    filename = '/progen_sfe.txt'
     data0 = []
     delimiters = []
     i = 0
@@ -229,7 +229,7 @@ def importApp(foldername):
                 d["sfe_gal" + str(j)][k] = float(data0[delimiters[j-1]+1+k][1])
 
 # Generate initial numpy array from txt file
-    filename = 'progen_gal_type.txt'
+    filename = '/progen_gal_type.txt'
     data0 = []
     delimiters = []
     i = 0
