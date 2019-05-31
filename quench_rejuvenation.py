@@ -16,7 +16,7 @@ counterfile = 'galaxy_count.txt'#input('Text file with total number of galaxies 
 simname = 'm50n512'#input('SIMBA simulation version: ')
 results_folder = '../quench_analysis/'+str(simname)+'/'
 from import_progen import importApp
-from mergerFinder import myrunningmedian
+#from mergerFinder import myrunningmedian
 from quenchingFinder import GalaxyData, quenchingFinder2, rejuvenation_rate_calculator, quenching_histogram
 
 # Extract progen data from txt files
