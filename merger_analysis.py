@@ -9,6 +9,7 @@ Created on 24 December 2018
 # Import required libraries
 import numpy as np
 import matplotlib
+matplotlib.use('Agg') # Must be before importing matplotlib.pyplot or pylab!
 import matplotlib.pyplot as plt
 from scipy import stats
 from scipy.optimize import curve_fit

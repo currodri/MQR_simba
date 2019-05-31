@@ -8,6 +8,8 @@ Created on Mon Dec 24 18:56:07 2018
 
 # Import required libraries
 import numpy as np
+import matplotlib
+matplotlib.use('Agg') # Must be before importing matplotlib.pyplot or pylab!
 import matplotlib.pyplot as plt
 from import_progen import importApp
 from mergerFinder import myrunningmedian
