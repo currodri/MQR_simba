@@ -15,14 +15,15 @@ from scipy import stats
 from scipy.optimize import curve_fit
 import seaborn as sns
 sns.set(style="ticks")
-import sys
-simfolder = input('SIMBA simulation progen folder: ')
-simname = input('SIMBA simulation version: ')
-results_folder = '../mergers/'+str(simname)+'/'
-sys.path.insert(0, str(simfolder))
 from import_progen import importApp
 from quenchingFinder import GalaxyData
 from merger_finder import merger_finder, runningmedian, runningmedian2, myrunningmedian
+import sys
+simfolder = '../progen_analysis/m50n512'#input('SIMBA simulation progen folder: ')
+sys.path.insert(0, str(simfolder))
+simname = 'm50n512'#input('SIMBA simulation version: ')
+results_folder = '../mergers/'+str(simname)+'/'
+sys.path.insert(0, str(simfolder))
 
 d, ngal = importApp(str(simfolder))
 galaxies = []
