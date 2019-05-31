@@ -10,14 +10,15 @@ Created on Mon Dec 24 18:56:07 2018
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
-sys.path.insert(0,'/Users/currorodriguez/Documents/Astrophysics_Year_4/SH_Project/quench_repository/Progen')
-sys.path.insert(0, '../Mergers')
+simfolder = input('SIMBA simulation progen folder: ')
+counterfile = input('Text file with total number of galaxies per snapshot: ')
+sys.path.insert(0, str(simfolder))
 from import_progen import importApp
-from merger_finder_8 import myrunningmedian
-from quenchingFinder8_5_3 import GalaxyData, quenchingFinder2, rejuvenation_rate_calculator, quenching_histogram
+from merger_finder import myrunningmedian
+from quenchingFinder import GalaxyData, quenchingFinder2, rejuvenation_rate_calculator, quenching_histogram
 
 # Extract progen data from txt files
-d, ngal = importApp()
+d, ngal = importApp(str(simfolder))
 print('Total number of galaxies at z = 0: '+str(ngal))
 
 #Store the galaxies sorted in objects of type GalaxyData
@@ -52,7 +53,7 @@ for i in range(len(galaxies)):
         reju_t.append(galaxy.rate[k+1])
         reju_m.append(np.log10(galaxy.rate[k+2]))
 
-rates, red_cent, rates_sig = rejuvenation_rate_calculator(d, reju_z, '../Progen/galaxy_count.txt')
+rates, red_cent, rates_sig = rejuvenation_rate_calculator(d, reju_z, counterfile)
 
 print('Total number of rejuvenations: '+str(len(reju_z)))
 print('Number of quenching events in first loop: '
