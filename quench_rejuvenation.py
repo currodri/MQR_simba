@@ -12,9 +12,11 @@ import matplotlib.pyplot as plt
 import sys
 simfolder = input('SIMBA simulation progen folder: ')
 counterfile = input('Text file with total number of galaxies per snapshot: ')
+simname = input('SIMBA simulation version: ')
+results_folder = '../quench_analysis/'+str(simname)+'/'
 sys.path.insert(0, str(simfolder))
 from import_progen import importApp
-from merger_finder import myrunningmedian
+from mergerFinder import myrunningmedian
 from quenchingFinder import GalaxyData, quenchingFinder2, rejuvenation_rate_calculator, quenching_histogram
 
 # Extract progen data from txt files
@@ -167,12 +169,12 @@ ax1.legend(loc='best', prop={'size': 10})
 ax2.set_xlabel(r'$log(M_{*})$', fontsize=16)
 ax2.set_ylabel(r'$\log(t_{q})$', fontsize=16)
 fig.tight_layout()
-fig.savefig('quenching_morethan9.5_20.png', format='png', dpi=250)
+fig.savefig(str(results_folder)+'quenching_morethan9.5_20.png', format='png', dpi=250)
 axre.set_xlabel(r'$log(M_{*})$', fontsize=16)
 axre.set_ylabel(r'$\log(t_{q}/t_{U})$', fontsize=16)
 axre.legend(loc='best', prop={'size': 10})
 figre.tight_layout()
-figre.savefig('quenching_morethan9.5_forreport.eps', format='eps', dpi=250)
+figre.savefig(str(results_folder)+'quenching_morethan9.5_forreport.eps', format='eps', dpi=250)
 # ax4.set_ylabel(r'$log(M_{*})$', fontsize=16)
 # ax4.set_xlabel(r'$\log(1+z)$', fontsize=16)
 # ax4.legend(loc='best', prop={'size': 10})
