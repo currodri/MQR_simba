@@ -10,11 +10,11 @@ Created on Mon Dec 24 18:56:07 2018
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
-simfolder = input('SIMBA simulation progen folder: ')
-counterfile = input('Text file with total number of galaxies per snapshot: ')
-simname = input('SIMBA simulation version: ')
-results_folder = '../quench_analysis/'+str(simname)+'/'
+simfolder = '../progen_analysis/m50n512'#input('SIMBA simulation progen folder: ')
 sys.path.insert(0, str(simfolder))
+counterfile = 'galaxy_count.txt'#input('Text file with total number of galaxies per snapshot: ')
+simname = 'm50n512'#input('SIMBA simulation version: ')
+results_folder = '../quench_analysis/'+str(simname)+'/'
 from import_progen import importApp
 from mergerFinder import myrunningmedian
 from quenchingFinder import GalaxyData, quenchingFinder2, rejuvenation_rate_calculator, quenching_histogram
