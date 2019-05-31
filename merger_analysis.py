@@ -17,7 +17,7 @@ import seaborn as sns
 sns.set(style="ticks")
 from import_progen import importApp
 from quenchingFinder import GalaxyData
-from mergerFinder import merger_finder, runningmedian, runningmedian2, myrunningmedian
+from mergerFinder import merger_finder, myrunningmedian
 import sys
 simfolder = '../progen_analysis/m50n512'#input('SIMBA simulation progen folder: ')
 sys.path.insert(0, str(simfolder))
