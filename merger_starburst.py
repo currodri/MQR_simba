@@ -70,8 +70,8 @@ def after_before_vs_msqPlots(mergers, sf_galaxies):
                         b[0].append(np.log10(mergers[j].sfe_gal[0]))
                         b[1].append(np.log10(mergers[j].sfe_gal[2]))
             for k in range(0, len(a)):
-                x,y,ysig = myrunningmedian(a[k],b[k],15)
-                axes['redbin'+str(m)].scatter(a[k],b[k], color=colours[k], label=merger_labels[k], marker='.')
+                x,y,ysig = myrunningmedian(np.asarray(a[k]),np.asarray(b[k]),15)
+                axes['redbin'+str(m)].scatter(np.asarray(a[k]),np.asarray(b[k]), color=colours[k], label=merger_labels[k], marker='.')
                 axes['redbin'+str(m)].plot(x, y, color = colours[k], linewidth=2.5)
             for n in range(0, len(sf_galaxies)):
                 a = []
@@ -84,7 +84,7 @@ def after_before_vs_msqPlots(mergers, sf_galaxies):
                         b.append(np.log10(sf_galaxies[n].fgas_gal))
                     elif i==2:
                         b.append(np.log10(sf_galaxies[n].sfe_gal))
-            x,y,ysig = myrunningmedian(a,b,20)
+            x,y,ysig = myrunningmedian(np.asarray(a),np.asarray(b),20)
             axes['redbin'+str(m)].plot(x, y, color = colours[2], label=merger_labels[2])
             axes['redbin'+str(m)].fill_between(x, y-ysig, y+ysig, facecolor=colours[2], alpha=0.25)
             axes['redbin'+str(m)].text(0.05, 0.05, titles[m], transform=axes['redbin'+str(m)].transAxes, fontsize=14,
@@ -97,7 +97,7 @@ def after_before_vs_msqPlots(mergers, sf_galaxies):
         axes['redbin0'].legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
                ncol=3, mode="expand", borderaxespad=0., prop={'size': 13})
         fig.tight_layout()
-        fig.savefig('merger_'+str(names[i])+'.png', format='png', dpi=200)
+        fig.savefig(str(results_folder)+'merger_'+str(names[i])+'.png', format='png', dpi=200)
 
 # redshift_bef, redshift_aft, redshift_all, redshift_mer = merger_finder(galaxies, 0.2, 10**9.5)
 #
