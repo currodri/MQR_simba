@@ -244,7 +244,7 @@ def statsMergers(mergers, sf_galaxies, nbins, printresults = True, plot=False):
             bins = np.linspace(mins.min(), maxs.max(), nbins)
             delta = bins[1] - bins[0]
             bin_cent = bins - delta/2
-            print(stats_results[names[m]][titles[i]])
+            print(stats_results[names[m]])
             stats_results[names[m]][titles[i]]['merger_pvalue'] = np.zeros(len(bins)-1)
             stats_results[names[m]][titles[i]]['aftvsbef_pvalue'] = np.zeros(len(bins)-1)
             stats_results[names[m]][titles[i]]['bin_cent'] = np.delete(bin_cent, 0)
