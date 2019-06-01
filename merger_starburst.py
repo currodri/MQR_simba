@@ -61,8 +61,8 @@ def after_before_vs_msqPlots(mergers, sf_galaxies):
                     a[0].append(np.log10(mergers[j].m_gal[0]))
                     a[1].append(np.log10(mergers[j].m_gal[2]))
                     if i==0:
-                        b[0].append(np.log10(mergers[j].ssfr_gal[0]))
-                        b[1].append(np.log10(mergers[j].ssfr_gal[2]))
+                        b[0].append(np.log10(mergers[j].sfr_gal[0]))
+                        b[1].append(np.log10(mergers[j].sfr_gal[2]))
                     elif i==1:
                         b[0].append(np.log10(mergers[j].fgas_gal[0]))
                         b[1].append(np.log10(mergers[j].fgas_gal[2]))
