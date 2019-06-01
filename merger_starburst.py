@@ -45,7 +45,7 @@ def after_before_vs_msqPlots(mergers, sf_galaxies):
     names = ['burst_ssfr','gas_frac','sfe_gal']
     merger_labels = ['Before merger','After merger','MSQ non merger']
     titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
-    zlimits = [[0, 0.5], [1, 1.5], [2, 2.5]]
+    zlimits = [[0.0, 0.5], [1.0, 1.5], [2.0, 2.5]]
     colours = ['g','r', 'k']
     props = dict(boxstyle='round', facecolor='white', alpha=0.5, edgecolor='k')
     for i in range(0, len(ylabels)):
@@ -57,6 +57,7 @@ def after_before_vs_msqPlots(mergers, sf_galaxies):
             for j in range(0, len(mergers)):
                 a = [[],[]]
                 b = [[],[]]
+                print(mergers[j].z_gal[1])
                 if zlimits[m][0] <= mergers[j].z_gal[1] < zlimits[m][1]:
                     a[0].append(np.log10(mergers[j].m_gal[0]))
                     a[1].append(np.log10(mergers[j].m_gal[2]))
