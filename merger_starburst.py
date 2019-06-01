@@ -226,19 +226,19 @@ def statsMergers(mergers, sf_galaxies, nbins, printresults = True, plot=False):
             stats_results[names[m]][titles[i]] = {}
             aft_m = np.log10(np.asarray([n.m_gal[2] for n in mergers]))
             bef_m = np.log10(np.asarray([n.m_gal[0] for n in mergers]))
-            msq = np.log10(np.asarray([n.m_gal for n in sf_galaxies]))
+            msq_m = np.log10(np.asarray([n.m_gal for n in sf_galaxies]))
             if m==0:
                 aft = np.log10(np.asarray([n.sfr_gal[2] for n in mergers]))
                 bef = np.log10(np.asarray([n.sfr_gal[0] for n in mergers]))
-                msq_m = np.log10(np.asarray([n.ssfr_gal for n in sf_galaxies]))
+                msq = np.log10(np.asarray([n.ssfr_gal for n in sf_galaxies]))
             elif m==1:
                 aft = np.log10(np.asarray([n.fgas_gal[2] for n in mergers]))
                 bef = np.log10(np.asarray([n.fgas_gal[0] for n in mergers]))
-                msq_m = np.log10(np.asarray([n.fgas_gal for n in sf_galaxies]))
+                msq = np.log10(np.asarray([n.fgas_gal for n in sf_galaxies]))
             elif m==2:
                 aft = np.log10(np.asarray([n.sfe_gal[2] for n in mergers]))
                 bef = np.log10(np.asarray([n.sfe_gal[0] for n in mergers]))
-                msq_m = np.log10(np.asarray([n.sfe_gal for n in sf_galaxies]))
+                msq = np.log10(np.asarray([n.sfe_gal for n in sf_galaxies]))
             maxs = np.array([aft_m.max(),bef_m.max(),msq_m.max()])
             mins = np.array([aft_m.min(),bef_m.min(),msq_m.min()])
             bins = np.linspace(mins.min(), maxs.max(), nbins)
