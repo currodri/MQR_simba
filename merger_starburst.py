@@ -69,6 +69,7 @@ def after_before_vs_msqPlots(mergers, sf_galaxies):
                     elif i==2:
                         b[0].append(np.log10(mergers[j].sfe_gal[0]))
                         b[1].append(np.log10(mergers[j].sfe_gal[2]))
+            print(len(a[0]), len(a[1]), len(b[0]), len(b[1]))
             for k in range(0, len(a)):
                 x,y,ysig = myrunningmedian(np.asarray(a[k]),np.asarray(b[k]),15)
                 axes['redbin'+str(m)].scatter(np.asarray(a[k]),np.asarray(b[k]), color=colours[k], label=merger_labels[k], marker='.')
