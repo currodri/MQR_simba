@@ -181,41 +181,41 @@ def after_before_vs_msqPlots(mergers, sf_galaxies):
 #     fig2.tight_layout()
 #     fig2.savefig(str(results_folder)+'merger_ssfr_forreport.eps', format='eps', dpi=250)
 
-def merger_fractionPlot(redshift_mer, redshift_all):
-    titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
-    markers = ['o','v', 's']
-    fig = plt.figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
-    ax = fig.add_subplot(1,1,1)
-    ax.set_xlabel(r'$\log(M_{*})$', fontsize=16)
-    ax.set_ylabel(r'Fraction of mergers (%)', fontsize=16)
-    n_mbins = 10
-    for m in range(0, len(titles)):
-        print(len(redshift_mer['galaxy_m'+str(m)]))
-        print(len(redshift_all['galaxy_m'+str(m)]))
-        m_mergers = np.log10(redshift_mer['galaxy_m'+str(m)])
-        m_all = np.log10(redshift_all['galaxy_m'+str(m)])
-        maxs = np.array([m_mergers.max(),m_all.max()])
-        mins = np.array([m_mergers.min(),m_all.min()])
-        mbins = np.linspace(mins.min(), maxs.max(), n_mbins)
-        delta = mbins[1] - mbins[0]
+# def merger_fractionPlot(redshift_mer, redshift_all):
+#     titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
+#     markers = ['o','v', 's']
+#     fig = plt.figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
+#     ax = fig.add_subplot(1,1,1)
+#     ax.set_xlabel(r'$\log(M_{*})$', fontsize=16)
+#     ax.set_ylabel(r'Fraction of mergers (%)', fontsize=16)
+#     n_mbins = 10
+#     for m in range(0, len(titles)):
+#         print(len(redshift_mer['galaxy_m'+str(m)]))
+#         print(len(redshift_all['galaxy_m'+str(m)]))
+#         m_mergers = np.log10(redshift_mer['galaxy_m'+str(m)])
+#         m_all = np.log10(redshift_all['galaxy_m'+str(m)])
+#         maxs = np.array([m_mergers.max(),m_all.max()])
+#         mins = np.array([m_mergers.min(),m_all.min()])
+#         mbins = np.linspace(mins.min(), maxs.max(), n_mbins)
+#         delta = mbins[1] - mbins[0]
+#
+#         digi_mer = np.digitize(m_mergers, mbins, right=True)
+#         digi_all = np.digitize(m_all, mbins, right=True)
+#         binco_mer = np.bincount(digi_mer)
+#         binco_all = np.bincount(digi_all)
+#         bin_cent = mbins - delta/2
+#         frac_mer = []
+#         bin_frac =[]
+#         for i in range(0, len(binco_mer)):
+#             if binco_mer[i] != 0 and binco_all[i] != 0:
+#                 frac_mer.append(100*binco_mer[i]/(binco_mer[i]+binco_all[i]))
+#                 bin_frac.append(bin_cent[i])
+#         ax.plot(bin_frac, frac_mer, label=titles[m], linestyle='--', marker=markers[m])
+#     ax.legend(loc='best', prop={'size': 12})
+#     fig.tight_layout()
+#     fig.savefig(str(results_folder)+'fraction_mergers.png', format='png', dpi=200)
 
-        digi_mer = np.digitize(m_mergers, mbins, right=True)
-        digi_all = np.digitize(m_all, mbins, right=True)
-        binco_mer = np.bincount(digi_mer)
-        binco_all = np.bincount(digi_all)
-        bin_cent = mbins - delta/2
-        frac_mer = []
-        bin_frac =[]
-        for i in range(0, len(binco_mer)):
-            if binco_mer[i] != 0 and binco_all[i] != 0:
-                frac_mer.append(100*binco_mer[i]/(binco_mer[i]+binco_all[i]))
-                bin_frac.append(bin_cent[i])
-        ax.plot(bin_frac, frac_mer, label=titles[m], linestyle='--', marker=markers[m])
-    ax.legend(loc='best', prop={'size': 12})
-    fig.tight_layout()
-    fig.savefig(str(results_folder)+'fraction_mergers.png', format='png', dpi=200)
-
-def statsMergers(merger_data, nbins, printresults = True, plot=False):
+def statsMergers(mergers, sf_galaxies, nbins, printresults = True, plot=False):
     ylabels = [r'$\log(sSFR)$',r'$\log(F_{H_2})$',r'$\log(SFE)$']
     names = ['burst_ssfr','gas_frac','sfe_gal']
     titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
@@ -224,12 +224,21 @@ def statsMergers(merger_data, nbins, printresults = True, plot=False):
         stats_results[names[m]] = {}
         for i in range(0, len(titles)):
             stats_results[names[m]][titles[i]] = {}
-            aft = np.log10(merger_data[0][str(names[m])+str(i)])
-            aft_m = np.log10(merger_data[0]['galaxy_m'+str(i)])
-            bef = np.log10(merger_data[1][str(names[m])+str(i)])
-            bef_m = np.log10(merger_data[1]['galaxy_m'+str(i)])
-            msq = np.log10(merger_data[2][str(names[m])+str(i)])
-            msq_m = np.log10(merger_data[2]['galaxy_m'+str(i)])
+            aft_m = np.log10(np.asarray([i.m_gal[2] for i in mergers]))
+            bef_m = np.log10(np.asarray([i.m_gal[0] for i in mergers]))
+            msq = np.log10(np.asarray([i.m_gal for i in sf_galaxies]))
+            if m==0:
+                aft = np.log10(np.asarray([i.sfr_gal[2] for i in mergers]))
+                bef = np.log10(np.asarray([i.sfr_gal[0] for i in mergers]))
+                msq_m = np.log10(np.asarray([i.ssfr_gal for i in sf_galaxies]))
+            elif m==1:
+                aft = np.log10(np.asarray([i.fgas_gal[2] for i in mergers]))
+                bef = np.log10(np.asarray([i.fgas_gal[0] for i in mergers]))
+                msq_m = np.log10(np.asarray([i.fgas_gal for i in sf_galaxies]))
+            elif m==2:
+                aft = np.log10(np.asarray([i.sfe_gal[2] for i in mergers]))
+                bef = np.log10(np.asarray([i.sfe_gal[0] for i in mergers]))
+                msq_m = np.log10(np.asarray([i.sfe_gal for i in sf_galaxies]))
             maxs = np.array([aft_m.max(),bef_m.max(),msq_m.max()])
             mins = np.array([aft_m.min(),bef_m.min(),msq_m.min()])
             bins = np.linspace(mins.min(), maxs.max(), nbins)
@@ -383,7 +392,7 @@ def distanceMSQ(merger_data, nbins):
         fig.tight_layout()
         fig.savefig(str(results_folder)+'distance_msq_'+str(names[i])+'.png', format='png', dpi=200)
 
-#statsMergers(merger_data, 5)
+statsMergers(merger_data, 5)
 #distanceMSQ(merger_data, 10)
 after_before_vs_msqPlots(mergers, sf_galaxies)
 #merger_fractionPlot(redshift_mer, redshift_all)
