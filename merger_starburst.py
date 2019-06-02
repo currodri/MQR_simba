@@ -275,21 +275,21 @@ def statsMergers(mergers, sf_galaxies, nbins, printresults = True, plot=False):
             print('#########################################')
             print('VARIABLE STUDIED: '+str(names[m]))
             print('Statistical significance of merger with respect to star-forming main sequence')
-            for i in range(0, len(titles)):
+            for w in range(0, len(titles)):
                 print('----------------------------------')
-                print('Redshift bin considered: '+str(titles[i]))
-                for j in range(0, nbins-1):
+                print('Redshift bin considered: '+str(titles[w]))
+                for v in range(0, nbins-1):
                     print('................')
-                    print('Mass bin center: '+str(stats_results[names[m]][titles[i]]['bin_cent'][j]))
-                    print('p-value from KS 2-sample test: '+str(stats_results[names[m]][titles[i]]['merger_pvalue'][j]))
+                    print('Mass bin center: '+str(stats_results[names[m]][titles[w]]['bin_cent'][v]))
+                    print('p-value from KS 2-sample test: '+str(stats_results[names[m]][titles[w]]['merger_pvalue'][v]))
             print('Statistical significance of difference between after and before merger data')
-            for i in range(0, len(titles)):
+            for w in range(0, len(titles)):
                 print('----------------------------------')
-                print('Redshift bin considered: '+str(titles[i]))
-                for j in range(0, nbins-1):
+                print('Redshift bin considered: '+str(titles[w]))
+                for v in range(0, nbins-1):
                     print('................')
-                    print('Mass bin center: '+str(stats_results[names[m]][titles[i]]['bin_cent'][j]))
-                    print('p-value from KS 2-sample test: '+str(stats_results[names[m]][titles[i]]['aftvsbef_pvalue'][j]))
+                    print('Mass bin center: '+str(stats_results[names[m]][titles[w]]['bin_cent'][v]))
+                    print('p-value from KS 2-sample test: '+str(stats_results[names[m]][titles[w]]['aftvsbef_pvalue'][v]))
 
 def distanceMSQ(merger_data, nbins):
     ylabels = [r'$\Delta_{MSQ}(sSFR)$',r'$\Delta_{MSQ}(f_{H_2})$',r'$\Delta_{MSQ}(SFE)$']
@@ -394,5 +394,5 @@ def distanceMSQ(merger_data, nbins):
 
 statsMergers(mergers, sf_galaxies, 5)
 #distanceMSQ(merger_data, 10)
-after_before_vs_msqPlots(mergers, sf_galaxies)
+#after_before_vs_msqPlots(mergers, sf_galaxies)
 #merger_fractionPlot(redshift_mer, redshift_all)
