@@ -79,7 +79,7 @@ def after_before_vs_msqPlots(mergers, sf_galaxies):
                 if zlimits[m][0] <= sf_galaxies[n].z_gal < zlimits[m][1]:
                     a.append(np.log10(sf_galaxies[n].m_gal))
                     if i==0:
-                        b.append(np.log10(sf_galaxies[n].ssfr_gal))
+                        b.append(np.log10(sf_galaxies[n].ssfr_gal/sf_galaxies[n].m_gal))
                     elif i==1:
                         b.append(np.log10(sf_galaxies[n].fgas_gal))
                     elif i==2:
@@ -240,7 +240,7 @@ def distanceMSQ(mergers, sf_galaxies, nbins):
                 if zlimits[i][0] <= sf_galaxies[n].z_gal < zlimits[i][1]:
                     msq_m.append(np.log10(sf_galaxies[n].m_gal))
                     if m==0:
-                        msq.append(np.log10(sf_galaxies[n].ssfr_gal))
+                        msq.append(np.log10(sf_galaxies[n].ssfr_gal/sf_galaxies[n].m_gal))
                     elif m==1:
                         msq.append(np.log10(sf_galaxies[n].fgas_gal))
                     elif m==2:
