@@ -329,8 +329,7 @@ print('MERGER-INDUCED STARBURST ANALYSIS')
 print('---------------------------------')
 print('The following functions are available:')
 print('- Comparison plots showing the after and before of mergers with respect to MSQ. (Press 1)')
-print('- 2-sample Kolmogorov-Smirnov test comparing the difference of the after and
-        before merger values with the MSQ. (Press 2)')
+print('- 2-sample Kolmogorov-Smirnov test comparing the difference of the after and before merger values with the MSQ. (Press 2)')
 print('- Deviation plot of running median of after and before merger with respect to MSQ. (Press 3)')
 u_selec = input('Write the number of the function you would like to use: ')
 if u_selec==1:
