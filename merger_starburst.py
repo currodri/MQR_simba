@@ -253,6 +253,7 @@ def statsMergers(mergers, sf_galaxies, nbins, printresults = True, plot=False):
                         msq.append(np.log10(sf_galaxies[n].fgas_gal))
                     elif m==2:
                         msq.append(np.log10(sf_galaxies[n].sfe_gal))
+            print(len(aft_m), len(aft))
             aft_m = np.asarray(aft_m)
             aft = np.asarray(aft)
             bef_m = np.asarray(bef_m)
