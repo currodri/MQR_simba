@@ -441,6 +441,6 @@ def distanceMSQ(mergers, sf_galaxies, nbins):
         fig.savefig(str(results_folder)+'distance_msq_'+str(names[i])+'.png', format='png', dpi=200)
 
 #statsMergers(mergers, sf_galaxies, 5)
-distanceMSQ(mergers, star_forming, 10)
+distanceMSQ(mergers, sf_galaxies, 10)
 #after_before_vs_msqPlots(mergers, sf_galaxies)
 #merger_fractionPlot(redshift_mer, redshift_all)
