@@ -99,122 +99,6 @@ def after_before_vs_msqPlots(mergers, sf_galaxies):
         fig.tight_layout()
         fig.savefig(str(results_folder)+'merger_'+str(names[i])+'.png', format='png', dpi=200)
 
-# redshift_bef, redshift_aft, redshift_all, redshift_mer = merger_finder(galaxies, 0.2, 10**9.5)
-#
-# merger_data = [redshift_aft, redshift_bef, redshift_all]
-#
-# def after_before_vs_msqPlots(merger_data):
-#     ylabels = [r'$\log(sSFR)$',r'$\log(f_{H_2})$',r'$\log(SFE)$']
-#     names = ['burst_ssfr','gas_frac','sfe_gal']
-#     merger_labels = ['After merger','Before merger','Non merger']
-#     titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
-#     colours = ['r', 'g', 'k']
-#     props = dict(boxstyle='round', facecolor='white', alpha=0.5, edgecolor='k')
-#     fig2 = plt.figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
-#     ax2 = fig2.add_subplot(1,1,1)
-#     for i in range(0, len(ylabels)):
-#         fig = plt.figure(num=None, figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
-#         axes = {}
-#         for m in range(0, len(titles)):
-#             axes['redbin'+str(m)] = fig.add_subplot(3,1,m+1)
-#             axes['redbin'+str(m)].set_ylabel(ylabels[i], fontsize=16)
-#             for j in range(0, len(merger_data)):
-#                 a = np.log10(merger_data[j]['galaxy_m'+str(m)])
-#                 b = np.log10(merger_data[j][str(names[i])+str(m)])
-#                 if merger_labels[j]=='Non merger':
-#                     x,y,ysig = myrunningmedian(a,b,20)
-#                     #print(titles[m],np.average(ysig)/np.sqrt(len(ysig)))
-#                     axes['redbin'+str(m)].plot(x, y, color = colours[j], label=merger_labels[j])
-#                     axes['redbin'+str(m)].fill_between(x, y-ysig, y+ysig, facecolor=colours[j], alpha=0.25)
-#                     if names[i]=='burst_ssfr' and titles[m]==r'$2 < z < 2.5$':
-#                         ax2.plot(x, y, color = colours[j], label=merger_labels[j])
-#                         ax2.fill_between(x, y-ysig, y+ysig, facecolor=colours[j], alpha=0.25)
-#                 else:
-#                     if names[i]=='burst_ssfr':
-#                         for k in range(0, len(b)):
-#                             if b[k]<-10.5 and titles[m]==r'$1 < z < 1.5$':
-#                                 b[k] = -10.5
-#                                 axes['redbin'+str(m)].arrow(a[k],b[k],0,-0.3, color=colours[j],
-#                                                                 head_width=0.015, width=0.001,
-#                                                                 head_length=0.1)
-#                             elif b[k]<-12:
-#                                 b[k] = -12
-#                                 axes['redbin'+str(m)].arrow(a[k],b[k],0,-0.3, color=colours[j],
-#                                                                 head_width=0.015, width=0.001,
-#                                                                 head_length=0.1)
-#                     elif names[i]=='sfe_gal' and titles[m]==r'$1 < z < 1.5$':
-#                         for k in range(0, len(b)):
-#                             if b[k]<-10.2:
-#                                 b[k] = -10.2
-#                                 axes['redbin'+str(m)].arrow(a[k],b[k],0,-0.3, color=colours[j],
-#                                                                 head_width=0.015, width=0.001,
-#                                                                 head_length=0.1)
-#                     elif names[i]=='gas_frac' and titles[m]==r'$1 < z < 1.5$':
-#                         for k in range(0, len(b)):
-#                             if b[k]<-2:
-#                                 b[k]=-2
-#                                 axes['redbin'+str(m)].arrow(a[k],b[k],0,-0.3, color=colours[j],
-#                                                                 head_width=0.015, width=0.001,
-#                                                                 head_length=0.1)
-#                     x,y,ysig = myrunningmedian(a,b,15)
-#                     axes['redbin'+str(m)].scatter(a,b, color=colours[j], label=merger_labels[j], marker='.')
-#                     axes['redbin'+str(m)].plot(x, y, color = colours[j], linewidth=2.5)
-#                     if names[i]=='burst_ssfr' and titles[m]==r'$2 < z < 2.5$':
-#                         ax2.scatter(a,b, color=colours[j], label=merger_labels[j], marker='.')
-#                         ax2.plot(x, y, color = colours[j], linewidth=2.5)
-#             axes['redbin'+str(m)].text(0.05, 0.05, titles[m], transform=axes['redbin'+str(m)].transAxes, fontsize=14,
-#             verticalalignment='bottom', bbox=props)
-#             axes['redbin'+str(m)].margins(.2)
-#             axes['redbin'+str(m)].set_xlim([9.3,11.9])
-#
-#         axes['redbin'+str(len(titles)-1)].set_xlabel(r'$\log(M_{*})$', fontsize=16)
-#
-#         axes['redbin0'].legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-#                ncol=3, mode="expand", borderaxespad=0., prop={'size': 13})
-#         fig.tight_layout()
-#         fig.savefig('merger_'+str(names[i])+'_h2.png', format='png', dpi=200)
-#     ax2.set_xlabel(r'$\log(M_{*})$', fontsize=16)
-#     ax2.set_ylabel(r'$\log(sSFR)$', fontsize=16)
-#     ax2.set_ylim([-10.0, -8.0])
-#     ax2.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-#                 ncol=3, mode="expand", borderaxespad=0., prop={'size': 13})
-#     fig2.tight_layout()
-#     fig2.savefig(str(results_folder)+'merger_ssfr_forreport.eps', format='eps', dpi=250)
-
-# def merger_fractionPlot(redshift_mer, redshift_all):
-#     titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
-#     markers = ['o','v', 's']
-#     fig = plt.figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
-#     ax = fig.add_subplot(1,1,1)
-#     ax.set_xlabel(r'$\log(M_{*})$', fontsize=16)
-#     ax.set_ylabel(r'Fraction of mergers (%)', fontsize=16)
-#     n_mbins = 10
-#     for m in range(0, len(titles)):
-#         print(len(redshift_mer['galaxy_m'+str(m)]))
-#         print(len(redshift_all['galaxy_m'+str(m)]))
-#         m_mergers = np.log10(redshift_mer['galaxy_m'+str(m)])
-#         m_all = np.log10(redshift_all['galaxy_m'+str(m)])
-#         maxs = np.array([m_mergers.max(),m_all.max()])
-#         mins = np.array([m_mergers.min(),m_all.min()])
-#         mbins = np.linspace(mins.min(), maxs.max(), n_mbins)
-#         delta = mbins[1] - mbins[0]
-#
-#         digi_mer = np.digitize(m_mergers, mbins, right=True)
-#         digi_all = np.digitize(m_all, mbins, right=True)
-#         binco_mer = np.bincount(digi_mer)
-#         binco_all = np.bincount(digi_all)
-#         bin_cent = mbins - delta/2
-#         frac_mer = []
-#         bin_frac =[]
-#         for i in range(0, len(binco_mer)):
-#             if binco_mer[i] != 0 and binco_all[i] != 0:
-#                 frac_mer.append(100*binco_mer[i]/(binco_mer[i]+binco_all[i]))
-#                 bin_frac.append(bin_cent[i])
-#         ax.plot(bin_frac, frac_mer, label=titles[m], linestyle='--', marker=markers[m])
-#     ax.legend(loc='best', prop={'size': 12})
-#     fig.tight_layout()
-#     fig.savefig(str(results_folder)+'fraction_mergers.png', format='png', dpi=200)
-
 def statsMergers(mergers, sf_galaxies, nbins, printresults = True, plot=False):
     ylabels = [r'$\log(sSFR)$',r'$\log(F_{H_2})$',r'$\log(SFE)$']
     names = ['burst_ssfr','gas_frac','sfe_gal']
@@ -441,7 +325,19 @@ def distanceMSQ(mergers, sf_galaxies, nbins):
         fig.tight_layout()
         fig.savefig(str(results_folder)+'distance_msq_'+str(names[i])+'.png', format='png', dpi=200)
 
-#statsMergers(mergers, sf_galaxies, 5)
-distanceMSQ(mergers, sf_galaxies, 10)
-#after_before_vs_msqPlots(mergers, sf_galaxies)
-#merger_fractionPlot(redshift_mer, redshift_all)
+print('MERGER-INDUCED STARBURST ANALYSIS')
+print('---------------------------------')
+print('The following functions are available:')
+print('- Comparison plots showing the after and before of mergers with respect to MSQ. (Press 1)')
+print('- 2-sample Kolmogorov-Smirnov test comparing the difference of the after and
+        before merger values with the MSQ. (Press 2)')
+print('- Deviation plot of running median of after and before merger with respect to MSQ. (Press 3)')
+u_selec = input('Write the number of the function you would like to use: ')
+if u_selec==1:
+    after_before_vs_msqPlots(mergers, sf_galaxies)
+elif u_selec==2:
+    statsMergers(mergers, sf_galaxies, 5)
+elif u_selec==3:
+    distanceMSQ(mergers, sf_galaxies, 10)
+else:
+    print('ERROR: function not found')
