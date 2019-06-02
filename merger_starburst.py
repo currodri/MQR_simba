@@ -316,6 +316,7 @@ def distanceMSQ(mergers, sf_galaxies, nbins):
     names = ['burst_ssfr','gas_frac','sfe_gal']
     merger_labels = ['After merger','Before merger','Non merger']
     titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
+    zlimits = [[0.0, 0.5], [1.0, 1.5], [2.0, 2.5]]
     colours = ['r', 'g']
     lines = ['-','--','-.']
     markers = ['o','v', 's']
