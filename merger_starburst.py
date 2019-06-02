@@ -219,26 +219,46 @@ def statsMergers(mergers, sf_galaxies, nbins, printresults = True, plot=False):
     ylabels = [r'$\log(sSFR)$',r'$\log(F_{H_2})$',r'$\log(SFE)$']
     names = ['burst_ssfr','gas_frac','sfe_gal']
     titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
+    zlimits = [[0.0, 0.5], [1.0, 1.5], [2.0, 2.5]]
     stats_results = {}
     for m in range(0, len(names)):
         stats_results[names[m]] = {}
         for i in range(0, len(titles)):
             stats_results[names[m]][titles[i]] = {}
-            aft_m = np.log10(np.asarray([n.m_gal[2] for n in mergers]))
-            bef_m = np.log10(np.asarray([n.m_gal[0] for n in mergers]))
-            msq_m = np.log10(np.asarray([n.m_gal for n in sf_galaxies]))
-            if m==0:
-                aft = np.log10(np.asarray([n.sfr_gal[2] for n in mergers]))
-                bef = np.log10(np.asarray([n.sfr_gal[0] for n in mergers]))
-                msq = np.log10(np.asarray([n.ssfr_gal for n in sf_galaxies]))
-            elif m==1:
-                aft = np.log10(np.asarray([n.fgas_gal[2] for n in mergers]))
-                bef = np.log10(np.asarray([n.fgas_gal[0] for n in mergers]))
-                msq = np.log10(np.asarray([n.fgas_gal for n in sf_galaxies]))
-            elif m==2:
-                aft = np.log10(np.asarray([n.sfe_gal[2] for n in mergers]))
-                bef = np.log10(np.asarray([n.sfe_gal[0] for n in mergers]))
-                msq = np.log10(np.asarray([n.sfe_gal for n in sf_galaxies]))
+            aft_m = []
+            aft = []
+            bef_m = []
+            bef = []
+            msq_m = []
+            msq = []
+            for j in range(0, len(mergers)):
+                if zlimits[i][0] <= mergers[j].z_gal[1] < zlimits[i][1]:
+                    bef_m.append(np.log10(mergers[j].m_gal[0]))
+                    aft_m.append(np.log10(mergers[j].m_gal[2]))
+                    if m==0:
+                        bef_m.append(np.log10(mergers[j].sfr_gal[0]))
+                        aft_m.append(np.log10(mergers[j].sfr_gal[2]))
+                    elif m==1:
+                        bef_m.append(np.log10(mergers[j].fgas_gal[0]))
+                        aft_m.append(np.log10(mergers[j].fgas_gal[2]))
+                    elif m==2:
+                        bef_m.append(np.log10(mergers[j].sfe_gal[0]))
+                        aft_m.append(np.log10(mergers[j].sfe_gal[2]))
+            for n in range(0, len(sf_galaxies)):
+                if zlimits[i][0] <= sf_galaxies[n].z_gal < zlimits[i][1]:
+                    msq_m.append(np.log10(sf_galaxies[n].m_gal))
+                    if m==0:
+                        msq.append(np.log10(sf_galaxies[n].ssfr_gal))
+                    elif m==1:
+                        msq.append(np.log10(sf_galaxies[n].fgas_gal))
+                    elif m==2:
+                        msq.append(np.log10(sf_galaxies[n].sfe_gal))
+            aft_m = np.asarray(aft_m)
+            aft = np.asarray(aft)
+            bef_m = np.asarray(bef_m)
+            bef = np.asarray(bef)
+            msq_m = np.asarray(msq_m)
+            msq = np.asarray(msq)
             maxs = np.array([aft_m.max(),bef_m.max(),msq_m.max()])
             mins = np.array([aft_m.min(),bef_m.min(),msq_m.min()])
             bins = np.linspace(mins.min(), maxs.max(), nbins)
