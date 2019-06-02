@@ -311,7 +311,7 @@ def statsMergers(mergers, sf_galaxies, nbins, printresults = True, plot=False):
                     print('Mass bin center: '+str(stats_results[names[m]][titles[w]]['bin_cent'][v]))
                     print('p-value from KS 2-sample test: '+str(stats_results[names[m]][titles[w]]['aftvsbef_pvalue'][v]))
 
-def distanceMSQ(merger_data, nbins):
+def distanceMSQ(mergers, sf_galaxies, nbins):
     ylabels = [r'$\Delta_{MSQ}(sSFR)$',r'$\Delta_{MSQ}(f_{H_2})$',r'$\Delta_{MSQ}(SFE)$']
     names = ['burst_ssfr','gas_frac','sfe_gal']
     merger_labels = ['After merger','Before merger','Non merger']
@@ -332,12 +332,40 @@ def distanceMSQ(merger_data, nbins):
             distance_results[names[i]]['aft_cent'+str(m)] = []
             distance_results[names[i]]['bef_d'+str(m)] = []
             distance_results[names[i]]['bef_cent'+str(m)] = []
-            aft = np.log10(merger_data[0][str(names[i])+str(m)])
-            aft_m = np.log10(merger_data[0]['galaxy_m'+str(m)])
-            bef = np.log10(merger_data[1][str(names[i])+str(m)])
-            bef_m = np.log10(merger_data[1]['galaxy_m'+str(m)])
-            msq_m = np.log10(merger_data[2]['galaxy_m'+str(m)])
-            msq = np.log10(merger_data[2][str(names[i])+str(m)])
+            aft_m = []
+            aft = []
+            bef_m = []
+            bef = []
+            msq_m = []
+            msq = []
+            for j in range(0, len(mergers)):
+                if zlimits[i][0] <= mergers[j].z_gal[1] < zlimits[i][1]:
+                    bef_m.append(np.log10(mergers[j].m_gal[0]))
+                    aft_m.append(np.log10(mergers[j].m_gal[2]))
+                    if m==0:
+                        bef.append(np.log10(mergers[j].sfr_gal[0]))
+                        aft.append(np.log10(mergers[j].sfr_gal[2]))
+                    elif m==1:
+                        bef.append(np.log10(mergers[j].fgas_gal[0]))
+                        aft.append(np.log10(mergers[j].fgas_gal[2]))
+                    elif m==2:
+                        bef.append(np.log10(mergers[j].sfe_gal[0]))
+                        aft.append(np.log10(mergers[j].sfe_gal[2]))
+            for n in range(0, len(sf_galaxies)):
+                if zlimits[i][0] <= sf_galaxies[n].z_gal < zlimits[i][1]:
+                    msq_m.append(np.log10(sf_galaxies[n].m_gal))
+                    if m==0:
+                        msq.append(np.log10(sf_galaxies[n].ssfr_gal))
+                    elif m==1:
+                        msq.append(np.log10(sf_galaxies[n].fgas_gal))
+                    elif m==2:
+                        msq.append(np.log10(sf_galaxies[n].sfe_gal))
+            aft_m = np.asarray(aft_m)
+            aft = np.asarray(aft)
+            bef_m = np.asarray(bef_m)
+            bef = np.asarray(bef)
+            msq_m = np.asarray(msq_m)
+            msq = np.asarray(msq)
             maxs = np.array([aft_m.max(),bef_m.max(),msq_m.max()])
             mins = np.array([aft_m.min(),bef_m.min(),msq_m.min()])
             bins = np.linspace(mins.min(), maxs.max(), nbins)
@@ -412,7 +440,7 @@ def distanceMSQ(merger_data, nbins):
         fig.tight_layout()
         fig.savefig(str(results_folder)+'distance_msq_'+str(names[i])+'.png', format='png', dpi=200)
 
-statsMergers(mergers, sf_galaxies, 5)
-#distanceMSQ(merger_data, 10)
+#statsMergers(mergers, sf_galaxies, 5)
+distanceMSQ(mergers, star_forming, 10)
 #after_before_vs_msqPlots(mergers, sf_galaxies)
 #merger_fractionPlot(redshift_mer, redshift_all)
