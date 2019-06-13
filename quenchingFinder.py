@@ -319,8 +319,8 @@ def rejuvenation_rate_calculator(d, rejuvenation_z, count_galaxy_file, timefile,
             zlimind = i
             break
     z = z[0:zlimind-2]
-    zbins[0] = zbins[0] * 0.9
-    zbins[-1] = zbins[-1] * 1.1
+    zbins[0] = zbins[0] * 0.7
+    zbins[-1] = zbins[-1] * 1.3
     bin_cent = np.zeros(len(zbins)-1)
     digi = np.digitize(z, bins=zbins, right=True)
     binco = np.bincount(digi)
