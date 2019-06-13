@@ -305,8 +305,10 @@ def rejuvenation_rate_calculator(d, rejuvenation_z, count_galaxy_file, timefile,
 
     # Get number of galaxies per snapshot
     num_gal_snap = np.genfromtxt(count_galaxy_file)
-    z = np.genfromtxt(redfile)[::-1]
-    t = np.genfromtxt(timefile)[::-1]
+    z = np.genfromtxt(redfile)
+    z = z[::-1]
+    t = np.genfromtxt(timefile)
+    t = t[::-1]
     zlim = np.amax(rejuvenation_z)
     zlimind = 0
     zbins = []
