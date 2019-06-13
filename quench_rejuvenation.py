@@ -27,7 +27,7 @@ print('Total number of galaxies at z = 0: '+str(ngal))
 
 #Store the galaxies sorted in objects of type GalaxyData
 galaxies = []
-for i in range(ngal):
+for i in range(30):
     ssfr_gal = (d['sfr_gal' + str(i)]/d['m_gal'+str(i)])[::-1]+1e-14
     sfe_gal = d['sfe_gal' + str(i)][::-1]
     z_gal = d['z_gal' + str(i)][::-1]
@@ -38,7 +38,7 @@ for i in range(ngal):
     galaxy = GalaxyData(i, ssfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type)
     galaxies.append(galaxy)
 
-max_ngal = len(galaxies)
+max_ngal = 30#len(galaxies)
 mass_limit = 9.5
 # Perform the quenching and rejuvenation analysis
 galaxies_interpolated = quenchingFinder2(galaxies[0:max_ngal], 1, mass_limit)
@@ -49,7 +49,7 @@ reju_m = []
 reju_t = []
 
 
-for i in range(len(galaxies)):
+for i in range(30):#len(galaxies)):
     galaxy = galaxies[i]
     for k in range(0, len(galaxy.rate), 3):
         #if np.log10(galaxy.rate[k+1])>=mass_limit:
