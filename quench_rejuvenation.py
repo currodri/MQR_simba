@@ -17,7 +17,7 @@ from quenchingFinder import GalaxyData, quenchingFinder2, rejuvenation_rate_calc
 import sys
 simfolder = '../progen_analysis/m50n512'#input('SIMBA simulation progen folder: ')
 sys.path.insert(0, str(simfolder))
-counterfile = '../progen_analysis/m50n512/galaxy_count.txt'#input('Text file with total number of galaxies per snapshot: ')
+counterfile = '../progen_analysis/m50n512/galaxy_count_m100n1024.txt'#input('Text file with total number of galaxies per snapshot: ')
 simname = 'm50n512'#input('SIMBA simulation version: ')
 results_folder = '../quench_analysis/'+str(simname)+'/'
 
