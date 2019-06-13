@@ -309,6 +309,7 @@ def rejuvenation_rate_calculator(d, rejuvenation_z, count_galaxy_file, timefile,
     z = z[::-1]
     t = np.genfromtxt(timefile)
     t = t[::-1]
+    print(z,t)
     zlim = np.amax(rejuvenation_z)
     zlimind = 0
     zbins = []
