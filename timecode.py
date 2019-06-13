@@ -17,8 +17,10 @@ caesarfile = '/home/rad/data/m100n1024/s50/Groups/' #input('Final group file: ')
 snaps = filter(lambda file:file[-5:]=='.hdf5' and file[0]=='m', os.listdir(caesarfile))
 snaps_sorted = sorted(snaps,key=lambda file: int(file[-8:-5]), reverse=True)
 
-timefile = open('times_m100n1024.txt','w')
-redfile = open('redshifts_m100n1024.txt','w')
+simname = 'm100n1024'#input('SIMBA simulation version: ')
+results_folder = '../quench_analysis/'+str(simname)+'/'
+timefile = open(results_folder+'times_m100n1024.txt','w')
+redfile = open(results_folder+'redshifts_m100n1024.txt','w')
 
 for s in range(0, len(snaps_sorted)):
     sim = caesar.load(caesarfile+snaps_sorted[s],LoadHalo=False) # load caesar file
