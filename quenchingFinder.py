@@ -302,7 +302,6 @@ def myrunningmedian(x,y,nbins, sigma=True):
     else:
         return bin_cent, running_median
 def rejuvenation_rate_calculator(d, rejuvenation_z, count_galaxy_file, timefile, redfile):
-
     # Get number of galaxies per snapshot
     num_gal_snap = np.genfromtxt(count_galaxy_file)
     z = np.genfromtxt(redfile)
@@ -318,7 +317,6 @@ def rejuvenation_rate_calculator(d, rejuvenation_z, count_galaxy_file, timefile,
         elif z[i]>=zlim:
             zlimind = i
             break
-    print(zbins)
     z = z[0:zlimind-2]
     zbins[0] = zbins[0] * 0.7
     zbins[-1] = zbins[-1] * 1.3
@@ -328,7 +326,6 @@ def rejuvenation_rate_calculator(d, rejuvenation_z, count_galaxy_file, timefile,
     histo = np.zeros(len(zbins)-1)
     deltat = np.zeros(len(zbins)-1)
     binco = np.delete(binco, 0)
-    print(digi)
     for i in range(0, len(digi)):
         index = digi[i]-1
         #print(len(histo), index, len(num_gal_snap), i)
