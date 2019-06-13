@@ -19,9 +19,9 @@ from import_progen import importApp
 from quenchingFinder import GalaxyData
 from mergerFinder import merger_finder, myrunningmedian
 import sys
-simfolder = '../progen_analysis/m50n512'#input('SIMBA simulation progen folder: ')
+simfolder = '../progen_analysis/m100n1024'#input('SIMBA simulation progen folder: ')
 sys.path.insert(0, str(simfolder))
-simname = 'm50n512'#input('SIMBA simulation version: ')
+simname = 'm100n1024'#input('SIMBA simulation version: ')
 results_folder = '../mergers/'+str(simname)+'/'
 
 d, ngal = importApp(str(simfolder))

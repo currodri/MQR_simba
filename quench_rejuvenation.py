@@ -192,7 +192,7 @@ fig = plt.figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
 ax3 = fig.add_subplot(1,1,1)
 ax3.set_xlabel(r'z', fontsize=16)
 ax3.set_ylabel(r'$\Gamma_{Rej}$ (Gyr$^{-1}$)', fontsize=16)
-leny = len(rates)-7
+#leny = len(rates)-7
 ax3.errorbar(red_cent[0:leny], rates[0:leny], yerr=rates_sig[0:leny], capsize=2, marker='d', markerfacecolor='None', color='k', linestyle='--', markersize=12)
 fig.tight_layout()
 fig.savefig('rejuvenation_rate.png', format='png', dpi=250)
