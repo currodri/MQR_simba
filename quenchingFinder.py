@@ -314,7 +314,7 @@ def rejuvenation_rate_calculator(d, rejuvenation_z, count_galaxy_file, timefile,
     zbins = []
     tbins = []
     for i in range(0, len(z), 3):
-        print(z[i], zlim)
+        print(i, z[i], zlim)
         if z[i]<zlim:
             zbins.append(z[i])
             tbins.append(t[i])
