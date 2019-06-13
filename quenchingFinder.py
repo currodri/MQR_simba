@@ -170,6 +170,10 @@ def pre_quench (galaxy,j,curr_state, sfr_condition, interpolation=False):
 
         #Now we look for rejuvenations
         new_state = (3, curr_state[1], None)
+    elif ssfr_gal >= 10**sfr_condition('start', galaxy, j):
+        del galaxy.quenching[-1]
+        #Go back to state readyToLook.
+        new_state = (1, galaxy.galaxy_t[j], None)
     else:
         new_state = curr_state
 
