@@ -327,9 +327,10 @@ def rejuvenation_rate_calculator(d, rejuvenation_z, count_galaxy_file, timefile,
     histo = np.zeros(len(zbins)-1)
     deltat = np.zeros(len(zbins)-1)
     binco = np.delete(binco, 0)
+    print(digi)
     for i in range(0, len(digi)):
         index = digi[i]-1
-        print(len(histo), index, len(num_gal_snap), i)
+        #print(len(histo), index, len(num_gal_snap), i)
         histo[index] = histo[index] + num_gal_snap[i]
     histo = histo/binco #Average galaxies per redshift bin
     for j in range(0, len(tbins)-1):
