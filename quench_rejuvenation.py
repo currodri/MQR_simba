@@ -15,9 +15,9 @@ from import_progen import importApp
 from mergerFinder import myrunningmedian
 from quenchingFinder import GalaxyData, quenchingFinder2, rejuvenation_rate_calculator, quenching_histogram
 import sys
-simfolder = '../progen_analysis/m50n512'#input('SIMBA simulation progen folder: ')
+simfolder = '../progen_analysis/m100n1024'#input('SIMBA simulation progen folder: ')
 sys.path.insert(0, str(simfolder))
-counterfile = '../progen_analysis/m50n512/galaxy_count_m100n1024.txt'#input('Text file with total number of galaxies per snapshot: ')
+counterfile = '../progen_analysis/m100n1024/galaxy_count_m100n1024.txt'#input('Text file with total number of galaxies per snapshot: ')
 simname = 'm100n1024'#input('SIMBA simulation version: ')
 results_folder = '../quench_analysis/'+str(simname)+'/'
 
@@ -57,7 +57,7 @@ for i in range(len(galaxies)):
         reju_t.append(galaxy.rate[k+1])
         reju_m.append(np.log10(galaxy.rate[k+2]))
 
-rates, red_cent, rates_sig = rejuvenation_rate_calculator(d, reju_z, counterfile)
+rates, red_cent, rates_sig = rejuvenation_rate_calculator(d, reju_z, counterfile, simfolder+'/times_m100n1024.txt', simfolder+'/redshifts_m100n1024.txt')
 
 print('Total number of rejuvenations: '+str(len(reju_z)))
 print('Number of quenching events in first loop: '
