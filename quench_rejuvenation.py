@@ -57,7 +57,7 @@ for i in range(len(galaxies)):
         reju_t.append(galaxy.rate[k+1])
         reju_m.append(np.log10(galaxy.rate[k+2]))
 
-rates, red_cent, rates_sig = rejuvenation_rate_calculator(d, reju_z, counterfile, simfolder+'/times_m100n1024.txt', simfolder+'/redshifts_m100n1024.txt')
+rates, red_cent, rates_sig = rejuvenation_rate_calculator(d, reju_z, counterfile, results_folder+'/times_m100n1024.txt', results_folder+'/redshifts_m100n1024.txt')
 
 print('Total number of rejuvenations: '+str(len(reju_z)))
 print('Number of quenching events in first loop: '
