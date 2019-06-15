@@ -39,7 +39,7 @@ for i in range(ngal):
 mergers, sf_galaxies = merger_finder(galaxies, 0.2, 10**9.5, 2.5)
 
 def SF_Budget(mergers, msq_galaxies, n_bins):
-    z_bins = np.linspace(0.0, 2.5, n_bins)
+    z_bins = np.linspace(0.0, 3.5, n_bins)
     f_budget = np.zeros(n_bins-1)
     delta = z_bins[1]-z_bins[0]
     z_cent = z_bins - delta/2
@@ -63,7 +63,7 @@ def SF_Budget(mergers, msq_galaxies, n_bins):
     plt.savefig(str(results_folder)+'sfbudget.png', dpi=250)
 
 def SFR_Evolution(mergers, msq_galaxies, n_bins):
-    z_bins = np.linspace(0.0, 2.5, n_bins)
+    z_bins = np.linspace(0.0, 3.5, n_bins)
     sfr_m_ave = np.zeros(n_bins-1)
     sfr_m_error = np.zeros(n_bins-1)
     sfr_nm_ave = np.zeros(n_bins-1)
@@ -96,7 +96,7 @@ def SFR_Evolution(mergers, msq_galaxies, n_bins):
     plt.legend(loc='best')
     plt.savefig(str(results_folder)+'sfr_evolution.png', dpi=250)
 def SFR_Evolution2(mergers, msq_galaxies, n_bins):
-    z_bins = np.linspace(0.0, 2.5, n_bins)
+    z_bins = np.linspace(0.0, 3.5, n_bins)
     ssfr_m_ave = np.zeros(n_bins-1)
     ssfr_m_error = np.zeros(n_bins-1)
     ssfr_nm_ave = np.zeros(n_bins-1)
@@ -162,7 +162,7 @@ def SFR_Evolution2(mergers, msq_galaxies, n_bins):
     plt.legend(loc='best')
     plt.savefig(str(results_folder)+'sfr_evolution_2.eps', dpi=250)
 def Merger_Fraction(mergers, msq_galaxies, n_bins):
-    z_bins = np.linspace(0.0, 2.5, n_bins)
+    z_bins = np.linspace(0.0, 3.5, n_bins)
     f_merger = np.zeros(n_bins-1)
     delta = z_bins[1]-z_bins[0]
     z_cent = z_bins - delta/2
@@ -184,7 +184,7 @@ def Merger_Fraction(mergers, msq_galaxies, n_bins):
     plt.ylabel('Merger fraction of star-forming galaxies')
     plt.savefig(str(results_folder)+'mfr_evolution.png', dpi=250)
 def Merger_Contribution(mergers, msq_galaxies, n_bins):
-    z_bins = np.linspace(0.0, 2.5, n_bins)
+    z_bins = np.linspace(0.0, 3.5, n_bins)
     f_merger = np.zeros(n_bins-1)
     f_budget = np.zeros(n_bins-1)
     delta = z_bins[1]-z_bins[0]
@@ -213,6 +213,7 @@ def Merger_Contribution(mergers, msq_galaxies, n_bins):
     ax.set_xticks([0.0, 0.5, 1.0, 2.5])
     ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
     ax.set_yscale("log")
+    print(f_merger)
     plt.plot(z_cent, f_merger, linestyle='--', marker='o', label='Fraction of galaxies')
     plt.plot(z_cent, f_budget, linestyle='--', marker='s', label='Fraction of SF Budget')
     ax.set_xlabel(r'$z$', fontsize=16)
@@ -222,7 +223,7 @@ def Merger_Contribution(mergers, msq_galaxies, n_bins):
     fig.savefig(str(results_folder)+'merger_contribution.png',format='png', dpi=250)
 
 def Fgas_mean(mergers, msq_galaxies, n_bins):
-    z_bins = np.linspace(0.0, 2.5, n_bins)
+    z_bins = np.linspace(0.0, 3.5, n_bins)
     fgas_ave = np.zeros(n_bins-1)
     m_ave = np.zeros(n_bins-1)
     fgas_error = np.zeros(n_bins-1)
@@ -266,7 +267,7 @@ def Fgas_mean(mergers, msq_galaxies, n_bins):
     fig.savefig(str(results_folder)+'fgas_evolution.png',format='png', dpi=250)
 
 def Frac_Merger_rate(mergers, msq_galaxies, n_bins):
-    z_bins = np.linspace(0.0, 2.5, n_bins)
+    z_bins = np.linspace(0.0, 3.5, n_bins)
     f_merger = np.zeros(n_bins-1)
     delta = z_bins[1]-z_bins[0]
     z_cent = z_bins - delta/2
@@ -329,7 +330,7 @@ print('- Evolution of contribution of mergers to the star-forming population. (P
 print(' ')
 print('- Evolution of merger rate with redshift. (Press 3)')
 print(' ')
-print('- If you want to do all of them, just press 3')
+print('- If you want to do all of them, just Press 4.')
 print(' ')
 u_selec = input('Write the number of the function you would like to use: ')
 
