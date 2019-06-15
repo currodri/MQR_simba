@@ -331,6 +331,8 @@ print('- Evolution of contribution of mergers to the star-forming population. (P
 print(' ')
 print('- Evolution of merger rate with redshift. (Press 4)')
 print(' ')
+print('- If you want to do all of them, just press 5')
+print(' ')
 u_selec = input('Write the number of the function you would like to use: ')
 if u_selec==1:
     SF_Budget(mergers, sf_galaxies, 10)
@@ -339,6 +341,11 @@ elif u_selec==2:
 elif u_selec==3:
     Merger_Contribution(mergers, sf_galaxies, 10)
 elif u_selec==4:
+    Frac_Merger_rate(mergers, sf_galaxies, 15)
+elif u_selec==5:
+    SF_Budget(mergers, sf_galaxies, 10)
+    SFR_Evolution2(mergers, sf_galaxies, 10)
+    Merger_Contribution(mergers, sf_galaxies, 10)
     Frac_Merger_rate(mergers, sf_galaxies, 15)
 else:
     print('ERROR: function not found')
