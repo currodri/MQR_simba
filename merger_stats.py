@@ -312,28 +312,35 @@ def Frac_Merger_rate(mergers, msq_galaxies, n_bins):
     ax.legend(loc='best', prop={'size': 12})
     fig.tight_layout()
     fig.savefig(str(results_folder)+'merger_rate_evolution.png',format='png', dpi=250)
-#SF_Budget(mergers, sf_galaxies, 10)
 #SFR_Evolution(mergers, sf_galaxies, 10)
 #Merger_Fraction(mergers, sf_galaxies, 10)
-#Merger_Contribution(mergers, sf_galaxies, 10)
 #Fgas_mean(mergers, sf_galaxies, 10)
-#Frac_Merger_rate(mergers, sf_galaxies, 15)
+#
 SFR_Evolution2(mergers, sf_galaxies, 10)
+print(' ')
+print(' ')
 print('MERGER STATISTICAL ANALYSIS')
 print(' ')
 print('---------------------------------')
 print(' ')
 print('The following functions are available:')
 print(' ')
-print('- . (Press 1)')
-
+print('- Contribution of mergers to the star-formation budget with redshift. (Press 1)')
+print(' ')
+print('- Mass-matched comparison of sSFR between mergers and star-forming galaxies. (Press 2)')
+print(' ')
+print('- Evolution of contribution of mergers to the star-forming population. (Press 3)')
+print(' ')
+print('- Evolution of merger rate with redshift. (Press 4)')
 print(' ')
 u_selec = input('Write the number of the function you would like to use: ')
 if u_selec==1:
-    after_before_vs_msqPlots(mergers, sf_galaxies)
+    SF_Budget(mergers, sf_galaxies, 10)
 elif u_selec==2:
-    statsMergers(mergers, sf_galaxies, 5)
+    SFR_Evolution2(mergers, sf_galaxies, 10)
 elif u_selec==3:
-    distanceMSQ(mergers, sf_galaxies, 10)
+    Merger_Contribution(mergers, sf_galaxies, 10)
+elif u_selec==4:
+    Frac_Merger_rate(mergers, sf_galaxies, 15)
 else:
     print('ERROR: function not found')
