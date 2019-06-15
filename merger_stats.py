@@ -205,9 +205,9 @@ def Merger_Contribution(mergers, msq_galaxies, n_bins):
             if z_bins[i]<= msq.z_gal < z_bins[i+1]:
                 sfr_nm = sfr_nm + msq.ssfr_gal
                 nm_counter = nm_counter + 1
-        print(m_counter, nm_counter, z_bins[i], z_bins[i+1])
         f_merger[i] = m_counter/(m_counter+nm_counter)
         f_budget[i] = sfr_m/(sfr_m+sfr_nm)
+    print(f_merger)
     fig = plt.figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
     ax = fig.add_subplot(1,1,1)
     ax.set_xscale("log")
