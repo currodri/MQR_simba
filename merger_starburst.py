@@ -65,14 +65,17 @@ def after_before_vs_msqPlots(mergers, sf_galaxies):
                         b[1].append(np.log10(mergers[j].sfr_gal[2]/mergers[j].m_gal[2]))
                         for s in range(0, len(b)):
                             if m==0 and b[s][-1]<-11:
+                                b[s][-1] = -11
                                 axes['redbin'+str(m)].arrow(a[s][-1],-11,0,-0.5, head_width=0.015,
                                                                 width=0.008, head_length=0.1,
                                                                 color=colours[s])
                             elif m==1 and b[s][-1]<-10.2:
+                                b[s][-1] = -10.2
                                 axes['redbin'+str(m)].arrow(a[s][-1],-10.2,0,-0.5, head_width=0.015,
                                                                 width=0.008, head_length=0.1,
                                                                 color=colours[s])
                             elif m==2 and b[s][-1]<-10:
+                                b[s][-1] = -10
                                 axes['redbin'+str(m)].arrow(a[s][-1],-10,0,-0.5, head_width=0.015,
                                                                 width=0.008, head_length=0.1,
                                                                 color=colours[s])
@@ -81,14 +84,17 @@ def after_before_vs_msqPlots(mergers, sf_galaxies):
                         b[1].append(np.log10(mergers[j].fgas_gal[2]))
                         for s in range(0, len(b)):
                             if m==0 and b[s][-1]<-2:
+                                b[s][-1] = -2
                                 axes['redbin'+str(m)].arrow(a[s][-1],-2,0,-0.5, head_width=0.015,
                                                                 width=0.008, head_length=0.1,
                                                                 color=colours[s])
                             elif m==1 and b[s][-1]<-1.7:
+                                b[s][-1] = -1.7
                                 axes['redbin'+str(m)].arrow(a[s][-1],-1.7,0,-0.5, head_width=0.015,
                                                                 width=0.008, head_length=0.1,
                                                                 color=colours[s])
                             elif m==2 and b[s][-1]<-1.5:
+                                b[s][-1] = -1.5
                                 axes['redbin'+str(m)].arrow(a[s][-1],-1.5,0,-0.5, head_width=0.015,
                                                                 width=0.008, head_length=0.1,
                                                                 color=colours[s])
@@ -97,14 +103,17 @@ def after_before_vs_msqPlots(mergers, sf_galaxies):
                         b[1].append(np.log10(mergers[j].sfe_gal[2]))
                         for s in range(0, len(b)):
                             if m==0 and b[s][-1]<-11:
+                                b[s][-1] = -11
                                 axes['redbin'+str(m)].arrow(a[s][-1],-11,0,-0.5, head_width=0.015,
                                                                 width=0.008, head_length=0.1,
                                                                 color=colours[s])
                             elif m==1 and b[s][-1]<-10.5:
+                                b[s][-1] = -10.5
                                 axes['redbin'+str(m)].arrow(a[s][-1],-10.5,0,-0.5, head_width=0.015,
                                                                 width=0.008, head_length=0.1,
                                                                 color=colours[s])
                             elif m==2 and b[s][-1]<-10.2:
+                                b[s][-1] = -10.2
                                 axes['redbin'+str(m)].arrow(a[s][-1],-10.2,0,-0.5, head_width=0.015,
                                                                 width=0.008, head_length=0.1,
                                                                 color=colours[s])
