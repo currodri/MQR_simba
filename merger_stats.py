@@ -319,3 +319,21 @@ def Frac_Merger_rate(mergers, msq_galaxies, n_bins):
 #Fgas_mean(mergers, sf_galaxies, 10)
 #Frac_Merger_rate(mergers, sf_galaxies, 15)
 SFR_Evolution2(mergers, sf_galaxies, 10)
+print('MERGER STATISTICAL ANALYSIS')
+print(' ')
+print('---------------------------------')
+print(' ')
+print('The following functions are available:')
+print(' ')
+print('- . (Press 1)')
+
+print(' ')
+u_selec = input('Write the number of the function you would like to use: ')
+if u_selec==1:
+    after_before_vs_msqPlots(mergers, sf_galaxies)
+elif u_selec==2:
+    statsMergers(mergers, sf_galaxies, 5)
+elif u_selec==3:
+    distanceMSQ(mergers, sf_galaxies, 10)
+else:
+    print('ERROR: function not found')
