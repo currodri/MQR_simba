@@ -306,7 +306,7 @@ def Frac_Merger_rate(mergers, msq_galaxies, n_bins):
     #ax.set_xticks([0.0, 0.5, 1.0, 2.5])
     #ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
     #ax.set_yscale("log")
-    plt.plot(1+z_cent, f_merger, linestyle='--', marker='d', label=r'Mergers in the $50h^{-1}$ Mpc box')
+    plt.plot(1+z_cent, f_merger, linestyle='--', marker='d', label=r'Mergers in the $100h^{-1}$ Mpc box')
     plt.plot(1+z_cent,(10**intercept)*(1+z_cent)**(slope), 'k-', label='The best fit power law to this data')
     ax.set_xlabel(r'$1+z$', fontsize=16)
     ax.set_ylabel(r'$\mathcal{R}_{merg}$ [Gyr$^{-1}$]', fontsize=16)
