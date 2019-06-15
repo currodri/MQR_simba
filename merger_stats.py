@@ -202,6 +202,7 @@ def Merger_Contribution(mergers, msq_galaxies, n_bins):
                 m_counter = m_counter + 1
         for k in range(0, len(msq_galaxies)):
             msq = msq_galaxies[k]
+            print(z_bins[i], msq.z_gal, z_bins[i+1])
             if z_bins[i]<= msq.z_gal < z_bins[i+1]:
                 sfr_nm = sfr_nm + msq.ssfr_gal
                 nm_counter = nm_counter + 1
