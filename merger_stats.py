@@ -8,6 +8,7 @@ Created on 24 December 2018
 
 # Import required libraries
 import numpy as np
+from decimal import Decimal
 import matplotlib
 matplotlib.use('Agg') # Must be before importing matplotlib.pyplot or pylab!
 import matplotlib.pyplot as plt
@@ -205,10 +206,8 @@ def Merger_Contribution(mergers, msq_galaxies, n_bins):
             if z_bins[i]<= msq.z_gal < z_bins[i+1]:
                 sfr_nm = sfr_nm + msq.ssfr_gal
                 nm_counter = nm_counter + 1
-        num = m_counter/(m_counter+nm_counter)
-        f_merger[i] = m_counter/(m_counter+nm_counter)
+        f_merger[i] = float(Decimal(m_counter)/Decimal(m_counter+nm_counter))
         f_budget[i] = sfr_m/(sfr_m+sfr_nm)
-        print(f_merger, num, m_counter, nm_counter)
     fig = plt.figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
     ax = fig.add_subplot(1,1,1)
     ax.set_xscale("log")
