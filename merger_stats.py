@@ -323,26 +323,23 @@ print('---------------------------------')
 print(' ')
 print('The following functions are available:')
 print(' ')
-print('- Contribution of mergers to the star-formation budget with redshift. (Press 1)')
+print('- Mass-matched comparison of sSFR between mergers and star-forming galaxies. (Press 1)')
 print(' ')
-print('- Mass-matched comparison of sSFR between mergers and star-forming galaxies. (Press 2)')
+print('- Evolution of contribution of mergers to the star-forming population. (Press 2)')
 print(' ')
-print('- Evolution of contribution of mergers to the star-forming population. (Press 3)')
+print('- Evolution of merger rate with redshift. (Press 3)')
 print(' ')
-print('- Evolution of merger rate with redshift. (Press 4)')
-print(' ')
-print('- If you want to do all of them, just press 5')
+print('- If you want to do all of them, just press 3')
 print(' ')
 u_selec = input('Write the number of the function you would like to use: ')
+
 if u_selec==1:
-    SF_Budget(mergers, sf_galaxies, 10)
-elif u_selec==2:
     SFR_Evolution2(mergers, sf_galaxies, 10)
-elif u_selec==3:
+elif u_selec==2:
     Merger_Contribution(mergers, sf_galaxies, 10)
-elif u_selec==4:
+elif u_selec==2:
     Frac_Merger_rate(mergers, sf_galaxies, 15)
-elif u_selec==5:
+elif u_selec==4:
     SF_Budget(mergers, sf_galaxies, 10)
     SFR_Evolution2(mergers, sf_galaxies, 10)
     Merger_Contribution(mergers, sf_galaxies, 10)
