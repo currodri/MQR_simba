@@ -315,7 +315,6 @@ def Frac_Merger_rate(mergers, msq_galaxies, n_bins):
 #SFR_Evolution(mergers, sf_galaxies, 10)
 #Merger_Fraction(mergers, sf_galaxies, 10)
 #Fgas_mean(mergers, sf_galaxies, 10)
-#
 print(' ')
 print(' ')
 print('MERGER STATISTICAL ANALYSIS')
