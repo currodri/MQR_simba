@@ -202,6 +202,7 @@ def Merger_Contribution(mergers, msq_galaxies, n_bins):
                 m_counter = m_counter + 1
         for k in range(0, len(msq_galaxies)):
             msq = msq_galaxies[k]
+            print(z_bins[i], msq.z_gal, z_bins[i+1])
             if z_bins[i]<= msq.z_gal < z_bins[i+1]:
                 sfr_nm = sfr_nm + msq.ssfr_gal
                 nm_counter = nm_counter + 1
@@ -213,7 +214,6 @@ def Merger_Contribution(mergers, msq_galaxies, n_bins):
     ax.set_xticks([0.0, 0.5, 1.0, 2.5])
     ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
     ax.set_yscale("log")
-    print(f_merger)
     plt.plot(z_cent, f_merger, linestyle='--', marker='o', label='Fraction of galaxies')
     plt.plot(z_cent, f_budget, linestyle='--', marker='s', label='Fraction of SF Budget')
     ax.set_xlabel(r'$z$', fontsize=16)
