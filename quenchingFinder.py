@@ -354,22 +354,21 @@ def quenching_histogram(redfile,galaxies,ngal,min_mass, max_mass,quenching_times
     z_cent = np.delete(z_cent, 0)
     counts_init = np.zeros(len(z_init)-1)
     z_init_cent = (z_init[:-1]+z_init[1:])/2
-    for i in range(0, len(z_init)-1):
-        count_m = 0
-        count_nm = 0
-        for j in range(0, len(redshifts)):
-            if z_init[i]<=redshifts[j]<z_init[i+1]:
-                count_m = count_m + 1
-        for k in range(0, ngal):
-            gal = galaxies[k]
-            red = gal.z_gal
-            mass = gal.m_gal
-            for m in range(0, len(red)):
-                if z_init[i]<=red[m]<z_init[i+1] and (10**min_mass)<=mass[m]<(10**max_mass):
-                    count_nm = count_nm + 1
-        print(count_m, count_nm)
-        if count_m != 0 and count_nm != 0:
-            counts_init[i] = count_m/count_nm
+    # for i in range(0, len(z_init)-1):
+    #     count_m = 0
+    #     count_nm = 0
+    #     for j in range(0, len(redshifts)):
+    #         if z_init[i]<=redshifts[j]<z_init[i+1]:
+    #             count_m = count_m + 1
+    #     for k in range(0, ngal):
+    #         gal = galaxies[k]
+    #         red = gal.z_gal
+    #         mass = gal.m_gal
+    #         for m in range(0, len(red)):
+    #             if z_init[i]<=red[m]<z_init[i+1] and (10**min_mass)<=mass[m]<(10**max_mass):
+    #                 count_nm = count_nm + 1
+    #     if count_m != 0 and count_nm != 0:
+    #         counts_init[i] = count_m/count_nm
 
     for i in range(0, n_bins-1):
         n_gals = 0
@@ -383,6 +382,7 @@ def quenching_histogram(redfile,galaxies,ngal,min_mass, max_mass,quenching_times
                 counts_ave.append(counts_init[k])
         counts_ave = np.asarray(counts_ave)
         counts[i] = np.average(counts_ave)
+        print(counts[i])
         counts_error[i] = np.std(counts_ave)/(np.sqrt(len(counts_ave)))
         t = np.asarray(t)
         times[i] = np.average(t)
