@@ -313,6 +313,56 @@ def Frac_Merger_rate(mergers, msq_galaxies, n_bins):
     ax.legend(loc='best', prop={'size': 12})
     fig.tight_layout()
     fig.savefig(str(results_folder)+'merger_rate_evolution.png',format='png', dpi=250)
+def Contribution_and_Rate(mergers, msq_galaxies, n_bins):
+    z_bins = np.linspace(0.0, 3.5, n_bins)
+    f_merger_n = np.zeros(n_bins-1)
+    f_merger = np.zeros(n_bins-1)
+    f_budget = np.zeros(n_bins-1)
+    delta = z_bins[1]-z_bins[0]
+    z_cent = z_bins - delta/2
+    z_cent = np.delete(z_cent, 0)
+    for i in range(0, n_bins-1):
+        m_counter = 0
+        nm_counter = 0
+        times = []
+        for j in range(0, len(mergers)):
+            merger = mergers[j]
+            if z_bins[i]<= merger.z_gal[1] < z_bins[i+1]:
+                m_counter = m_counter + 1
+                sfr_m = sfr_m + merger.sfr_gal[1]
+                times.append(merger.galaxy_t[1])
+        for k in range(0, len(msq_galaxies)):
+            msq = msq_galaxies[k]
+            if z_bins[i]<= msq.z_gal < z_bins[i+1]:
+                sfr_nm = sfr_nm + msq.ssfr_gal
+                nm_counter = nm_counter + 1
+        f_merger[i] = float(Decimal(m_counter)/Decimal(m_counter+nm_counter))
+        f_budget[i] = sfr_m/(sfr_m+sfr_nm)
+        times = np.asarray(times)
+        delta_t = times.max() - times.min()
+        f_merger_n[i] = m_counter/((m_counter+nm_counter)*delta_t)
+    z_cent = np.asarray(z_cent)
+    f_merger_n = np.asarray(f_merger_n)
+    x = np.log10(1+z_cent)
+    y = np.log10(f_merger_n)
+    def func(x, a, b):
+        return a*x + b
+    slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
+    print("slope: %f    intercept: %f    r_value: %f    p_value: %f    std_error: %f" % (slope, intercept,r_value, p_value, std_err))
+    fig, axes = plt.subplots(2, 1, sharex='col', num=None, figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
+    ax[0].plot(np.log10(1+z_cent), np.log10(f_merger_n), linestyle='--', marker='d', label=r'Mergers in the $100h^{-1}$ Mpc box')
+    ax[0].plot(np.log10(1+z_cent),np.log10((10**intercept)*(1+z_cent)**(slope)), 'k-', label='The best fit power law to this data')
+    ax[0].set_ylabel(r'$log(\mathcal{R}_{merg})$', fontsize=16)
+    ax[0].legend(loc='best', prop={'size': 12})
+
+    ax[1].plot(np.log10(1+z_cent), np.log10(f_merger), linestyle='--', marker='o', label=r'$\log($Fraction of galaxies)')
+    ax[1].plot(np.log10(1+z_cent), np.log10(f_budget), linestyle='--', marker='s', label=r'$\log($Fraction of SF Budget)')
+    ax[1].set_xlabel(r'$\log(1+z)$', fontsize=16)
+    ax[1].set_ylabel('Merger contribution to star-forming galaxies', fontsize=16)
+    ax[1].legend(loc='best')
+    fig.tight_layout()
+    fig.savefig(str(results_folder)+'merger_contribution_and_rate.png',format='png', dpi=250)
+
 #SFR_Evolution(mergers, sf_galaxies, 10)
 #Merger_Fraction(mergers, sf_galaxies, 10)
 #Fgas_mean(mergers, sf_galaxies, 10)
@@ -330,7 +380,9 @@ print('- Evolution of contribution of mergers to the star-forming population. (P
 print(' ')
 print('- Evolution of merger rate with redshift. (Press 3)')
 print(' ')
-print('- If you want to do all of them, just Press 4.')
+print('- Evolution of contribution and merger rate with redshift. (Press 4)')
+print(' ')
+print('- If you want to do all of them, just Press 5.')
 print(' ')
 u_selec = input('Write the number of the function you would like to use: ')
 
@@ -341,6 +393,8 @@ elif u_selec==2:
 elif u_selec==3:
     Frac_Merger_rate(mergers, sf_galaxies, 15)
 elif u_selec==4:
+    Contribution_and_Rate(mergers, sf_galaxies, 15)
+elif u_selec==5:
     SF_Budget(mergers, sf_galaxies, 10)
     SFR_Evolution2(mergers, sf_galaxies, 10)
     Merger_Contribution(mergers, sf_galaxies, 10)
