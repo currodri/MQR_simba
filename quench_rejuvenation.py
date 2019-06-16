@@ -228,7 +228,6 @@ for i in range(0, len(mass_ranges)-1):
 axes[0].set_ylabel('Quenching events per galaxy', fontsize=16)
 axes[1].set_ylabel(r' $\langle \log(t_{q}/t_{U}) \rangle$', fontsize=16)
 axes[1].set_xlabel('z', fontsize=16)
-axes[1].legend(loc='best', prop={'size': 12})
 axes[0].legend(loc='best', prop={'size': 12})
 fig2.tight_layout()
 fig2.savefig(str(results_folder)+'quenching_histograms.png', format='png', dpi=200)

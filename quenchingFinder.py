@@ -382,7 +382,6 @@ def quenching_histogram(redfile,galaxies,ngal,min_mass, max_mass,quenching_times
                 counts_ave.append(counts_init[k])
         counts_ave = np.asarray(counts_ave)
         counts[i] = np.average(counts_ave)
-        print(counts[i])
         counts_error[i] = np.std(counts_ave)/(np.sqrt(len(counts_ave)))
         t = np.asarray(t)
         times[i] = np.average(t)
