@@ -50,7 +50,7 @@ def after_before_vs_msqPlots(mergers, sf_galaxies):
     colours = ['g','r', 'k']
     props = dict(boxstyle='round', facecolor='white', alpha=0.5, edgecolor='k')
     for i in range(0, len(ylabels)):
-        fig, axes = plt.subplots(len(titles), 1, sharex=True, num=None, figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
+        fig, axes = plt.subplots(len(titles), 1, sharex='col', num=None, figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
         for m in range(0, len(titles)):
             axes[m] = fig.add_subplot(3,1,m+1)
             axes[m].set_ylabel(ylabels[i], fontsize=16)
