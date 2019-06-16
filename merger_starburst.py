@@ -53,7 +53,7 @@ def after_before_vs_msqPlots(mergers, sf_galaxies):
         fig = plt.figure(num=None, figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
         axes = {}
         for m in range(0, len(titles)):
-            axes['redbin'+str(m)] = fig.add_subplot(3,1,m+1)
+            axes['redbin'+str(m)] = fig.add_subplot(3,1,m+1,sharex=True)
             axes['redbin'+str(m)].set_ylabel(ylabels[i], fontsize=16)
             a = [[],[]]
             b = [[],[]]
