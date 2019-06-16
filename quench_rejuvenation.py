@@ -222,16 +222,15 @@ mass_ranges = [9.5,10.3,11.0,18.0]
 types = [r'$9.5\leq \log(M_*) < 10.3$', r'$10.3\leq \log(M_*) < 11.0$', r'$\log(M_*) \geq 11.0$']
 for i in range(0, len(mass_ranges)-1):
     red_cent,frequency,frequency_sig,times,times_sig = quenching_histogram(results_folder+'/redshifts_m100n1024.txt',galaxies,max_ngal,mass_ranges[i],mass_ranges[i+1],quenchingPerType['times'+str(i)],
-                                                                            quenchingPerType['redshifts'+str(i)], 7)
-    print(frequency)
+                                                                            quenchingPerType['redshifts'+str(i)], 10)
     axes[0].errorbar(red_cent, frequency,yerr=frequency_sig, label=types[i], marker='o', linestyle='--', capsize=3, markersize=8)
     axes[1].errorbar(red_cent, times, yerr = times_sig, label=types[i], marker='o', linestyle='--', capsize=3, markersize=8)
-axes[0].set_ylabel('Number of quenching events per galaxy', fontsize=16)
+axes[0].set_ylabel('Quenching events per galaxy', fontsize=16)
 axes[1].set_ylabel(r' $\langle \log(t_{q}/t_{U}) \rangle$', fontsize=16)
 axes[1].set_xlabel('z', fontsize=16)
 axes[1].legend(loc='best', prop={'size': 12})
 axes[0].legend(loc='best', prop={'size': 12})
 fig2.tight_layout()
-fig2.savefig('quenching_histograms.png', format='png', dpi=200)
+fig2.savefig(str(results_folder)+'quenching_histograms.png', format='png', dpi=200)
 
 print('Quenching and Rejuvenation analysis done.')

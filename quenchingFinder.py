@@ -342,7 +342,7 @@ def rejuvenation_rate_calculator(d, rejuvenation_z, count_galaxy_file, timefile,
     bin_cent, rates, rates_sig = myrunningmedian(bin_cent, rates, 20)
     return rates, bin_cent, rates_sig
 
-def quenching_histogram(redfile,galaxies,ngal,min_mass, max_mass,quenching_times, redshifts, n_bins):
+def quenching_histogram(redfile,galaxies,ngal,min_mass, max_mass,quenching_times,redshifts, n_bins):
     z_init = np.genfromtxt(redfile)
     z_bins = np.linspace(0.0, np.amax(redshifts)*1.1, n_bins)
     counts = np.zeros(n_bins-1)
@@ -367,6 +367,7 @@ def quenching_histogram(redfile,galaxies,ngal,min_mass, max_mass,quenching_times
             for m in range(0, len(red)):
                 if z_init[i]<=red[m]<z_init[i+1] and (10**min_mass)<=mass[m]<(10**max_mass):
                     count_nm = count_nm + 1
+        print(counts_m, counts_nm)
         if count_m != 0 and count_nm != 0:
             counts_init[i] = count_m/count_nm
 
