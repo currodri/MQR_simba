@@ -135,7 +135,7 @@ def after_before_vs_msqPlots(mergers, sf_galaxies):
             x,y,ysig = myrunningmedian(np.asarray(a),np.asarray(b),20)
             axes[m].plot(x, y, color = colours[2], label=merger_labels[2])
             axes[m].fill_between(x, y-ysig, y+ysig, facecolor=colours[2], alpha=0.25)
-            axes[m].text(0.05, 0.05, titles[m], transform=axes['redbin'+str(m)].transAxes, fontsize=14,
+            axes[m].text(0.05, 0.05, titles[m], transform=axes[m].transAxes, fontsize=14,
                             verticalalignment='bottom', bbox=props)
             axes[m].margins(.2)
             axes[m].set_xlim([9.3,11.9])
