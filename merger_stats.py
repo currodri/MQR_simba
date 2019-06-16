@@ -324,6 +324,8 @@ def Contribution_and_Rate(mergers, msq_galaxies, n_bins):
     for i in range(0, n_bins-1):
         m_counter = 0
         nm_counter = 0
+        sfr_m = 0
+        sfr_nm = 0
         times = []
         for j in range(0, len(mergers)):
             merger = mergers[j]
