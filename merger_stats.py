@@ -338,7 +338,7 @@ if u_selec==1:
     SFR_Evolution2(mergers, sf_galaxies, 10)
 elif u_selec==2:
     Merger_Contribution(mergers, sf_galaxies, 10)
-elif u_selec==2:
+elif u_selec==3:
     Frac_Merger_rate(mergers, sf_galaxies, 15)
 elif u_selec==4:
     SF_Budget(mergers, sf_galaxies, 10)
