@@ -47,7 +47,8 @@ def after_before_vs_msqPlots(mergers, sf_galaxies):
     merger_labels = ['Before merger','After merger','MSQ non merger']
     titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
     zlimits = [[0.0, 0.5], [1.0, 1.5], [2.0, 2.5]]
-    colours = ['g','r', 'k']
+    colours = ['b','r','k']
+    colour_lines = ['c','m']
     props = dict(boxstyle='round', facecolor='white', alpha=0.5, edgecolor='k')
     for i in range(0, len(ylabels)):
         fig, axes = plt.subplots(len(titles), 1, sharex='col', num=None, figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
@@ -55,78 +56,77 @@ def after_before_vs_msqPlots(mergers, sf_galaxies):
             axes[m].set_ylabel(ylabels[i], fontsize=16)
             a = [[],[]]
             b = [[],[]]
-            a_m = []
-            b_m = []
+            #a_m = []
+            #b_m = []
             for j in range(0, len(mergers)):
                 if zlimits[m][0] <= mergers[j].z_gal[1] < zlimits[m][1]:
                     a[0].append(np.log10(mergers[j].m_gal[0]))
-                    a_m.append(np.log10(mergers[j].m_gal[1]))
+                    #a_m.append(np.log10(mergers[j].m_gal[1]))
                     a[1].append(np.log10(mergers[j].m_gal[2]))
                     if i==0:
                         b[0].append(np.log10(mergers[j].sfr_gal[0]/mergers[j].m_gal[0]))
-                        b_m.append(np.log10(mergers[j].sfr_gal[1]/mergers[j].m_gal[1]))
+                        #b_m.append(np.log10(mergers[j].sfr_gal[1]/mergers[j].m_gal[1]))
                         b[1].append(np.log10(mergers[j].sfr_gal[2]/mergers[j].m_gal[2]))
-                        # for s in range(0, len(b)):
-                        #     if m==0 and b[s][-1]<-11:
-                        #         b[s][-1] = -11 + 0.01*random.randint(0,10)
-                        #         axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
-                        #                                         width=0.005, head_length=0.1,
-                        #                                         color=colours[s])
-                        #     elif m==1 and b[s][-1]<-10.2:
-                        #         b[s][-1] = -10.2 + 0.01*random.randint(0,10)
-                        #         axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
-                        #                                         width=0.005, head_length=0.1,
-                        #                                         color=colours[s])
-                        #     elif m==2 and b[s][-1]<-10:
-                        #         b[s][-1] = -10 + 0.01*random.randint(0,10)
-                        #         axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
-                        #                                         width=0.005, head_length=0.1,
-                        #                                         color=colours[s])
+                        for s in range(0, len(b)):
+                            if m==0 and b[s][-1]<-11:
+                                b[s][-1] = -11 + 0.01*random.randint(0,10)
+                                axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
+                                                                width=0.005, head_length=0.1,
+                                                                color=colours[s])
+                            elif m==1 and b[s][-1]<-10.2:
+                                b[s][-1] = -10.2 + 0.01*random.randint(0,10)
+                                axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
+                                                                width=0.005, head_length=0.1,
+                                                                color=colours[s])
+                            elif m==2 and b[s][-1]<-10:
+                                b[s][-1] = -10 + 0.01*random.randint(0,10)
+                                axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
+                                                                width=0.005, head_length=0.1,
+                                                                color=colours[s])
                     elif i==1:
                         b[0].append(np.log10(mergers[j].fgas_gal[0]))
-                        b_m.append(np.log10(mergers[j].fgas_gal[1]))
+                        #b_m.append(np.log10(mergers[j].fgas_gal[1]))
                         b[1].append(np.log10(mergers[j].fgas_gal[2]))
-                        # for s in range(0, len(b)):
-                        #     if m==0 and b[s][-1]<-2:
-                        #         b[s][-1] = -2 + 0.01*random.randint(0,10)
-                        #         axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
-                        #                                         width=0.005, head_length=0.1,
-                        #                                         color=colours[s])
-                        #     elif m==1 and b[s][-1]<-1.7:
-                        #         b[s][-1] = -1.7 + 0.01*random.randint(0,10)
-                        #         axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
-                        #                                         width=0.005, head_length=0.1,
-                        #                                         color=colours[s])
-                        #     elif m==2 and b[s][-1]<-1.5:
-                        #         b[s][-1] = -1.5 + 0.01*random.randint(0,10)
-                        #         axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
-                        #                                         width=0.005, head_length=0.1,
-                        #                                         color=colours[s])
+                        for s in range(0, len(b)):
+                            if m==0 and b[s][-1]<-2:
+                                b[s][-1] = -2 + 0.01*random.randint(0,10)
+                                axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
+                                                                width=0.005, head_length=0.1,
+                                                                color=colours[s])
+                            elif m==1 and b[s][-1]<-1.7:
+                                b[s][-1] = -1.7 + 0.01*random.randint(0,10)
+                                axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
+                                                                width=0.005, head_length=0.1,
+                                                                color=colours[s])
+                            elif m==2 and b[s][-1]<-1.5:
+                                b[s][-1] = -1.5 + 0.01*random.randint(0,10)
+                                axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
+                                                                width=0.005, head_length=0.1,
+                                                                color=colours[s])
                     elif i==2:
                         b[0].append(np.log10(mergers[j].sfe_gal[0]))
-                        b_m.append(np.log10(mergers[j].sfe_gal[1]))
+                        #b_m.append(np.log10(mergers[j].sfe_gal[1]))
                         b[1].append(np.log10(mergers[j].sfe_gal[2]))
-                        # for s in range(0, len(b)):
-                        #     if m==0 and b[s][-1]<-11:
-                        #         b[s][-1] = -11 + 0.01*random.randint(0,10)
-                        #         axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
-                        #                                         width=0.005, head_length=0.1,
-                        #                                         color=colours[s])
-                        #     elif m==1 and b[s][-1]<-10.5:
-                        #         b[s][-1] = -10.5 + 0.01*random.randint(0,10)
-                        #         axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
-                        #                                         width=0.005, head_length=0.1,
-                        #                                         color=colours[s])
-                        #     elif m==2 and b[s][-1]<-10.2:
-                        #         b[s][-1] = -10.2 + 0.01*random.randint(0,10)
-                        #         axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
-                        #                                         width=0.005, head_length=0.1,
-                        #                                         color=colours[s])
+                        for s in range(0, len(b)):
+                            if m==0 and b[s][-1]<-11:
+                                b[s][-1] = -11 + 0.01*random.randint(0,10)
+                                axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
+                                                                width=0.005, head_length=0.1,
+                                                                color=colours[s])
+                            elif m==1 and b[s][-1]<-10.5:
+                                b[s][-1] = -10.5 + 0.01*random.randint(0,10)
+                                axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
+                                                                width=0.005, head_length=0.1,
+                                                                color=colours[s])
+                            elif m==2 and b[s][-1]<-10.2:
+                                b[s][-1] = -10.2 + 0.01*random.randint(0,10)
+                                axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
+                                                                width=0.005, head_length=0.1,
+                                                                color=colours[s])
             for k in range(0, len(a)):
                 x,y,ysig = myrunningmedian(np.asarray(a[k]),np.asarray(b[k]),15)
-                #axes[m].scatter(np.asarray(a[k]),np.asarray(b[k]), color=colours[k], label=merger_labels[k], marker='.')
-                axes[m].plot(x, y, color = colours[k], linewidth=2.5)
-            axes[m].hexbin(np.asarray(a_m), np.asarray(b_m), cmap='rainbow')
+                axes[m].scatter(np.asarray(a[k]),np.asarray(b[k]), color=colours[k], label=merger_labels[k], marker='.', s=0.01)
+                axes[m].plot(x, y, color = colour_lines[k], linewidth=2.5)
             a = []
             b = []
             for n in range(0, len(sf_galaxies)):
