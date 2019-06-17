@@ -150,8 +150,8 @@ def Quenching_Scatter_Plot(redshifts2, quenching_times2, ste_mass2):
     for i in range(0, len(scatter_labels)):
         for j in range(0, len(scatter_markers)):
             if j==0:
-                hb2 = ax2.hexbin(ste_mass2[i][j], quenching_times2[i][j], cmap=cmaps[i], alpha=0.85, bins='log')
-                hb1 = ax1.hexbin(redshifts2[i][j], quenching_times2[i][j], cmap=cmaps[i], alpha=0.75, bins='log')
+                hb2 = ax2.hexbin(ste_mass2[i][j], quenching_times2[i][j], cmap=cmaps[i], alpha=0.85, bins='log', gridsize=70)
+                hb1 = ax1.hexbin(redshifts2[i][j], quenching_times2[i][j], cmap=cmaps[i], alpha=0.75, bins='log', gridsize=30)
                 cb1 = fig.colorbar(hb1, ax=ax1)
                 cb1.set_label('log10(N)')
                 cb2 = fig.colorbar(hb2, ax=ax2)
