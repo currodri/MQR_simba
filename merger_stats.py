@@ -191,6 +191,7 @@ def Merger_Fraction_Mass_Distribution(mergers, msq_galaxies, n_bins):
     mass_bins = np.linspace(9.5, 12, n_bins)
     delta = mass_bins[1]-mass_bins[0]
     mass_cent = mass_bins - delta/2
+    mass_cent = np.delete(mass_cent, 0)
     fig = plt.figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
     ax = fig.add_subplot(1,1,1)
     for zs in range(0, len(zlimits)):
