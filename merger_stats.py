@@ -210,7 +210,7 @@ def Merger_Fraction_Mass_Distribution(mergers, msq_galaxies, n_bins):
             if m_counter != 0 or nm_counter != 0:
                 f_merger[i] = float(m_counter)/(float(m_counter)+float(nm_counter))
         ax.plot(mass_cent, f_merger, label=titles[zs], linestyle='--', marker=markers[zs])
-    ax.set_xlabel(r'$z$')
+    ax.set_xlabel(r'$\log(M_{*})$', fontsize=16)
     ax.legend(loc='best')
     ax.set_ylabel('Merger fraction of star-forming galaxies')
     fig.tight_layout()
