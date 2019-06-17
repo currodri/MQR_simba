@@ -99,6 +99,7 @@ for i in range(0, len(galaxies_interpolated)):
         if quench is lastquench:
             pos = 0
             finalis = finalis + 1
+            print(len(galaxy.rate))
             for k in range(0, len(galaxy.rate), 3):
                 print(0.2*galaxy.galaxy_t[start], galaxy.galaxy_t[start] - galaxy.rate[k+1])
                 if 0.2*galaxy.galaxy_t[start]> (galaxy.galaxy_t[start] - galaxy.rate[k+1]) >=0:
