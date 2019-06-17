@@ -136,7 +136,7 @@ def Quenching_Scatter_Plot(redshifts2, quenching_times2, ste_mass2):
     scatter_markers = ['.','*', '.']
     cmaps = ['Reds', 'Blues']
     #scatter_colours = [['#e90c35','#ec5b75','#e90c35'],['#0c86e4','#8d0ce4','#0c86e4']]
-    scatter_colours = [['#e90c35','m','c'],['#0c86e4','m','c']]
+    scatter_colours = [['#e90c35','m','r'],['#0c86e4','c','b']]
     fig = plt.figure(num=None, figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
     #figre = plt.figure(num=None, figsize=(7, 5), dpi=80, facecolor='w', edgecolor='k')
     # fig4 = plt.figure(num=None, figsize=(7, 5), dpi=80, facecolor='w', edgecolor='k')
@@ -150,8 +150,8 @@ def Quenching_Scatter_Plot(redshifts2, quenching_times2, ste_mass2):
     for i in range(0, len(scatter_labels)):
         for j in range(0, len(scatter_markers)):
             if j==0:
-                hb1 = ax1.hexbin(redshifts2[i][j], quenching_times2[i][j], cmap=cmaps[i], alpha=0.95, bins='log')
-                hb2 = ax2.hexbin(ste_mass2[i][j], quenching_times2[i][j], cmap=cmaps[i], alpha=0.95, bins='log')
+                hb2 = ax2.hexbin(ste_mass2[i][j], quenching_times2[i][j], cmap=cmaps[i], alpha=0.85, bins='log')
+                hb1 = ax1.hexbin(redshifts2[i][j], quenching_times2[i][j], cmap=cmaps[i], alpha=0.75, bins='log')
                 cb1 = fig.colorbar(hb1, ax=ax1)
                 cb1.set_label('log10(N)')
                 cb2 = fig.colorbar(hb2, ax=ax2)
