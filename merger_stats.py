@@ -200,11 +200,11 @@ def Merger_Fraction_Mass_Distribution(mergers, msq_galaxies, n_bins):
             nm_counter = 0
             for j in range(0, len(mergers)):
                 merger = mergers[j]
-                if z_limits[zs][0] <= merger.z_gal[1] < z_limits[zs][1] and mass_bins[i] <= merger.m_gal[1] < mass_bins[i+1]:
+                if zlimits[zs][0] <= merger.z_gal[1] < zlimits[zs][1] and mass_bins[i] <= merger.m_gal[1] < mass_bins[i+1]:
                     m_counter = m_counter + 1
             for k in range(0, len(msq_galaxies)):
                 msq = msq_galaxies[k]
-                if z_limits[zs][0] <= msq.z_gal < z_limits[zs][1] and mass_bins[i] <= msq.m_gal < mass_bins[i+1]:
+                if zlimits[zs][0] <= msq.z_gal < zlimits[zs][1] and mass_bins[i] <= msq.m_gal < mass_bins[i+1]:
                     nm_counter = nm_counter + 1
             if m_counter != 0 and nm_counter != 0:
                 f_merger[i] = m_counter/(m_counter+nm_counter)
