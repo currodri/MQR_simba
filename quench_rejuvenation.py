@@ -148,7 +148,7 @@ def Quenching_Scatter_Plot(redshifts2, quenching_times2, ste_mass2):
     ax2 = fig.add_subplot(2,1,2)
     #axre = figre.add_subplot(1,1,1)
     # ax5.plot(np.log10(tau), np.log10(sfr_tau), 'k-')
-    for i in range(len(scatter_labels), 0, -1):
+    for i in range(len(scatter_labels)-1, -1, -1):
         for j in range(0, len(scatter_markers)):
             if j==0:
                 hb2 = ax2.hexbin(ste_mass2[i][j], quenching_times2[i][j], cmap=cmaps[i], alpha=0.85, bins='log', gridsize=grids[i])
