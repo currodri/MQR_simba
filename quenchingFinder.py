@@ -246,9 +246,12 @@ def ssfr_interpolation(galaxy):
         tck = interpolate.splrep(galaxy_t_non,ssfr_gal_non, k=3)
         ssfr_new = interpolate.splev(time_new, tck, der=0)
 
-        new_galaxies.append(GalaxyData(galaxy.id, ssfr_new.tolist(), galaxy.sfe_gal[quench.below11],
+        new_gal = GalaxyData(galaxy.id, ssfr_new.tolist(), galaxy.sfe_gal[quench.below11],
                                 galaxy.z_gal[quench.below11],time_new.tolist(), galaxy.m_gal[quench.above9],
-                                galaxy.fgas_gal[quench.above9], quench.type))
+                                galaxy.fgas_gal[quench.above9], quench.type)
+        new_gal.rate = galaxy.rate[]
+
+        new_galaxies.append(new_gal)
     return new_galaxies
 
 
