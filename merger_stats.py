@@ -184,6 +184,36 @@ def Merger_Fraction(mergers, msq_galaxies, n_bins):
     plt.xlabel(r'$z$')
     plt.ylabel('Merger fraction of star-forming galaxies')
     plt.savefig(str(results_folder)+'mfr_evolution.png', dpi=250)
+def Merger_Fraction_Mass_Distribution(mergers, msq_galaxies, n_bins):
+    zlimits = [[0.0, 0.5], [1.0, 1.5], [2.0, 2.5]]
+    titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
+    markers = ['o','v', 's']
+    mass_bins = np.linspace(9.5, 12, n_bins)
+    delta = mass_bins[1]-mass_bins[0]
+    mass_cent = mass_bins - delta/2
+    fig = plt.figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
+    ax = fig.add_subplot(1,1,1)
+    for zs in range(0, len(zlimits)):
+        f_merger = np.zeros(n_bins-1)
+        for i in range(0, n_bins-1):
+            m_counter = 0
+            nm_counter = 0
+            for j in range(0, len(mergers)):
+                merger = mergers[j]
+                if z_limits[zs][0] <= merger.z_gal[1] < z_limits[zs][1] and mass_bins[i] <= merger.m_gal[1] < mass_bins[i+1]:
+                    m_counter = m_counter + 1
+            for k in range(0, len(msq_galaxies)):
+                msq = msq_galaxies[k]
+                if z_limits[zs][0] <= msq.z_gal < z_limits[zs][1] and mass_bins[i] <= msq.m_gal < mass_bins[i+1]:
+                    nm_counter = nm_counter + 1
+            if m_counter != 0 and nm_counter != 0:
+                f_merger[i] = m_counter/(m_counter+nm_counter)
+        ax.plot(mass_cent, f_merger, label=titles[zs], linestyle='--', marker=markers[zs])
+    ax.set_xlabel(r'$z$')
+    ax.legend(loc='best')
+    ax.set_ylabel('Merger fraction of star-forming galaxies')
+    fig.tight_layout()
+    fig.savefig(str(results_folder)+'mfr_evolution_permass.png', dpi=250)
 def Merger_Contribution(mergers, msq_galaxies, n_bins):
     z_bins = np.linspace(0.0, 3.5, n_bins)
     f_merger = np.zeros(n_bins-1)
@@ -384,7 +414,9 @@ print('- Evolution of merger rate with redshift. (Press 3)')
 print(' ')
 print('- Evolution of contribution and merger rate with redshift. (Press 4)')
 print(' ')
-print('- If you want to do all of them, just Press 5.')
+print('- Mass distribution of merger fraction in three redshift bins. (Press 5)')
+print(' ')
+print('- If you want to do all of them, just Press 6.')
 print(' ')
 u_selec = input('Write the number of the function you would like to use: ')
 
@@ -397,9 +429,12 @@ elif u_selec==3:
 elif u_selec==4:
     Contribution_and_Rate(mergers, sf_galaxies, 15)
 elif u_selec==5:
-    SF_Budget(mergers, sf_galaxies, 10)
+    Merger_Fraction_Mass_Distribution(mergers, sf_galaxies, 15)
+elif u_selec==6:
     SFR_Evolution2(mergers, sf_galaxies, 10)
     Merger_Contribution(mergers, sf_galaxies, 10)
     Frac_Merger_rate(mergers, sf_galaxies, 15)
+    Contribution_and_Rate(mergers, sf_galaxies, 15)
+    Merger_Fraction_Mass_Distribution(mergers, sf_galaxies, 15)
 else:
     print('ERROR: function not found')
