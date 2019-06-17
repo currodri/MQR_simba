@@ -249,7 +249,7 @@ def ssfr_interpolation(galaxy):
         new_gal = GalaxyData(galaxy.id, ssfr_new.tolist(), galaxy.sfe_gal[quench.below11],
                                 galaxy.z_gal[quench.below11],time_new.tolist(), galaxy.m_gal[quench.above9],
                                 galaxy.fgas_gal[quench.above9], quench.type)
-        new_gal.rate = galaxy.rate[]
+        new_gal.rate = galaxy.rate
 
         new_galaxies.append(new_gal)
     return new_galaxies
