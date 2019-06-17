@@ -135,6 +135,7 @@ def Quenching_Scatter_Plot(redshifts2, quenching_times2, ste_mass2):
     scatter_labels = [['Final quenching Sat', 'Non-final quenching Sat', 'Final quenching Sat with rejuvenation' ],['Final quenching Central', 'Non-final quenching Central', 'Final quenching Central with rejuvenation']]
     scatter_markers = ['.','*', '.']
     cmaps = ['Reds', 'Blues']
+    grids = [30,70]
     #scatter_colours = [['#e90c35','#ec5b75','#e90c35'],['#0c86e4','#8d0ce4','#0c86e4']]
     scatter_colours = [['#e90c35','m','r'],['#0c86e4','c','b']]
     fig = plt.figure(num=None, figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
@@ -147,22 +148,22 @@ def Quenching_Scatter_Plot(redshifts2, quenching_times2, ste_mass2):
     ax2 = fig.add_subplot(2,1,2)
     #axre = figre.add_subplot(1,1,1)
     # ax5.plot(np.log10(tau), np.log10(sfr_tau), 'k-')
-    for i in range(0, len(scatter_labels)):
+    for i in range(len(scatter_labels), 0, -1):
         for j in range(0, len(scatter_markers)):
             if j==0:
-                hb2 = ax2.hexbin(ste_mass2[i][j], quenching_times2[i][j], cmap=cmaps[i], alpha=0.85, bins='log', gridsize=70)
-                hb1 = ax1.hexbin(redshifts2[i][j], quenching_times2[i][j], cmap=cmaps[i], alpha=0.75, bins='log', gridsize=30)
+                hb2 = ax2.hexbin(ste_mass2[i][j], quenching_times2[i][j], cmap=cmaps[i], alpha=0.85, bins='log', gridsize=grids[i])
+                hb1 = ax1.hexbin(redshifts2[i][j], quenching_times2[i][j], cmap=cmaps[i], alpha=0.75, bins='log', gridsize=grids[i])
                 cb1 = fig.colorbar(hb1, ax=ax1)
-                cb1.set_label('log10(N)')
+                cb1.set_label(r'$\log$(N)')
                 cb2 = fig.colorbar(hb2, ax=ax2)
-                cb2.set_label('log10(N)')
+                cb2.set_label(r'$\log$(N)')
             # if j==2:
             #     ax1.scatter(redshifts2[i][j], quenching_times2[i][j], edgecolor=scatter_colours[i][j], marker=scatter_markers[j], facecolors=scatter_faces[i][j], s=60)
             #     ax2.scatter(ste_mass2[i][j], quenching_times2[i][j], edgecolor=scatter_colours[i][j], marker=scatter_markers[j], facecolors=scatter_faces[i][j], s=60)
             #     #axre.scatter(ste_mass2[i][j], quenching_times2[i][j], edgecolor=scatter_colours[i][j], marker=scatter_markers[j], facecolors=scatter_faces[i][j], s=60)
             else:
-                ax1.scatter(redshifts2[i][j], quenching_times2[i][j], label =scatter_labels[i][j], marker=scatter_markers[j], edgecolor=scatter_colours[i][j], s=30, facecolors='w')
-                ax2.scatter(ste_mass2[i][j], quenching_times2[i][j], label =scatter_labels[i][j], marker=scatter_markers[j], edgecolor=scatter_colours[i][j], s=30, facecolors='w')
+                ax1.scatter(redshifts2[i][j], quenching_times2[i][j], label =scatter_labels[i][j], marker=scatter_markers[j], edgecolor=scatter_colours[i][j], s=40, facecolors='w')
+                ax2.scatter(ste_mass2[i][j], quenching_times2[i][j], label =scatter_labels[i][j], marker=scatter_markers[j], edgecolor=scatter_colours[i][j], s=40, facecolors='w')
                 #axre.scatter(ste_mass2[i][j], quenching_times2[i][j], edgecolor=scatter_colours[i][j], label =scatter_labels[i][j], marker=scatter_markers[j], facecolors=scatter_faces[i][j], s=60)
             # if scatter_labels[i][j]=='Non-final quenching Sat' or scatter_labels[i][j]=='Non-final quenching Central':
             #     print(quenching_times2[i][j])
