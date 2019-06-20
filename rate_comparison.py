@@ -51,6 +51,8 @@ max_redshift_mergers = 3.5
 # Perform the search for mergers
 mergers, sf_galaxies = merger_finder(galaxies, min_merger_ratio, 10**mass_limit, max_redshift_mergers)
 
+print(len(sf_galaxies))
+
 print('Merger analysis done.')
 
 # Perform the quenching and rejuvenation analysis
@@ -167,11 +169,9 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
                     times.append(merger.galaxy_t[1])
         for k in range(0, len(sf_galaxies)):
             sf = sf_galaxies[k]
-            print(z_bins[i],sf.z_gal,z_bins[i+1])
             if z_bins[i]<= sf.z_gal < z_bins[i+1]:
                 type = Mass_Bin_Type(mass_limits,sf.m_gal)
                 if type != False:
-                    print('hey')
                     sf_counter = sf_counter + 1
                     times.append(sf.galaxy_t)
         for l in range(0, len(q_reds)):
