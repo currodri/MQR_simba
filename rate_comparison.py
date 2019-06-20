@@ -156,7 +156,9 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
     z_cent = z_bins - delta/2
     z_cent = np.delete(z_cent, 0)
     for i in range(0, n_bins-1):
-        sf_counter = 0
+        sf_counter = {}
+        for sf_type in range(0, len(mass_limits)):
+            sf_counter['massbin'+str(sf_type)] = 0
         counter = 0
         times = []
         for j in range(0, len(mergers)):
@@ -173,7 +175,7 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
             if z_bins[i]<= sf.z_gal < z_bins[i+1]:
                 type = Mass_Bin_Type(mass_limits,sf.m_gal)
                 if type != 3:
-                    sf_counter = sf_counter + 1
+                    sf_counter['massbin'+str(type)] = sf_counter['massbin'+str(type)] + 1
                     times.append(sf.galaxy_t)
         for l in range(0, len(q_reds)):
             quench_red = q_reds[l]
@@ -194,7 +196,7 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
         for ty in range(0, len(mass_limits)):
             print(counter)
             print(r_merger['massbin'+str(ty)][i], r_quench['massbin'+str(ty)][i], r_merger['massbin'+str(ty)][i])
-            normalization = float(float(r_merger['massbin'+str(ty)][i]+sf_counter)*delta_t)
+            normalization = float(float(r_merger['massbin'+str(ty)][i]+sf_counter['massbin'+str(ty)])*delta_t)
             r_merger['massbin'+str(ty)][i] = float(r_merger['massbin'+str(ty)][i])/normalization
             r_quench['massbin'+str(ty)][i] = float(r_quench['massbin'+str(ty)][i])/normalization
             r_reju['massbin'+str(ty)][i] = float(r_reju['massbin'+str(ty)][i])/normalization
@@ -204,12 +206,69 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
         ax[0].plot(x_dat, np.log10(r_merger['massbin'+str(i)]), linestyle='--', marker='d', label=mass_labels[i])
         ax[1].plot(x_dat, np.log10(r_quench['massbin'+str(i)]), linestyle='--', marker='d')
         ax[2].plot(x_dat, np.log10(r_reju['massbin'+str(i)]), linestyle='--', marker='d')
-    ax[0].set_ylabel(r'$\log(\Gamma_{Mer})$', fontsize=16)
-    ax[1].set_ylabel(r'$\log(\Gamma_{Que})$', fontsize=16)
-    ax[2].set_ylabel(r'$\log(\Gamma_{Rej})$', fontsize=16)
+    ax[0].set_ylabel(r'$\log(\mathcal{R}_{Mer})$ [Gyr$^{-1}$]', fontsize=16)
+    ax[1].set_ylabel(r'$\log(\mathcal{R}_{Que})$ [Gyr$^{-1}$]', fontsize=16)
+    ax[2].set_ylabel(r'$\log(\mathcal{R}_{Rej})$ [Gyr$^{-1}$]', fontsize=16)
     ax[2].set_xlabel(r'$\log(1+z)$', fontsize=16)
     ax[0].legend(loc='best', prop={'size': 12})
     fig.tight_layout()
     fig.savefig(str(results_folder)+'mqr_fractional_rate.png', format='png', dpi=200)
 
+def Density_Rate(mergers,q_masses,q_reds,q_thubble,reju_z,reju_t,reju_m,n_bins,max_redshift_mergers):
+    mass_limits = [[9.5,10.3], [10.3,11.0],[11.0,18.0]]
+    mass_labels = [r'$9.5\leq \log(M_*) < 10.3$', r'$10.3\leq \log(M_*) < 11.0$', r'$\log(M_*) \geq 11.0$']
+    z_bins = np.linspace(0.0, max_redshift_mergers, n_bins)
+    r_merger = {}
+    r_quench = {}
+    r_reju = {}
+    for bini in range(0, len(mass_limits)):
+        r_merger['massbin'+str(bini)] = np.zeros(n_bins-1)
+        r_quench['massbin'+str(bini)] = np.zeros(n_bins-1)
+        r_reju['massbin'+str(bini)] = np.zeros(n_bins-1)
+    delta = z_bins[1]-z_bins[0]
+    z_cent = z_bins - delta/2
+    z_cent = np.delete(z_cent, 0)
+    for i in range(0, n_bins-1):
+        counter = []
+        for j in range(0, len(mergers)):
+            merger = mergers[j]
+            if z_bins[i]<= merger.z_gal[1] < z_bins[i+1]:
+                type = Mass_Bin_Type(mass_limits,merger.m_gal[1])
+                if type != 3:
+                    r_merger['massbin'+str(type)][i] = r_merger['massbin'+str(type)][i] + 1
+                    counter.append(merger.z_gal[1])
+        for l in range(0, len(q_reds)):
+            quench_red = q_reds[l]
+            if z_bins[i]<= quench_red < z_bins[i+1]:
+                type = Mass_Bin_Type(mass_limits,q_masses[l])
+                if type != 3:
+                    r_quench['massbin'+str(type)][i] = r_quench['massbin'+str(type)][i] + 1
+                    counter.append(quench_red)
+        for m in range(0, len(reju_z)):
+            reju = reju_z[m]
+            if z_bins[i]<= reju < z_bins[i+1]:
+                type = Mass_Bin_Type(mass_limits, reju_m[m])
+                if type != 3:
+                    r_reju['massbin'+str(type)][i] = r_reju['massbin'+str(type)][i] + 1
+                    counter.append(reju)
+        total_v = float(100*len(np.unique(counter)))
+        for ty in range(0, len(mass_limits)):
+            r_merger['massbin'+str(ty)][i] = float(r_merger['massbin'+str(ty)][i])/total_v
+            r_quench['massbin'+str(ty)][i] = float(r_quench['massbin'+str(ty)][i])/total_v
+            r_reju['massbin'+str(ty)][i] = float(r_reju['massbin'+str(ty)][i])/total_v
+    fig, ax = plt.subplots(3, 1, sharex='col', num=None, figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
+    x_dat = np.log10(1+z_cent)
+    for i in range(0, len(mass_limits)):
+        ax[0].plot(x_dat, np.log10(r_merger['massbin'+str(i)]), linestyle='--', marker='d', label=mass_labels[i])
+        ax[1].plot(x_dat, np.log10(r_quench['massbin'+str(i)]), linestyle='--', marker='d')
+        ax[2].plot(x_dat, np.log10(r_reju['massbin'+str(i)]), linestyle='--', marker='d')
+    ax[0].set_ylabel(r'$\log(\Gamma_{Mer})$ [cMpc$^{-3}$Gyr$^{-1}$]', fontsize=16)
+    ax[1].set_ylabel(r'$\log(\Gamma_{Que})$ [cMpc$^{-3}$Gyr$^{-1}$]', fontsize=16)
+    ax[2].set_ylabel(r'$\log(\Gamma_{Rej})$ [cMpc$^{-3}$Gyr$^{-1}$]', fontsize=16)
+    ax[2].set_xlabel(r'$\log(1+z)$', fontsize=16)
+    ax[0].legend(loc='best', prop={'size': 12})
+    fig.tight_layout()
+    fig.savefig(str(results_folder)+'mqr_density_rate.png', format='png', dpi=200)
+
 Fractional_Rate(mergers,sf_galaxies,ste_mass2_all,redshifts2_all,thubble2_all,reju_z,reju_t,reju_m,10,max_redshift_mergers)
+Density_Rate(mergers,ste_mass2_all,redshifts2_all,thubble2_all,reju_z,reju_t,reju_m,10,max_redshift_mergers)
