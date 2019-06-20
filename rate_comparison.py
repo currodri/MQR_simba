@@ -148,9 +148,9 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
     r_quench = {}
     r_reju = {}
     for bini in range(0, len(mass_limits)):
-        r_merger['massbin'+str(bini)] = np.zeros(z_bins-1)
-        r_quench['massbin'+str(bini)] = np.zeros(z_bins-1)
-        r_reju['massbin'+str(bini)] = np.zeros(z_bins-1)
+        r_merger['massbin'+str(bini)] = np.zeros(n_bins-1)
+        r_quench['massbin'+str(bini)] = np.zeros(n_bins-1)
+        r_reju['massbin'+str(bini)] = np.zeros(n_bins-1)
     delta = z_bins[1]-z_bins[0]
     z_cent = z_bins - delta/2
     z_cent = np.delete(z_cent, 0)

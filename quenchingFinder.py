@@ -239,15 +239,15 @@ def ssfr_interpolation(galaxy):
     below = belows.max()
     if len(range(above, below+limit,1))>3:
         #If there are at least three points in the quench, then:
-        ssfr_gal_non = [galaxy.ssfr_gal[j] for j in range(above-limit, below+limit,1)]
+        sfr_gal_non = [galaxy.sfr_gal[j] for j in range(above-limit, below+limit,1)]
         galaxy_t_non = [galaxy.galaxy_t[j] for j in range(above-limit, below+limit,1)]
 
         time_new = np.arange(np.amin(galaxy_t_non), np.amax(galaxy_t_non), 0.001)
 
-        tck = interpolate.splrep(galaxy_t_non,ssfr_gal_non, k=3)
-        ssfr_new = interpolate.splev(time_new, tck, der=0)
+        tck = interpolate.splrep(galaxy_t_non,sfr_gal_non, k=3)
+        sfr_new = interpolate.splev(time_new, tck, der=0)
 
-        new_gal = GalaxyData(galaxy.id, ssfr_new.tolist(), galaxy.sfe_gal[quench.below11],
+        new_gal = GalaxyData(galaxy.id, sfr_new.tolist(), galaxy.sfe_gal[quench.below11],
                                 galaxy.z_gal[quench.below11],time_new.tolist(), galaxy.m_gal[quench.above9],
                                 galaxy.fgas_gal[quench.above9], quench.type)
         new_gal.rate = galaxy.rate
@@ -358,7 +358,7 @@ def quenching_histogram(redfile,galaxies,ngal,min_mass, max_mass,quenching_times
     z_cent = np.delete(z_cent, 0)
     counts_init = np.zeros(len(z_init)-1)
     z_init_cent = (z_init[:-1]+z_init[1:])/2
-    
+
     for i in range(0, len(z_init)-1):
         count_m = 0
         count_nm = 0
