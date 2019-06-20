@@ -141,6 +141,8 @@ def Mass_Bin_Type(mass_bins, m_gal):
     for mbin in range(0, len(mass_bins)):
         if 10**mass_bins[mbin][0] <= m_gal < 10**mass_bins[mbin][1]:
             mass_type = mbin
+    if mass_type==0:
+        print('hey')
     return mass_type
 
 def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,reju_m,n_bins,max_redshift_mergers):
