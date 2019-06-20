@@ -141,8 +141,6 @@ def Mass_Bin_Type(mass_bins, m_gal):
     for mbin in range(0, len(mass_bins)):
         if 10**mass_bins[mbin][0] <= m_gal < 10**mass_bins[mbin][1]:
             mass_type = mbin
-    if mass_type==0:
-        print('hey')
     return mass_type
 
 def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,reju_m,n_bins,max_redshift_mergers):
@@ -161,12 +159,14 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
     z_cent = np.delete(z_cent, 0)
     for i in range(0, n_bins-1):
         sf_counter = 0
+        counter = 0
         times = []
         for j in range(0, len(mergers)):
             merger = mergers[j]
             if z_bins[i]<= merger.z_gal[1] < z_bins[i+1]:
                 type = Mass_Bin_Type(mass_limits,merger.m_gal[1])
                 if type != False:
+                    counter = counter + 1
                     r_merger['massbin'+str(type)][i] = r_merger['massbin'+str(type)][i] + 1
                     times.append(merger.galaxy_t[1])
         for k in range(0, len(sf_galaxies)):
@@ -193,7 +193,7 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
         times = np.asarray(times)
         delta_t = float(times.max() - times.min())
         for ty in range(0, len(mass_limits)):
-            print(r_merger['massbin'+str(ty)][i], r_quench['massbin'+str(ty)][i])
+            print(r_merger['massbin'+str(ty)][i], r_quench['massbin'+str(ty)][i], r_merger['massbin'+str(ty)][i])
             normalization = float(float(r_merger['massbin'+str(ty)][i]+sf_counter)*delta_t)
             r_merger['massbin'+str(ty)][i] = float(r_merger['massbin'+str(ty)][i])/normalization
             r_quench['massbin'+str(ty)][i] = float(r_quench['massbin'+str(ty)][i])/normalization
