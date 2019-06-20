@@ -195,10 +195,12 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
             r_merger['massbin'+str(ty)][i] = float(r_merger['massbin'+str(ty)][i])/normalization
             r_quench['massbin'+str(ty)][i] = float(r_quench['massbin'+str(ty)][i])/normalization
             r_reju['massbin'+str(ty)][i] = float(r_reju['massbin'+str(ty)][i])/normalization
-
     fig, ax = plt.subplots(3, 1, sharex='col', num=None, figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
     x_dat = np.log10(1+z_cent)
     for i in range(0, len(mass_limits)):
+        print(r_merger['massbin'+str(i)])
+        print(r_quench['massbin'+str(i)])
+        print(r_reju['massbin'+str(i)])
         ax[0].plot(x_dat, np.log10(r_merger['massbin'+str(i)]), linestyle='--', marker='d', label=mass_labels[i])
         ax[1].plot(x_dat, np.log10(r_quench['massbin'+str(i)]), linestyle='--', marker='d')
         ax[2].plot(x_dat, np.log10(r_reju['massbin'+str(i)]), linestyle='--', marker='d')
