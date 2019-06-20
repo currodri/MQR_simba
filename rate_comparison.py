@@ -187,9 +187,9 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
                     r_reju['massbin'+str(type)][i] = r_reju['massbin'+str(type)][i] + 1
                     times.append(reju_t[m])
         times = np.asarray(times)
-        delta_t = times.max() - times.min()
+        delta_t = float(times.max() - times.min())
         for ty in range(0, len(mass_limits)):
-            normalization = float((r_merger['massbin'+str(ty)][i]+sf_counter)*delta_t)
+            normalization = float(float(r_merger['massbin'+str(ty)][i]+sf_counter)*delta_t)
             r_merger['massbin'+str(ty)][i] = float(r_merger['massbin'+str(ty)][i])/normalization
             r_quench['massbin'+str(ty)][i] = float(r_quench['massbin'+str(ty)][i])/normalization
             r_reju['massbin'+str(ty)][i] = float(r_reju['massbin'+str(ty)][i])/normalization
