@@ -199,9 +199,9 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
     fig, ax = plt.subplots(3, 1, sharex='col', num=None, figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
     x_dat = np.log10(1+z_cent)
     for i in range(0, len(mass_limits)):
-        a[0].plot(x_dat, np.log10(r_merger['massbin'+str(i)]), linestyle='--', marker='d', label=mass_labels[i])
-        a[1].plot(x_dat, np.log10(r_quench['massbin'+str(i)]), linestyle='--', marker='d')
-        a[2].plot(x_dat, np.log10(r_reju['massbin'+str(i)]), linestyle='--', marker='d')
+        ax[0].plot(x_dat, np.log10(r_merger['massbin'+str(i)]), linestyle='--', marker='d', label=mass_labels[i])
+        ax[1].plot(x_dat, np.log10(r_quench['massbin'+str(i)]), linestyle='--', marker='d')
+        ax[2].plot(x_dat, np.log10(r_reju['massbin'+str(i)]), linestyle='--', marker='d')
     ax[0].set_ylabel(r'$log(\Gamma_{Mer})$', fontsize=16)
     ax[1].set_ylabel(r'$log(\Gamma_{Que})$', fontsize=16)
     ax[2].set_ylabel(r'$log(\Gamma_{Rej})$', fontsize=16)
