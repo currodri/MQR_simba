@@ -167,6 +167,7 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
                     times.append(merger.galaxy_t[1])
         for k in range(0, len(sf_galaxies)):
             sf = sf_galaxies[k]
+            print(z_bins[i],sf.z_gal,z_bins[i+1])
             if z_bins[i]<= sf.z_gal < z_bins[i+1]:
                 type = Mass_Bin_Type(mass_limits,sf.m_gal)
                 if type != False:
