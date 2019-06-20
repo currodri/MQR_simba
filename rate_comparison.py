@@ -191,6 +191,7 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
         times = np.asarray(times)
         delta_t = float(times.max() - times.min())
         for ty in range(0, len(mass_limits)):
+            print(r_merger['massbin'+str(ty)][i], r_quench['massbin'+str(ty)][i])
             normalization = float(float(r_merger['massbin'+str(ty)][i]+sf_counter)*delta_t)
             r_merger['massbin'+str(ty)][i] = float(r_merger['massbin'+str(ty)][i])/normalization
             r_quench['massbin'+str(ty)][i] = float(r_quench['massbin'+str(ty)][i])/normalization
@@ -198,16 +199,13 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
     fig, ax = plt.subplots(3, 1, sharex='col', num=None, figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
     x_dat = np.log10(1+z_cent)
     for i in range(0, len(mass_limits)):
-        print(r_merger['massbin'+str(i)])
-        print(r_quench['massbin'+str(i)])
-        print(r_reju['massbin'+str(i)])
         ax[0].plot(x_dat, np.log10(r_merger['massbin'+str(i)]), linestyle='--', marker='d', label=mass_labels[i])
         ax[1].plot(x_dat, np.log10(r_quench['massbin'+str(i)]), linestyle='--', marker='d')
         ax[2].plot(x_dat, np.log10(r_reju['massbin'+str(i)]), linestyle='--', marker='d')
-    ax[0].set_ylabel(r'$log(\Gamma_{Mer})$', fontsize=16)
-    ax[1].set_ylabel(r'$log(\Gamma_{Que})$', fontsize=16)
-    ax[2].set_ylabel(r'$log(\Gamma_{Rej})$', fontsize=16)
-    ax[2].set_xlabel(r'$log(1+z)$', fontsize=16)
+    ax[0].set_ylabel(r'$\log(\Gamma_{Mer})$', fontsize=16)
+    ax[1].set_ylabel(r'$\log(\Gamma_{Que})$', fontsize=16)
+    ax[2].set_ylabel(r'$\log(\Gamma_{Rej})$', fontsize=16)
+    ax[2].set_xlabel(r'$\log(1+z)$', fontsize=16)
     ax[0].legend(loc='best', prop={'size': 12})
     fig.tight_layout()
     fig.savefig(str(results_folder)+'mqr_fractional_rate.png', format='png', dpi=200)
