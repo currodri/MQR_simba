@@ -78,6 +78,7 @@ def merger_finder(galaxies, merger_ratio, mass_limit, redshift_limit):
                     merger = Merger(id,sfr[i-1:i+2],sfe[i-1:i+2],z[i-1:i+2],time[i-1:i+2],mass[i-1:i+2],fgas[i-1:i+2],type[i-1:i+2],ratio, boost)
                     mergers.append(merger)
                 else:
+                    print(mass[i],mass_limit,ssfr,10**sfcondition)
                     if mass[i]>mass_limit and ssfr>=(10**sfcondition):
                         sf_gal = GalaxyData(id,sfr[i],sfe[i],z[i],time[i],mass[i],fgas[i],type[i])
                         # Add star forming galaxy to the list
