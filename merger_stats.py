@@ -384,8 +384,8 @@ def Contribution_and_Rate(mergers, msq_galaxies, n_bins):
     print("slope: %f    intercept: %f    r_value: %f    p_value: %f    std_error: %f" % (slope, intercept,r_value, p_value, std_err))
     fig, ax = plt.subplots(2, 1, sharex='col', num=None, figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
     ax[0].plot(np.log10(1+z_cent), np.log10(f_merger_n), linestyle='--', marker='d', label=r'Mergers in the $100h^{-1}$ Mpc box')
-    ax[0].plot(np.log10(1+z_cent),np.log10((10**intercept)*(1+z_cent)**(slope)), 'k-', label='The best fit power law to this data')
-    ax[0].set_ylabel(r'$log(\mathcal{R}_{merg})$', fontsize=16)
+    ax[0].plot(np.log10(1+z_cent),np.log10((10**intercept)*(1+z_cent)**(slope)), 'k-', label=r'$\log(\mathcal{R}_{merg})=%f\cdot(1+z)+%f$' % (slope, intercept))
+    ax[0].set_ylabel(r'$log(\Gamma_{Mer})$', fontsize=16)
     ax[0].legend(loc='best', prop={'size': 12})
 
     ax[1].plot(np.log10(1+z_cent), np.log10(f_merger), linestyle='--', marker='o', label=r'$\log($Fraction of galaxies)')

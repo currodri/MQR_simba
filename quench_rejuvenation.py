@@ -34,14 +34,14 @@ print('Total number of galaxies at z = 0: '+str(ngal))
 #Store the galaxies sorted in objects of type GalaxyData
 galaxies = []
 for i in range(ngal):
-    ssfr_gal = (d['sfr_gal' + str(i)]/d['m_gal'+str(i)])[::-1]+1e-14
+    sfr_gal = d['sfr_gal' + str(i)]
     sfe_gal = d['sfe_gal' + str(i)][::-1]
     z_gal = d['z_gal' + str(i)][::-1]
     galaxy_t = d['galaxy_t' + str(i)][::-1]
     galaxy_m = d['m_gal'+str(i)][::-1]
     fgas_gal = d['fgas_gal'+str(i)][::-1]
     gal_type = d['gal_type'+str(i)][::-1]
-    galaxy = GalaxyData(i, ssfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type)
+    galaxy = GalaxyData(i, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type)
     galaxies.append(galaxy)
 
 max_ngal = len(galaxies)

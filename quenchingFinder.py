@@ -16,8 +16,9 @@ from scipy import interpolate
 
 """Classes defined"""
 class GalaxyData:
-    def __init__(self,id, ssfr_gal, sfe_gal, z_gal, galaxy_t, m_gal, fgas_gal, gal_type):
-        self.ssfr_gal = ssfr_gal
+    def __init__(self,id, sfr_gal, sfe_gal, z_gal, galaxy_t, m_gal, fgas_gal, gal_type):
+        self.sfr_gal = sfr_gal
+        self.ssfr_gal = (sfr_gal/m_gal)+1e-14
         self.sfe_gal = sfe_gal
         self.z_gal = z_gal
         self.galaxy_t = galaxy_t
@@ -357,6 +358,7 @@ def quenching_histogram(redfile,galaxies,ngal,min_mass, max_mass,quenching_times
     z_cent = np.delete(z_cent, 0)
     counts_init = np.zeros(len(z_init)-1)
     z_init_cent = (z_init[:-1]+z_init[1:])/2
+    
     for i in range(0, len(z_init)-1):
         count_m = 0
         count_nm = 0
