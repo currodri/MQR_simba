@@ -225,12 +225,10 @@ def statsMergers(mergers, sf_galaxies, nbins, printresults = True, plot=False):
                 aft_bin = np.asarray(aft_bin)
                 bef_bin = np.asarray(bef_bin)
                 print(names[m],titles[i])
-                print(aft_bin)
-                print(bef_bin)
-                print(msq_bin)
                 merger_bin = np.concatenate((aft_bin, bef_bin), axis=None)
                 msq_bin = np.asarray(msq_bin)
                 statsKS, pvalue = stats.ks_2samp(merger_bin, msq_bin)
+                print(np.mean(msq_bin),np.mean(aft_bin),np.mean(bef_bin))
                 print(pvalue)
                 stats_results[names[m]][titles[i]]['merger_pvalue'][j-1] = pvalue
                 statsKS, pvalue = stats.ks_2samp(aft_bin, bef_bin)
