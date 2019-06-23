@@ -224,15 +224,11 @@ def statsMergers(mergers, sf_galaxies, nbins, printresults = True, plot=False):
                         msq_bin.append(msq[k])
                 aft_bin = np.asarray(aft_bin)
                 bef_bin = np.asarray(bef_bin)
-                print(names[m],titles[i])
                 merger_bin = np.concatenate((aft_bin, bef_bin), axis=None)
                 msq_bin = np.asarray(msq_bin)
                 statsKS, pvalue = stats.ks_2samp(merger_bin, msq_bin)
-                print(np.mean(msq_bin),np.mean(aft_bin),np.mean(bef_bin))
-                print(pvalue)
                 stats_results[names[m]][titles[i]]['merger_pvalue'][j-1] = pvalue
                 statsKS, pvalue = stats.ks_2samp(aft_bin, bef_bin)
-                print(pvalue)
                 stats_results[names[m]][titles[i]]['aftvsbef_pvalue'][j-1] = pvalue
         if printresults==True:
             print('#########################################')
@@ -245,6 +241,7 @@ def statsMergers(mergers, sf_galaxies, nbins, printresults = True, plot=False):
                     print('................')
                     print('Mass bin center: '+str(stats_results[names[m]][titles[w]]['bin_cent'][v]))
                     print('p-value from KS 2-sample test: '+str(stats_results[names[m]][titles[w]]['merger_pvalue'][v]))
+            print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.')
             print('Statistical significance of difference between after and before merger data')
             for w in range(0, len(titles)):
                 print('----------------------------------')
@@ -400,7 +397,7 @@ u_selec = input('Write the number of the function you would like to use: ')
 if u_selec==1:
     after_before_vs_msqPlots(mergers, sf_galaxies)
 elif u_selec==2:
-    statsMergers(mergers, sf_galaxies, 5, printresults = False)
+    statsMergers(mergers, sf_galaxies, 5)
 elif u_selec==3:
     distanceMSQ(mergers, sf_galaxies, 10)
 else:
