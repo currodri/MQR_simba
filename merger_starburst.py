@@ -306,6 +306,7 @@ def distanceMSQ(mergers, sf_galaxies, nbins):
             bef = np.asarray(bef)
             msq_m = np.asarray(msq_m)
             msq = np.asarray(msq)
+            print(aft_m,aft,bef_m,msq_m,msq)
             maxs = np.array([aft_m.max(),bef_m.max(),msq_m.max()])
             mins = np.array([aft_m.min(),bef_m.min(),msq_m.min()])
             bins = np.linspace(mins.min(), maxs.max(), nbins)
@@ -396,7 +397,7 @@ u_selec = input('Write the number of the function you would like to use: ')
 if u_selec==1:
     after_before_vs_msqPlots(mergers, sf_galaxies)
 elif u_selec==2:
-    statsMergers(mergers, sf_galaxies, 5)
+    statsMergers(mergers, sf_galaxies, 5, printresults = False)
 elif u_selec==3:
     distanceMSQ(mergers, sf_galaxies, 10)
 else:
