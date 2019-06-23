@@ -381,6 +381,60 @@ def distanceMSQ(mergers, sf_galaxies, nbins):
         fig.tight_layout()
         fig.savefig(str(results_folder)+'distance_msq_'+str(names[i])+'.png', format='png', dpi=200)
 
+def distanceMSQ_2(mergers, sf_galaxies, nbins):
+    ylabels = [r'$\Delta_{MSQ}(sSFR)$',r'$\Delta_{MSQ}(f_{H_2})$',r'$\Delta_{MSQ}(SFE)$']
+    names = ['burst_ssfr','gas_frac','sfe_gal']
+    titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
+    zlimits = [[0.0, 0.5], [1.0, 1.5], [2.0, 2.5]]
+    lines = ['-','--','-.']
+    markers = ['o','v', 's']
+    props = dict(boxstyle='round', facecolor='white', alpha=0.5, edgecolor='k')
+    fig2, axes = plt.subplots(3, 1, sharex='col', num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
+    axes[2].set_xlabel(r'$\log(M_{*})$', fontsize=16)
+    for i in range(0, len(ylabels)):
+        axes[i].set_ylabel(ylabels[i], fontsize=16)
+        for m in range(0, len(titles)):
+            mer_m = []
+            mer = []
+            msq_m = []
+            msq = []
+            for j in range(0, len(mergers)):
+                if zlimits[i][0] <= mergers[j].z_gal[1] < zlimits[i][1]:
+                    mer_m.append(np.log10(mergers[j].m_gal[1]))
+                    if m==0:
+                        mer.append(np.log10(mergers[j].ssfr_gal[1]))
+                    elif m==1:
+                        mer.append(np.log10(mergers[j].fgas_gal[1]))
+                    elif m==2:
+                        mer.append(np.log10(mergers[j].sfe_gal[1]))
+            for n in range(0, len(sf_galaxies)):
+                if zlimits[i][0] <= sf_galaxies[n].z_gal < zlimits[i][1]:
+                    msq_m.append(np.log10(sf_galaxies[n].m_gal))
+                    if m==0:
+                        msq.append(np.log10(sf_galaxies[n].ssfr_gal))
+                    elif m==1:
+                        msq.append(np.log10(sf_galaxies[n].fgas_gal))
+                    elif m==2:
+                        msq.append(np.log10(sf_galaxies[n].sfe_gal))
+            mer_m = np.asarray(mer_m)
+            mer = np.asarray(mer)
+            msq_m = np.asarray(msq_m)
+            msq = np.asarray(msq)
+            bins = np.linspace(mer_m.min(), mer.max(), nbins)
+            delta = bins[1] - bins[0]
+            bin_cent = bins - delta/2
+            bin_cent = np.delete(bin_cent, 0)
+            idx = np.digitize(mer_m, bins)
+            running_median = [np.median(mer[idx==k]) for k in range(0,nbins)]
+            mer_median = np.asarray(running_median)
+            idx = np.digitize(msq_m, bins)
+            running_median = [np.median(msq[idx==k]) for k in range(0,nbins)]
+            msq_median = np.asarray(running_median)
+            distance = (mer_median-msq_median)/abs(msq_median)
+            axes[i].plot(bin_cent, distance, linestyle=lines[m], marker=markers[m])
+            axes[i].set_ylabel(ylabels[i], fontsize=16)
+    fig2.tight_layout()
+    fig2.savefig(str(results_folder)+'distance_msq.png', format='png', dpi=200)
 print('MERGER-INDUCED STARBURST ANALYSIS')
 print(' ')
 print('---------------------------------')
@@ -393,6 +447,8 @@ print('- 2-sample Kolmogorov-Smirnov test comparing the difference of the after 
 print(' ')
 print('- Deviation plot of running median of after and before merger with respect to MSQ. (Press 3)')
 print(' ')
+print('- Deviation plot of running median with respect to MSQ. (Press 4)')
+print(' ')
 u_selec = input('Write the number of the function you would like to use: ')
 if u_selec==1:
     after_before_vs_msqPlots(mergers, sf_galaxies)
@@ -400,5 +456,7 @@ elif u_selec==2:
     statsMergers(mergers, sf_galaxies, 5)
 elif u_selec==3:
     distanceMSQ(mergers, sf_galaxies, 10)
+elif u_selec==4:
+    distanceMSQ2(mergers, sf_galaxies, 15)
 else:
     print('ERROR: function not found')
