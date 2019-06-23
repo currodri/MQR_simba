@@ -19,6 +19,7 @@ from quenchingFinder import sfr_condition_2, GalaxyData
 class Merger:
     def __init__(self,id, sfr_gal, sfe_gal, z_gal, galaxy_t, m_gal, fgas_gal, gal_type, merger_ratio, fgas_boost):
         self.sfr_gal = sfr_gal
+        self.ssfr_gal = sfr_gal/m_gal+1e-14
         self.sfe_gal = sfe_gal
         self.z_gal = z_gal
         self.galaxy_t = galaxy_t

@@ -64,9 +64,9 @@ def after_before_vs_msqPlots(mergers, sf_galaxies):
                     #a_m.append(np.log10(mergers[j].m_gal[1]))
                     a[1].append(np.log10(mergers[j].m_gal[2]))
                     if i==0:
-                        b[0].append(np.log10(mergers[j].sfr_gal[0]/mergers[j].m_gal[0]))
+                        b[0].append(np.log10(mergers[j].ssfr_gal[0]))
                         #b_m.append(np.log10(mergers[j].sfr_gal[1]/mergers[j].m_gal[1]))
-                        b[1].append(np.log10(mergers[j].sfr_gal[2]/mergers[j].m_gal[2]))
+                        b[1].append(np.log10(mergers[j].ssfr_gal[2]))
                         for s in range(0, len(b)):
                             if m==0 and b[s][-1]<-11:
                                 b[s][-1] = -11 + 0.01*random.randint(0,10)
@@ -134,7 +134,7 @@ def after_before_vs_msqPlots(mergers, sf_galaxies):
                 if zlimits[m][0] <= sf_galaxies[n].z_gal < zlimits[m][1]:
                     a.append(np.log10(sf_galaxies[n].m_gal))
                     if i==0:
-                        b.append(np.log10(sf_galaxies[n].ssfr_gal/sf_galaxies[n].m_gal))
+                        b.append(np.log10(sf_galaxies[n].ssfr_gal))
                     elif i==1:
                         b.append(np.log10(sf_galaxies[n].fgas_gal))
                     elif i==2:
@@ -175,8 +175,8 @@ def statsMergers(mergers, sf_galaxies, nbins, printresults = True, plot=False):
                     bef_m.append(np.log10(mergers[j].m_gal[0]))
                     aft_m.append(np.log10(mergers[j].m_gal[2]))
                     if m==0:
-                        bef.append(np.log10(mergers[j].sfr_gal[0]))
-                        aft.append(np.log10(mergers[j].sfr_gal[2]))
+                        bef.append(np.log10(mergers[j].ssfr_gal[0]))
+                        aft.append(np.log10(mergers[j].ssfr_gal[2]))
                     elif m==1:
                         bef.append(np.log10(mergers[j].fgas_gal[0]))
                         aft.append(np.log10(mergers[j].fgas_gal[2]))
@@ -198,8 +198,8 @@ def statsMergers(mergers, sf_galaxies, nbins, printresults = True, plot=False):
             bef = np.asarray(bef)
             msq_m = np.asarray(msq_m)
             msq = np.asarray(msq)
-            maxs = np.array([aft_m.max(),bef_m.max(),msq_m.max()])
-            mins = np.array([aft_m.min(),bef_m.min(),msq_m.min()])
+            maxs = np.array([aft_m.max(),bef_m.max()])
+            mins = np.array([aft_m.min(),bef_m.min()])
             bins = np.linspace(mins.min(), maxs.max(), nbins)
             delta = bins[1] - bins[0]
             bin_cent = bins - delta/2
@@ -230,8 +230,10 @@ def statsMergers(mergers, sf_galaxies, nbins, printresults = True, plot=False):
                 merger_bin = np.concatenate((aft_bin, bef_bin), axis=None)
                 msq_bin = np.asarray(msq_bin)
                 statsKS, pvalue = stats.ks_2samp(merger_bin, msq_bin)
+                print(pvalue)
                 stats_results[names[m]][titles[i]]['merger_pvalue'][j-1] = pvalue
                 statsKS, pvalue = stats.ks_2samp(aft_bin, bef_bin)
+                print(pvalue)
                 stats_results[names[m]][titles[i]]['aftvsbef_pvalue'][j-1] = pvalue
         if printresults==True:
             print('#########################################')
@@ -286,8 +288,8 @@ def distanceMSQ(mergers, sf_galaxies, nbins):
                     bef_m.append(np.log10(mergers[j].m_gal[0]))
                     aft_m.append(np.log10(mergers[j].m_gal[2]))
                     if m==0:
-                        bef.append(np.log10(mergers[j].sfr_gal[0]/mergers[j].m_gal[0]))
-                        aft.append(np.log10(mergers[j].sfr_gal[2]/mergers[j].m_gal[2]))
+                        bef.append(np.log10(mergers[j].ssfr_gal[0]))
+                        aft.append(np.log10(mergers[j].ssfr_gal[2]))
                     elif m==1:
                         bef.append(np.log10(mergers[j].fgas_gal[0]))
                         aft.append(np.log10(mergers[j].fgas_gal[2]))
