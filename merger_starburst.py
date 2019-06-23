@@ -33,7 +33,7 @@ for i in range(ngal):
     z_gal = d['z_gal' + str(i)][::-1]
     galaxy_t = d['galaxy_t' + str(i)][::-1]
     galaxy_m = d['m_gal'+str(i)][::-1]
-    fgas_gal = d['h2_gal'+str(i)][::-1]
+    fgas_gal = d['h2_gal'+str(i)][::-1]+0.000001
     gal_type = d['gal_type'+str(i)][::-1]
     galaxy = GalaxyData(i, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type)
     galaxies.append(galaxy)
@@ -224,6 +224,7 @@ def statsMergers(mergers, sf_galaxies, nbins, printresults = True, plot=False):
                         msq_bin.append(msq[k])
                 aft_bin = np.asarray(aft_bin)
                 bef_bin = np.asarray(bef_bin)
+                print(names[m],titles[i])
                 print(aft_bin)
                 print(bef_bin)
                 merger_bin = np.concatenate((aft_bin, bef_bin), axis=None)
