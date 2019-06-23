@@ -227,6 +227,7 @@ def statsMergers(mergers, sf_galaxies, nbins, printresults = True, plot=False):
                 print(names[m],titles[i])
                 print(aft_bin)
                 print(bef_bin)
+                print(msq_bin)
                 merger_bin = np.concatenate((aft_bin, bef_bin), axis=None)
                 msq_bin = np.asarray(msq_bin)
                 statsKS, pvalue = stats.ks_2samp(merger_bin, msq_bin)
@@ -300,7 +301,7 @@ def distanceMSQ(mergers, sf_galaxies, nbins):
                 if zlimits[i][0] <= sf_galaxies[n].z_gal < zlimits[i][1]:
                     msq_m.append(np.log10(sf_galaxies[n].m_gal))
                     if m==0:
-                        msq.append(np.log10(sf_galaxies[n].ssfr_gal/sf_galaxies[n].m_gal))
+                        msq.append(np.log10(sf_galaxies[n].ssfr_gal))
                     elif m==1:
                         msq.append(np.log10(sf_galaxies[n].fgas_gal))
                     elif m==2:
