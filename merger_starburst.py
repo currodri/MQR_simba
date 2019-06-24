@@ -434,6 +434,7 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             running_median = [np.median(msq[idx==k]) for k in range(0,nbins)]
             running_std_2 = np.asarray([np.std(msq[idx==k])/np.sqrt(len(msq[idx==k])) for k in range(0,nbins)])
             msq_median = np.asarray(running_median)
+            print(running_std_1,running_std_2)
             distance_std = np.sqrt(running_std_1**2+running_std_2**2)
             distance = (mer_median-msq_median)/msq_median
             axes[i].plot(bin_cent, distance, label=titles[m], color=colours[m])
