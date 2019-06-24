@@ -436,7 +436,6 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             axes[i].plot(bin_cent, distance, label=titles[m])
             axes[i].set_ylabel(ylabels[i], fontsize=16)
     axes[0].legend(loc='best', prop={'size': 12})
-    fig2.tight_layout()
     fig2.savefig(str(results_folder)+'distance_msq.png', format='png', dpi=200)
 print('MERGER-INDUCED STARBURST ANALYSIS')
 print(' ')
@@ -460,6 +459,6 @@ elif u_selec==2:
 elif u_selec==3:
     distanceMSQ(mergers, sf_galaxies, 10)
 elif u_selec==4:
-    distanceMSQ_2(mergers, sf_galaxies, 15)
+    distanceMSQ_2(mergers, sf_galaxies, 10)
 else:
     print('ERROR: function not found')
