@@ -428,7 +428,6 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             bin_cent = bins - delta/2
             idx = np.digitize(mer_m, bins)
             running_median = [np.median(mer[idx==k]) for k in range(0,nbins)]
-            len_mer =
             running_std_1 = np.asarray([np.std(mer[idx==k])/np.sqrt(len(mer[idx==k])) for k in range(0,nbins)])
             mer_median = np.asarray(running_median)
             idx = np.digitize(msq_m, bins)
