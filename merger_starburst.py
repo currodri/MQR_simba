@@ -438,7 +438,7 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             distance_std = np.sqrt(((1/msq_median)**2)*running_std_1**2 + (((mer_median/(msq_median**2)-1)**2)*running_std_2**2))
             distance = (mer_median-msq_median)/msq_median
             axes[i].plot(bin_cent, distance, label=titles[m], color=colours[m])
-            axes[m].fill_between(bin_cent, distance-distance_std, distance+distance_std, facecolor=colours[m], alpha=0.25)
+            axes[i].fill_between(bin_cent, distance-distance_std, distance+distance_std, facecolor=colours[m], alpha=0.25)
             axes[i].set_ylabel(ylabels[i], fontsize=16)
     axes[0].legend(loc='best', prop={'size': 12})
     fig2.savefig(str(results_folder)+'distance_msq.png', format='png', dpi=200)
