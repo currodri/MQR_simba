@@ -422,7 +422,7 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             mer = np.asarray(mer)
             msq_m = np.asarray(msq_m)
             msq = np.asarray(msq)
-            bins = np.linspace(mer_m.min(), mer.max(), nbins)
+            bins = np.linspace(mer_m.min(), mer_m.max(), nbins)
             delta = bins[1] - bins[0]
             bin_cent = bins - delta/2
             idx = np.digitize(mer_m, bins)
