@@ -393,6 +393,9 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
     fig2, axes = plt.subplots(3, 1, sharex=True, num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
     fig2.subplots_adjust(hspace=0)
     axes[2].set_xlabel(r'$\log(M_{*})$', fontsize=16)
+    bins = np.linspace(9.5, 12.0, nbins)
+    delta = bins[1] - bins[0]
+    bin_cent = bins - delta/2
     for i in range(0, len(ylabels)):
         axes[i].set_ylabel(ylabels[i], fontsize=16)
         axes[i].plot([9.5,12.0],[0.0,0.0], 'k--')
@@ -423,9 +426,6 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             mer = np.asarray(mer)
             msq_m = np.asarray(msq_m)
             msq = np.asarray(msq)
-            bins = np.linspace(mer_m.min(), mer_m.max(), nbins)
-            delta = bins[1] - bins[0]
-            bin_cent = bins - delta/2
             idx = np.digitize(mer_m, bins)
             running_median = [np.median(mer[idx==k]) for k in range(0,nbins)]
             running_std_1 = np.asarray([np.std(mer[idx==k])/np.sqrt(len(mer[idx==k])) for k in range(0,nbins)])
