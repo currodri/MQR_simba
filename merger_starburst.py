@@ -395,6 +395,7 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
     axes[2].set_xlabel(r'$\log(M_{*})$', fontsize=16)
     for i in range(0, len(ylabels)):
         axes[i].set_ylabel(ylabels[i], fontsize=16)
+        axes[i].plot([9.5,12.0],[0.0,0.0], 'k--')
         for m in range(0, len(titles)):
             mer_m = []
             mer = []
@@ -436,6 +437,7 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             distance = (mer_median-msq_median)/abs(msq_median)
             axes[i].plot(bin_cent, distance, label=titles[m], linestyle=lines[m], marker=markers[m])
             axes[i].set_ylabel(ylabels[i], fontsize=16)
+    axes[1].legend(loc='best', prop={'size': 12})
     fig2.tight_layout()
     fig2.savefig(str(results_folder)+'distance_msq.png', format='png', dpi=200)
 print('MERGER-INDUCED STARBURST ANALYSIS')
