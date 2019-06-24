@@ -388,8 +388,6 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
     names = ['burst_ssfr','gas_frac','sfe_gal']
     titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
     zlimits = [[0.0, 0.5], [1.0, 1.5], [2.0, 2.5]]
-    lines = ['-','--','-.']
-    markers = ['o','v', 's']
     props = dict(boxstyle='round', facecolor='white', alpha=0.5, edgecolor='k')
     fig2, axes = plt.subplots(3, 1, sharex=True, num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
     fig2.subplots_adjust(hspace=0)
@@ -435,9 +433,9 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             msq_median = np.asarray(running_median)
             distance = (mer_median-msq_median)/msq_median
             print(distance)
-            axes[i].plot(bin_cent, distance, label=titles[m], linestyle=lines[m], marker=markers[m])
+            axes[i].plot(bin_cent, distance, label=titles[m])
             axes[i].set_ylabel(ylabels[i], fontsize=16)
-    axes[1].legend(loc='best', prop={'size': 12})
+    axes[0].legend(loc='best', prop={'size': 12})
     fig2.tight_layout()
     fig2.savefig(str(results_folder)+'distance_msq.png', format='png', dpi=200)
 print('MERGER-INDUCED STARBURST ANALYSIS')
