@@ -391,7 +391,8 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
     lines = ['-','--','-.']
     markers = ['o','v', 's']
     props = dict(boxstyle='round', facecolor='white', alpha=0.5, edgecolor='k')
-    fig2, axes = plt.subplots(3, 1, sharex='col', num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
+    fig2, axes = plt.subplots(3, 1, sharex=True, num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
+    fig2.subplots_adjust(hspace=0)
     axes[2].set_xlabel(r'$\log(M_{*})$', fontsize=16)
     for i in range(0, len(ylabels)):
         axes[i].set_ylabel(ylabels[i], fontsize=16)
@@ -403,22 +404,22 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             msq = []
             for j in range(0, len(mergers)):
                 if zlimits[m][0] <= mergers[j].z_gal[1] < zlimits[m][1]:
-                    mer_m.append(np.log10(mergers[j].m_gal[1]))
+                    mer_m.append(mergers[j].m_gal[1])
                     if i==0:
-                        mer.append(np.log10(mergers[j].ssfr_gal[1]))
+                        mer.append(mergers[j].ssfr_gal[1])
                     elif i==1:
-                        mer.append(np.log10(mergers[j].fgas_gal[1]))
+                        mer.append(mergers[j].fgas_gal[1])
                     elif i==2:
-                        mer.append(np.log10(mergers[j].sfe_gal[1]))
+                        mer.append(mergers[j].sfe_gal[1])
             for n in range(0, len(sf_galaxies)):
                 if zlimits[m][0] <= sf_galaxies[n].z_gal < zlimits[m][1]:
-                    msq_m.append(np.log10(sf_galaxies[n].m_gal))
+                    msq_m.append(sf_galaxies[n].m_gal)
                     if i==0:
-                        msq.append(np.log10(sf_galaxies[n].ssfr_gal))
+                        msq.append(sf_galaxies[n].ssfr_gal)
                     elif i==1:
-                        msq.append(np.log10(sf_galaxies[n].fgas_gal))
+                        msq.append(sf_galaxies[n].fgas_gal)
                     elif i==2:
-                        msq.append(np.log10(sf_galaxies[n].sfe_gal))
+                        msq.append(sf_galaxies[n].sfe_gal)
             mer_m = np.asarray(mer_m)
             mer = np.asarray(mer)
             msq_m = np.asarray(msq_m)
@@ -432,8 +433,8 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             idx = np.digitize(msq_m, bins)
             running_median = [np.median(msq[idx==k]) for k in range(0,nbins)]
             msq_median = np.asarray(running_median)
-            distance = (mer_median-msq_median)/abs(msq_median)
-            axes[i].plot(bin_cent, distance, label=titles[m], linestyle=lines[m], marker=markers[m])
+            distance = abs((mer_median-msq_median)/msq_median)
+            axes[i].plot(bin_cent, np.log10(distance), label=titles[m], linestyle=lines[m], marker=markers[m])
             axes[i].set_ylabel(ylabels[i], fontsize=16)
     axes[1].legend(loc='best', prop={'size': 12})
     fig2.tight_layout()
