@@ -38,8 +38,10 @@ for i in range(ngal):
     galaxy = GalaxyData(i, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type)
     galaxies.append(galaxy)
 
+print('Data extracted from PROGEN files.')
+print('Performing search of mergers...')
 mergers, sf_galaxies = merger_finder(galaxies, 0.2, 10**9.5, 2.5)
-
+print('Search of mergers finished!!')
 
 def after_before_vs_msqPlots(mergers, sf_galaxies):
     ylabels = [r'$\log(sSFR)$',r'$\log(f_{H_2})$',r'$\log(SFE)$']
@@ -420,6 +422,7 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             mer = np.asarray(mer)
             msq_m = np.asarray(msq_m)
             msq = np.asarray(msq)
+            print(mer_m, mer)
             bins = np.linspace(mer_m.min(), mer.max(), nbins)
             delta = bins[1] - bins[0]
             bin_cent = bins - delta/2
@@ -430,7 +433,6 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             running_median = [np.median(msq[idx==k]) for k in range(0,nbins)]
             msq_median = np.asarray(running_median)
             distance = (mer_median-msq_median)/abs(msq_median)
-            print(mer_median, msq_median, distance)
             axes[i].plot(bin_cent, distance, label=titles[i], linestyle=lines[m], marker=markers[m])
             axes[i].set_ylabel(ylabels[i], fontsize=16)
     fig2.tight_layout()
