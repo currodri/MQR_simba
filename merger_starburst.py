@@ -401,22 +401,22 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             msq_m = []
             msq = []
             for j in range(0, len(mergers)):
-                if zlimits[i][0] <= mergers[j].z_gal[1] < zlimits[i][1]:
+                if zlimits[m][0] <= mergers[j].z_gal[1] < zlimits[m][1]:
                     mer_m.append(np.log10(mergers[j].m_gal[1]))
-                    if m==0:
+                    if i==0:
                         mer.append(np.log10(mergers[j].ssfr_gal[1]))
-                    elif m==1:
+                    elif i==1:
                         mer.append(np.log10(mergers[j].fgas_gal[1]))
-                    elif m==2:
+                    elif i==2:
                         mer.append(np.log10(mergers[j].sfe_gal[1]))
             for n in range(0, len(sf_galaxies)):
-                if zlimits[i][0] <= sf_galaxies[n].z_gal < zlimits[i][1]:
+                if zlimits[m][0] <= sf_galaxies[n].z_gal < zlimits[m][1]:
                     msq_m.append(np.log10(sf_galaxies[n].m_gal))
-                    if m==0:
+                    if i==0:
                         msq.append(np.log10(sf_galaxies[n].ssfr_gal))
-                    elif m==1:
+                    elif i==1:
                         msq.append(np.log10(sf_galaxies[n].fgas_gal))
-                    elif m==2:
+                    elif i==2:
                         msq.append(np.log10(sf_galaxies[n].sfe_gal))
             mer_m = np.asarray(mer_m)
             mer = np.asarray(mer)
@@ -433,7 +433,7 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             running_median = [np.median(msq[idx==k]) for k in range(0,nbins)]
             msq_median = np.asarray(running_median)
             distance = (mer_median-msq_median)/abs(msq_median)
-            axes[i].plot(bin_cent, distance, label=titles[i], linestyle=lines[m], marker=markers[m])
+            axes[i].plot(bin_cent, distance, label=titles[m], linestyle=lines[m], marker=markers[m])
             axes[i].set_ylabel(ylabels[i], fontsize=16)
     fig2.tight_layout()
     fig2.savefig(str(results_folder)+'distance_msq.png', format='png', dpi=200)
