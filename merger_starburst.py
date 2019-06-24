@@ -404,7 +404,7 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             msq = []
             for j in range(0, len(mergers)):
                 if zlimits[m][0] <= mergers[j].z_gal[1] < zlimits[m][1]:
-                    mer_m.append(mergers[j].m_gal[1])
+                    mer_m.append(np.log10(mergers[j].m_gal[1]))
                     if i==0:
                         mer.append(mergers[j].ssfr_gal[1])
                     elif i==1:
@@ -413,7 +413,7 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
                         mer.append(mergers[j].sfe_gal[1])
             for n in range(0, len(sf_galaxies)):
                 if zlimits[m][0] <= sf_galaxies[n].z_gal < zlimits[m][1]:
-                    msq_m.append(sf_galaxies[n].m_gal)
+                    msq_m.append(np.log10(sf_galaxies[n].m_gal))
                     if i==0:
                         msq.append(sf_galaxies[n].ssfr_gal)
                     elif i==1:
