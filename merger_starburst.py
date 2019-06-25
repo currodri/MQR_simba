@@ -390,12 +390,16 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
     colours = ['b','r','m']
     zlimits = [[0.0, 0.5], [1.0, 1.5], [2.0, 2.5]]
     props = dict(boxstyle='round', facecolor='white', alpha=0.5, edgecolor='k')
+    fig1 = plt.figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
+    ax1 = fig.add_subplot(1,1,1)
     fig2, axes = plt.subplots(3, 1, sharex=True, num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
     fig2.subplots_adjust(hspace=0)
     axes[2].set_xlabel(r'$\log(M_{*})$', fontsize=16)
     bins = np.linspace(9.5, 12.0, nbins)
     delta = bins[1] - bins[0]
     bin_cent = bins - delta/2
+    fgas = [0,0,0]
+    sfe = [0,0,0]
     for i in range(0, len(ylabels)):
         axes[i].set_ylabel(ylabels[i], fontsize=16)
         axes[i].plot([9.5,12.0],[0.0,0.0], 'k--')
@@ -437,11 +441,19 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             print(running_std_1,running_std_2)
             distance_std = np.sqrt(((1/msq_median)**2)*running_std_1**2 + (((mer_median/(msq_median**2)-1)**2)*running_std_2**2))
             distance = (mer_median-msq_median)/msq_median
+            if i==1:
+                fgas[m] = distance
+            elif i==2:
+                sfe[m] = distance
             axes[i].plot(bin_cent, distance, label=titles[m], color=colours[m])
             axes[i].fill_between(bin_cent, distance-distance_std, distance+distance_std, facecolor=colours[m], alpha=0.25)
             axes[i].set_ylabel(ylabels[i], fontsize=16)
     axes[0].legend(loc='best', prop={'size': 12})
     fig2.savefig(str(results_folder)+'distance_msq.png', format='png', dpi=200)
+    for i in range(0, len(fgas)):
+        ax1.plot(bin_cent, fgas[i]*sfe[i], label=titles[i])
+    ax1.legend(loc='best', prop={'size': 12})
+    fig1.savefig(str(results_folder)+'test_distance.png', format='png', dpi=200)
 print('MERGER-INDUCED STARBURST ANALYSIS')
 print(' ')
 print('---------------------------------')
