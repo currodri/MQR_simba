@@ -391,7 +391,7 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
     zlimits = [[0.0, 0.5], [1.0, 1.5], [2.0, 2.5]]
     props = dict(boxstyle='round', facecolor='white', alpha=0.5, edgecolor='k')
     fig1 = plt.figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
-    ax1 = fig.add_subplot(1,1,1)
+    ax1 = fig1.add_subplot(1,1,1)
     fig2, axes = plt.subplots(3, 1, sharex=True, num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
     fig2.subplots_adjust(hspace=0)
     axes[2].set_xlabel(r'$\log(M_{*})$', fontsize=16)
