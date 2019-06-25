@@ -19,7 +19,7 @@ from quenchingFinder import sfr_condition_2, GalaxyData
 class Merger:
     def __init__(self,id, sfr_gal, sfe_gal, z_gal, galaxy_t, m_gal, fgas_gal, gal_type, merger_ratio, fgas_boost):
         self.sfr_gal = sfr_gal
-        self.ssfr_gal = sfr_gal/m_gal+1e-14
+        self.ssfr_gal = (sfr_gal/m_gal) + 1e-14
         self.sfe_gal = sfe_gal
         self.z_gal = z_gal
         self.galaxy_t = galaxy_t
@@ -83,8 +83,9 @@ def merger_finder(galaxies, merger_ratio, mass_limit, redshift_limit):
                         sf_gal = GalaxyData(id,sfr[i],sfe[i],z[i],time[i],mass[i],fgas[i],type[i])
                         # Add star forming galaxy to the list
                         sf_galaxies.append(sf_gal)
-    return(mergers, sf_galaxies)
     print('Star-forming main sequence and mergers found up to z = '+str(redshift_limit))
+    return(mergers, sf_galaxies)
+
 
 ##########################################################################################
 """

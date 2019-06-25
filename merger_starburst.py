@@ -33,7 +33,7 @@ for i in range(ngal):
     z_gal = d['z_gal' + str(i)][::-1]
     galaxy_t = d['galaxy_t' + str(i)][::-1]
     galaxy_m = d['m_gal'+str(i)][::-1]
-    fgas_gal = d['h2_gal'+str(i)][::-1]+0.000001
+    fgas_gal = d['h2_gal'+str(i)][::-1]#+0.00000001
     gal_type = d['gal_type'+str(i)][::-1]
     galaxy = GalaxyData(i, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type)
     galaxies.append(galaxy)
