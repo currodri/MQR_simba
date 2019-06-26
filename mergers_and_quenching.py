@@ -22,7 +22,7 @@ simfolder = '../progen_analysis/m100n1024'#input('SIMBA simulation progen folder
 sys.path.insert(0, str(simfolder))
 counterfile = '../progen_analysis/m100n1024/galaxy_count_m100n1024.txt'#input('Text file with total number of galaxies per snapshot: ')
 simname = 'm100n1024'#input('SIMBA simulation version: ')
-results_folder = '../mand_relations/'+str(simname)+'/'
+results_folder = '../mandq_relations/'+str(simname)+'/'
 timefile = '../quench_analysis'+str(simname)+'/times_m100n1024.txt'
 redshiftfile = '../quench_analysis'+str(simname)+'/redshifts_m100n1024.txt'
 
