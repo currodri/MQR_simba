@@ -161,14 +161,14 @@ def mergerquench_relation():
         diff = np.asarray(diff)
         #print(diff)
         if len(possible_q)>0:
-            if diff[np.argmin(diff)]>=0:
+            if diff[np.argmin(diff)]>=0 and merg.merger_ratio<=0.6:
                 merger_ratios.append(merg.merger_ratio)
                 time_diff.append(possible_q[np.argmin(diff)]-merg.galaxy_t[1])
                 quenching_times.append(possible_q_time[np.argmin(diff)])
     time_diff = np.asarray(time_diff)
     merger_ratios = np.asarray(merger_ratios)
     quenching_times = np.asarray(quenching_times)
-    fig = plt.figure(num=None, figsize=(8, 8), dpi=80, facecolor='w', edgecolor='k')
+    fig = plt.figure(num=None, figsize=(8, 4), dpi=80, facecolor='w', edgecolor='k')
     ax = fig.add_subplot(1,1,1)
     ax.set_xlabel(r'$T_q - T_m$(Gyr)', fontsize=16)
     ax.set_ylabel(r'$\log(N) $(Gyr)', fontsize=16)
@@ -217,7 +217,7 @@ def merger_reju_relation():
                 time_diff.append(possible_r[np.argmin(diff)]-merg.galaxy_t[1])
     time_diff = np.asarray(time_diff)
     merger_boost = np.asarray(merger_boost)
-    fig = plt.figure(num=None, figsize=(8, 8), dpi=80, facecolor='w', edgecolor='k')
+    fig = plt.figure(num=None, figsize=(8, 4), dpi=80, facecolor='w', edgecolor='k')
     ax = fig.add_subplot(1,1,1)
     ax.set_xlabel(r'$T_r - T_m$(Gyr)', fontsize=16)
     ax.set_ylabel(r'$\log(N) $(Gyr)', fontsize=16)
