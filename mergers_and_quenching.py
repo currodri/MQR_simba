@@ -8,6 +8,7 @@ Created on 26 June 2019
 # Import required libraries
 import numpy as np
 import matplotlib
+from scipy import stats
 matplotlib.use('Agg') # Must be before importing matplotlib.pyplot or pylab!
 import matplotlib.pyplot as plt
 import seaborn as sns
