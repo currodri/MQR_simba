@@ -260,7 +260,7 @@ def merger_reju_scatter():
     ax.set_ylabel(r'$T_m $(Gyr)', fontsize=16)
     fig.colorbar(sc, ax=ax, label=r'$\log(\Delta f_{H_2})$', orientation='horizontal')
     fig.tight_layout()
-    fig.savefig(str(results_folder)'mergertime_and_rejuvenation_scatter.png',format='png', dpi=250)
+    fig.savefig(str(results_folder)+'mergertime_and_rejuvenation_scatter.png',format='png', dpi=250)
 #time_diff, q_times, m_ratios = mergerquench_relation()
 #quench_delay(time_diff,q_times,m_ratios)
 #merger_reju_relation()
