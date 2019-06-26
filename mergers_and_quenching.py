@@ -212,8 +212,6 @@ def merger_reju_relation():
                     merger_boost.append(0.001)
                 else:
                     merger_boost.append(merg.fgas_boost)
-                if merg.fgas_boost>10.0:
-                    print(merg.id)
                 time_diff.append(possible_r[np.argmin(diff)]-merg.galaxy_t[1])
     time_diff = np.asarray(time_diff)
     merger_boost = np.asarray(merger_boost)
@@ -221,7 +219,7 @@ def merger_reju_relation():
     ax = fig.add_subplot(1,1,1)
     ax.set_xlabel(r'$T_r - T_m$(Gyr)', fontsize=16)
     ax.set_ylabel(r'$\log(N) $(Gyr)', fontsize=16)
-    ax.hist(time_diff, bins=12, histtype='step', log=True)
+    ax.hist(time_diff, bins=12, histtype='step', log=True, color='k')
     fig.tight_layout()
     fig.savefig(str(results_folder)+'mergertime_and_rejuvenation.png',format='png', dpi=250)
 
