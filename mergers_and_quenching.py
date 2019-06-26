@@ -213,11 +213,11 @@ def merger_reju_relation():
                 else:
                     merger_boost.append(merg.fgas_boost)
                 time_diff.append(possible_r[np.argmin(diff)]-merg.galaxy_t[1]+1e-7)
-    time_diff = np.log10(np.asarray(time_diff))
+    time_diff = np.asarray(time_diff)
     merger_boost = np.asarray(merger_boost)
     fig = plt.figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
     ax = fig.add_subplot(1,1,1)
-    ax.set_xlabel(r'$\log(T_r - T_m)$(Gyr)', fontsize=16)
+    ax.set_xlabel(r'$T_r - T_m$(Gyr)', fontsize=16)
     ax.set_ylabel(r'$\log(N) $(Gyr)', fontsize=16)
     ax.hist(time_diff, bins=12, histtype='step', log=True, color='k')
     fig.tight_layout()
@@ -237,10 +237,8 @@ def merger_reju_scatter():
         for k in range(0, len(possible_r)):
             diff.append(possible_r[k] - merg.galaxy_t[1])
         diff = np.asarray(diff)
-        print(possible_r,diff)
         if len(possible_r)>0:
             rejuvenation_t.append(possible_r[np.argmin(diff)])
-            print(np.argmin(diff))
             merger_t.append(merg.galaxy_t[1])
             if merg.fgas_boost<0:
                 merger_boost.append(0.001)
@@ -265,5 +263,5 @@ def merger_reju_scatter():
     fig.savefig(str(results_folder)+'mergertime_and_rejuvenation_scatter.png',format='png', dpi=250)
 #time_diff, q_times, m_ratios = mergerquench_relation()
 #quench_delay(time_diff,q_times,m_ratios)
-#merger_reju_relation()
-merger_reju_scatter()
+merger_reju_relation()
+#merger_reju_scatter()
