@@ -237,8 +237,10 @@ def merger_reju_scatter():
         for k in range(0, len(possible_r)):
             diff.append(possible_r[k] - merg.galaxy_t)
         diff = np.asarray(diff)
+        print(possible_r,diff)
         if len(possible_r)>0:
             rejuvenation_t.append(possible_r[np.argmin(diff)])
+            print(np.argmin(diff))
             merger_t.append(merg.galaxy_t)
             if merg.fgas_boost<0:
                 merger_boost.append(0.001)

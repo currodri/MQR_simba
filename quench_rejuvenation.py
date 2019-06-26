@@ -130,6 +130,7 @@ print('Now, you can choose what plots to obtain!')
 print(' ')
 print(' ')
 # Plot the results
+def Quenching_Scatter(redshifts, quenching_times, ste_mass):
 
 def Quenching_Scatter_Plot(redshifts2, quenching_times2, ste_mass2):
     scatter_labels = [['Final quenching Sat', 'Non-final quenching Sat', 'Final quenching Sat with rejuvenation' ],['Final quenching Central', 'Non-final quenching Central', 'Final quenching Central with rejuvenation']]
