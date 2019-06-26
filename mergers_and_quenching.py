@@ -222,7 +222,46 @@ def merger_reju_relation():
     ax.hist(time_diff, bins=12, histtype='step', log=True, color='k')
     fig.tight_layout()
     fig.savefig(str(results_folder)+'mergertime_and_rejuvenation.png',format='png', dpi=250)
-
+def merger_reju_scatter():
+    print('Start finding for connection between mergers and rejuvenations')
+    merger_t = []
+    rejuvenation_t = []
+    merger_boost = []
+    for i in range(0, len(mergers)):
+        merg = mergers[i]
+        possible_r = []
+        for j in range(0, len(reju_t)):
+            if reju_id[j]==merg.id:
+                possible_r.append(reju_t[j])
+        diff = []
+        for k in range(0, len(possible_r)):
+            diff.append(possible_r[k] - merg.galaxy_t)
+        diff = np.asarray(diff)
+        if len(possible_r)>0:
+            rejuvenation_t.append(possible_r[np.argmin(diff)])
+            merger_t.append(merg.galaxy_t)
+            if merg.fgas_boost<0:
+                merger_boost.append(0.001)
+            else:
+                merger_boost.append(merg.fgas_boost)
+    merger_t = np.asarray(merger_t)
+    rejuvenation_t = np.asarray(rejuvenation_t)
+    merger_boost = np.asarray(merger_boost)
+    fig = plt.figure(num=None, figsize=(8, 8), dpi=80, facecolor='w', edgecolor='k')
+    ax = fig.add_subplot(1,1,1)
+    pear = stats.pearsonr(rejuvenation_t, merger_t)
+    print('The Pearson correlation R is given by: '+str(pear))
+    ax.hexbin(rejuvenation_t, merger_t, gridsize=20, cmap='BuGn')
+    sc = ax.scatter(rejuvenation_t, merger_t, c = np.log10(merger_boost), cmap='winter')
+    ax.plot([3, 13], [3, 13], 'k--')
+    ax.set_xlim([rejuvenation_t.min(), rejuvenation_t.max()])
+    ax.set_ylim([merger_t.min(), merger_t.max()])
+    ax.set_xlabel(r'$T_r $(Gyr)', fontsize=16)
+    ax.set_ylabel(r'$T_m $(Gyr)', fontsize=16)
+    fig.colorbar(sc, ax=ax, label=r'$\log(\Delta f_{H_2})$', orientation='horizontal')
+    fig.tight_layout()
+    fig.savefig(str(results_folder)'mergertime_and_rejuvenation_scatter.png',format='png', dpi=250)
 #time_diff, q_times, m_ratios = mergerquench_relation()
 #quench_delay(time_diff,q_times,m_ratios)
-merger_reju_relation()
+#merger_reju_relation()
+merger_reju_scatter()
