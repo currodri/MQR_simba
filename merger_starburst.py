@@ -18,7 +18,7 @@ import seaborn as sns
 sns.set(style="white")
 from import_progen import importApp
 from quenchingFinder import GalaxyData
-from mergerFinder import merger_finder, myrunningmedian
+from mergerFinder import merger_finder, myrunningmedian, plotmedian
 import sys
 simfolder = '../progen_analysis/m100n1024'#input('SIMBA simulation progen folder: ')
 sys.path.insert(0, str(simfolder))
@@ -440,7 +440,7 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             msq_median = np.asarray(running_median)
             print(running_std_1,running_std_2)
             distance_std = np.sqrt(((1/msq_median)**2)*running_std_1**2 + (((mer_median/(msq_median**2)-1)**2)*running_std_2**2))
-            distance = (mer_median-msq_median)/msq_median
+            distance = np.log10(mer_median/msq_median)
             if i==1:
                 fgas[m] = distance
             elif i==2:

@@ -12,6 +12,7 @@ s1650043@ed.ac.uk
 
 """Import some necessary packages"""
 import numpy as np
+import pylab as plt
 from scipy import stats
 from quenchingFinder import sfr_condition_2, GalaxyData
 
@@ -92,7 +93,56 @@ def merger_finder(galaxies, merger_ratio, mass_limit, redshift_limit):
 EXTRA FUNCTIONS USEFUL FOR THE ANALYSIS OF THE RESULTS
 """
 
-# Running median thorugh scatter data
+def histedges_equalN(x, nbin):
+    npt = len(x)
+    return np.interp(np.linspace(0, npt, nbin + 1),
+                     np.arange(npt),
+                     np.sort(x))
+
+def plotmedian(x,y,yflag=[],c='k',ltype='--',lw=3,stat='median',ax='plt',bins=8,label=None,pos=None,boxsize=-1):
+    if len(yflag) != len(x):
+        #print 'Plotmedian: No flag provided, using all values'
+        xp = x
+        yp = y
+    else:
+        xp = x[yflag]
+        yp = y[yflag]
+    # bins<0 sets bins such that there are equal numbers per bin
+    if bins < 0: bin_edges = histedges_equalN(xp,-bins)
+    else: bin_edges = np.arange(0.999*min(xp),1.001*max(xp),(max(xp)-min(xp))/(bins))
+    if bins < 0:	bin_means, bin_edges, binnumber = stats.binned_statistic(xp,yp,bins=bin_edges,statistic=stat)
+    else: bin_means, bin_edges, binnumber = stats.binned_statistic(xp,yp,bins=bins,statistic=stat)
+    bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
+    #ax.plot(bin_cent, bin_means, ltype, lw=lw, color=c, label=label)
+
+    if boxsize > 0:  # determine cosmic variance over 8 octants, plot errorbars
+	if len(yflag) != len(x): posp = pos
+	else: posp = pos[yflag]
+        pos = np.floor(posp/(0.5*boxsize)).astype(np.int)
+        gal_index = pos[:,0] + pos[:,1]*2 + pos[:,2]*4
+        bin_oct = np.zeros((abs(bins),8))
+        for i0 in xrange(8):
+            xq = xp[gal_index==i0]
+            yq = yp[gal_index==i0]
+	    if bins < 0: bin_oct[:,i0], bin_edges, binnumber = stats.binned_statistic(xq,yq,bins=bin_edges,statistic=stat)
+	    else: bin_oct[:,i0], bin_edges, binnumber = stats.binned_statistic(xq,yq,bins=bin_edges,statistic=stat)
+        bin_oct  = np.ma.masked_invalid(bin_oct)
+        var  = np.ma.std(bin_oct, axis=1)
+        #ax.errorbar(bin_cent, bin_means, yerr=[var,var], fmt='o', linewidth=lw, color=c)
+    elif boxsize == -1:
+        var = []
+        for i0 in range(len(bin_edges)-1):
+            xq = xp[(xp>bin_edges[i0])&(xp<bin_edges[i0+1])]
+            yq = yp[(xp>bin_edges[i0])&(xp<bin_edges[i0+1])]
+            var.append(np.ma.std(yq-np.mean(yq)))
+        #print 'bins',bin_cent
+        #print 'variance',var
+        #ax.errorbar(bin_cent, bin_means, yerr=[var,var], fmt='o', linewidth=lw, color=c)
+    else:
+        var = np.zeros(len(bin_cent))
+    return bin_cent,bin_means,var
+
+# Running median through scatter data
 def myrunningmedian(x,y,nbins, sigma=True):
     bins = np.linspace(x.min(), x.max(), nbins)
     delta = bins[1]-bins[0]

@@ -138,7 +138,8 @@ def Quenching_Scatter_Plot(redshifts2, quenching_times2, ste_mass2):
     grids = [30,70]
     #scatter_colours = [['#e90c35','#ec5b75','#e90c35'],['#0c86e4','#8d0ce4','#0c86e4']]
     scatter_colours = [['#e90c35','m','r'],['#0c86e4','c','b']]
-    fig = plt.figure(num=None, figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
+    for i in range(0, len(scatter_labels)):
+        fig = plt.figure(num=None, figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
     #figre = plt.figure(num=None, figsize=(7, 5), dpi=80, facecolor='w', edgecolor='k')
     # fig4 = plt.figure(num=None, figsize=(7, 5), dpi=80, facecolor='w', edgecolor='k')
     # fig5 = plt.figure(num=None, figsize=(7, 5), dpi=80, facecolor='w', edgecolor='k')
