@@ -392,30 +392,3 @@ def quenching_histogram(redfile,galaxies,ngal,min_mass, max_mass,quenching_times
         times[i] = np.average(t)
         times_error[i] = np.std(t)/(np.sqrt(len(t)))
     return(z_cent, counts, counts_error, times, times_error)
-
-
-    # z = d['z_gal0']
-    # zlim = np.amax(redshifts)
-    # zlimind = 0
-    # zbins = []
-    # for i in range(0, len(z), 3):
-    #     if z[i]<zlim:
-    #         zbins.append(z[i])
-    #     elif z[i]==zlim:
-    #         zlimind = i
-    #         break
-    # z = z[0:zlimind-2]
-    # zbins[0] = zbins[0] * 0.9
-    # zbins[-1] = zbins[-1] * 1.1
-    # bin_cent = np.zeros(len(zbins)-1)
-    # digi = np.digitize(redshifts, bins=zbins, right=True)
-    # binco = np.bincount(digi)
-    # histo = np.zeros(len(zbins)-1)
-    # deltat = np.zeros(len(zbins)-1)
-    # binco = np.delete(binco, 0)
-    # for i in range(0, len(digi)):
-    #     index = digi[i]-1
-    #     histo[index] = histo[index] + quenching_times[i]/binco[index]
-    # for j in range(0, len(zbins)-1):
-    #     bin_cent[j] = (zbins[j+1] + zbins[j])/2
-    # return histo, binco, bin_cent
