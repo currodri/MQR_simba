@@ -61,12 +61,13 @@ galaxies_interpolated = quenchingFinder2(galaxies[0:max_ngal], 1, mass_limit)
 reju_z = []
 reju_m = []
 reju_t = []
-
+reju_id = []
 
 for i in range(len(galaxies)):
     galaxy = galaxies[i]
     for k in range(0, len(galaxy.rate), 3):
         #if np.log10(galaxy.rate[k+1])>=mass_limit:
+        reju_id.append(galaxy.id)
         reju_z.append(galaxy.rate[k])
         reju_t.append(galaxy.rate[k+1])
         reju_m.append(galaxy.rate[k+2])
