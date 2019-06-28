@@ -17,7 +17,7 @@ from quenchingFinder import sfr_condition_2
 caesarfile = '/home/rad/data/m100n1024/s50/Groups/' #input('Final group file: ')
 progenref_file = '/home/rad/progen_m100n1024_151.dat'
 simname = 'm100n1024'#input('SIMBA simulation version: ')
-results_folder = '../rate_analysis/'+str(simname)+'/'
+results_folder = '../progen_analysis/'+str(simname)+'/'
 
 
 progenref = open(progenref_file, 'r').readlines()
@@ -129,7 +129,7 @@ for s in range(0, len(progenref_data[0])+1):
             d['gal_pos'+str(k)] = np.concatenate((d['gal_pos'+str(k)],galpos[k]), axis=None)
 
 print('Data saved to dictionary.')
-output = open('progen'+str(simname)+'.pkl','wb')
+output = open(results_folder+'progen'+str(simname)+'.pkl','wb')
 pickle.dump(d, output)
 print('Data saved in pickle file.')
 output.close()
