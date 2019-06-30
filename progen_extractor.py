@@ -130,7 +130,7 @@ for s in range(0, len(progenref_data[0])+1):
             d['z_gal'+str(k)] = np.concatenate((d['z_gal'+str(k)], redshift), axis=None)
             d['gal_type'+str(k)] = np.concatenate((d['gal_type'+str(k)],gals[index]), axis=None)
             d['gal_pos'+str(k)] = np.concatenate((d['gal_pos'+str(k)],[galpos[k]]), axis=0)
-
+        print(d['gal_pos'+str(k)])
 print('Data saved to dictionary.')
 output = open(results_folder+'progen'+str(simname)+'.pkl','wb')
 pickle.dump(d, output)
