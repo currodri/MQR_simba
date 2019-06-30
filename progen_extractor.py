@@ -48,7 +48,6 @@ for j in range(0, lengal):
     d['z_gal'+str(j)] = np.array([])
     d['sfe_gal'+str(j)] = np.array([])
     d['gal_type'+str(j)] = np.array([])
-    d['gal_pos'+str(j)] = np.array([])
 
 
 snaps = filter(lambda file:file[-5:]=='.hdf5' and file[0]=='m', os.listdir(caesarfile))
@@ -93,8 +92,6 @@ for s in range(0, len(progenref_data[0])+1):
     if s==0:
         d['boxsize_in_kpccm'] = sim.simulation.boxsize.to('kpccm')
     for k in range(0, lengal):
-        #print(len(progenref_data[k]))
-        #print(s-1)
         if s==0:
             d['m_gal'+str(k)] = np.concatenate((d['m_gal'+str(k)], ms[k]), axis=None)
             d['sfr_gal'+str(k)] = np.concatenate((d['sfr_gal'+str(k)],sfr[k]), axis=None)
@@ -112,7 +109,7 @@ for s in range(0, len(progenref_data[0])+1):
             d['t_gal'+str(k)] = np.concatenate((d['t_gal'+str(k)], thubble), axis=None)
             d['z_gal'+str(k)] = np.concatenate((d['z_gal'+str(k)], redshift), axis=None)
             d['gal_type'+str(k)] = np.concatenate((d['gal_type'+str(k)],gals[k]), axis=None)
-            d['gal_pos'+str(k)] = np.stack((d['gal_pos'+str(k)],galpos[k]))
+            d['gal_pos'+str(k)] = np.array([galpos[k]])
 
         elif progenref_data[k][s-1] !=-1:
             index = progenref_data[k][s-1]
@@ -132,7 +129,7 @@ for s in range(0, len(progenref_data[0])+1):
             d['t_gal'+str(k)] = np.concatenate((d['t_gal'+str(k)], thubble), axis=None)
             d['z_gal'+str(k)] = np.concatenate((d['z_gal'+str(k)], redshift), axis=None)
             d['gal_type'+str(k)] = np.concatenate((d['gal_type'+str(k)],gals[index]), axis=None)
-            d['gal_pos'+str(k)] = np.stack((d['gal_pos'+str(k)],galpos[k]))
+            d['gal_pos'+str(k)] = np.concatenate((d['gal_pos'+str(k)],galpos[k]), axis=0)
 
 print('Data saved to dictionary.')
 output = open(results_folder+'progen'+str(simname)+'.pkl','wb')
