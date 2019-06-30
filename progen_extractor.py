@@ -55,6 +55,9 @@ snaps_sorted = sorted(snaps,key=lambda file: int(file[-8:-5]), reverse=True)
 print('Progenitor indexes obtained from .dat file.')
 print('Saving data to dictionary...')
 d['sf_galaxies_per_snap'] = np.zeros(len(snaps_sorted))
+d['sf_galaxies_mass'] = np.zeros(len(snaps_sorted))
+d['redshifts'] = np.zeros(len(snaps_sorted))
+d['t_hubble'] = np.zeros(len(snaps_sorted))
 
 def sfr_condition(type, time):
     if type == 'start':
@@ -84,11 +87,18 @@ for s in range(0, len(progenref_data[0])+1):
     ssfr_gal = sfr/ms
     sfgals = 0
     ssfr_cond = sfr_condition('end',thubble)
+    sfmass = []
     for i in range(0, len(gals)):
         if ssfr_gal[i] >= 10**ssfr_cond:
             sfgals = sfgals + 1
+            sfmass.append(ms[i])
+    sfmass = np.asarray(sfmass)
+    d['sf_galaxies_mass'][s] = np.median(sfmass)
     print('Number of star forming galaxies in this snapshot: '+str(sfgals))
+    print('Median mass of star forming galaxies in this snapshot: '+str(d['sf_galaxies_mass'][s])+' M*')
     d['sf_galaxies_per_snap'][s] = sfgals
+    d['redshifts'][s] = redshift
+    d['t_hubble'][s] = thubble
     if s==0:
         d['boxsize_in_kpccm'] = sim.simulation.boxsize.to('kpccm')
     for k in range(0, lengal):
@@ -134,7 +144,7 @@ for s in range(0, len(progenref_data[0])+1):
             d['gal_pos'+str(k)] = np.concatenate((d['gal_pos'+str(k)],np.asarray([galpos[index]])), axis=0)
         #print(d['gal_pos'+str(k)])
 print('Data saved to dictionary.')
-output = open(results_folder+'progen'+str(simname)+'.pkl','wb')
+output = open(results_folder+'progen_'+str(simname)+'.pkl','wb')
 pickle.dump(d, output)
 print('Data saved in pickle file.')
 output.close()

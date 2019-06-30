@@ -8,6 +8,7 @@ Created on Mon Dec 24 18:56:07 2018
 
 # Import required libraries
 import numpy as np
+import pickle
 import matplotlib
 matplotlib.use('Agg') # Must be before importing matplotlib.pyplot or pylab!
 import matplotlib.pyplot as plt
@@ -26,9 +27,12 @@ simname = 'm100n1024'#input('SIMBA simulation version: ')
 results_folder = '../rate_analysis/'+str(simname)+'/'
 timefile = '../quench_analysis'+str(simname)+'/times_m100n1024.txt'
 redshiftfile = '../quench_analysis'+str(simname)+'/redshifts_m100n1024.txt'
+pickle_file = '../progen_analysis/m100n1024/progen'+str(simname)+'.pkl'
 
 # Extract progen data from txt files
-d, ngal = importApp(str(simfolder))
+#d, ngal = importApp(str(simfolder))
+d = pickle.load(pickle_file)
+ngal = 49215
 print('Total number of galaxies at z = 0: '+str(ngal))
 
 #Store the galaxies sorted in objects of type GalaxyData
@@ -41,18 +45,13 @@ for i in range(ngal):
     galaxy_m = d['m_gal'+str(i)][::-1]
     fgas_gal = d['h2_gal'+str(i)][::-1]
     gal_type = d['gal_type'+str(i)][::-1]
-    galaxy = GalaxyData(i, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type)
+    #gal_pos = d['gal_pos'+str(i)][::-1]
+    gal_pos = None
+    galaxy = GalaxyData(i, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type, gal_pos)
     galaxies.append(galaxy)
 
 max_ngal = len(galaxies)
 mass_limit = 9.5
-min_merger_ratio = 0.2
-max_redshift_mergers = 3.5
-
-# Perform the search for mergers
-mergers, sf_galaxies = merger_finder(galaxies, min_merger_ratio, 10**mass_limit, max_redshift_mergers)
-
-print('Merger analysis done.')
 
 # Perform the quenching and rejuvenation analysis
 galaxies_interpolated = quenchingFinder2(galaxies[0:max_ngal], 1, mass_limit)
@@ -119,7 +118,7 @@ for i in range(0, len(galaxies_interpolated)):
         if np.log10(galaxy.m_gal)>=mass_limit:
             redshifts2[int(quench.type)][pos].append(galaxy.z_gal)
             ste_mass2[int(quench.type)][pos].append(np.log10(galaxy.m_gal))
-            quenching_times2[int(quench.type)][pos].append(np.log10(quench.quench_time))
+            quenching_times2[int(quench.type)][pos].append(np.log10(quench.quench_time/galaxy.galaxy_t[end]))
             frac_gas2[int(quench.type)][pos].append(np.log10(galaxy.fgas_gal))
             thubble2[int(quench.type)][pos].append(np.log10(galaxy.galaxy_t[end]))
             sfr_2[int(quench.type)][pos].append(np.log10(galaxy.ssfr_gal[start-1]*galaxy.m_gal))
@@ -135,8 +134,26 @@ print('Number of quenching events in second loop: '
 print('Quenching and Rejuvenation analysis done.')
 print(' ')
 
+def Fraction_Fast_vs_Slow(x, times, sf_galaxies, sf_redshifts, sf_masses):
+    slow = []
+    fast = []
+    bins = np.linspace(x.min()*0.9,x.max()*1.1,10)
+    delta = bins[1] - bins[0]
+    cent = bins - delta/2
+    fast_bins = np.zeros(len(bins)-1)
+    slow_bins = np.zeros(len(bins)-1)
+    for i in range(0, len(times)):
+        if times[i] < -1.5:
+            fast.append(x[i])
+        else:
+            slow.append(x[i])
+    for i in range(0, len(bins)-1):
+        
+
+
+
 # Plot the results
-def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass, sf_data):
+def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass, sf_data, redshiftfile):
     y_labels = [r'\log(t_q(Central)/t_U)',r'\log(t_q(Satellite)/t_U)',r'\log(N/N_{SF})']
     x_labels = [r'z', r'\log(M_*)']
     x_data = [redshifts, ste_mass]
