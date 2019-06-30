@@ -13,7 +13,6 @@ from functools import reduce
 import os
 from astropy.cosmology import FlatLambdaCDM
 import pickle
-from quenchingFinder import sfr_condition_2
 caesarfile = '/home/rad/data/m100n1024/s50/Groups/' #input('Final group file: ')
 progenref_file = '/disk01/rad/sim/m100n1024/s50/Groups/progen_m100n1024_151.dat'
 simname = 'm100n1024'#input('SIMBA simulation version: ')
@@ -58,6 +57,13 @@ print('Progenitor indexes obtained from .dat file.')
 print('Saving data to dictionary...')
 d['sf_galaxies_per_snap'] = np.zeros(len(snaps_sorted))
 
+def sfr_condition(type, time):
+    if type == 'start':
+        lsfr = np.log10(1/(time))-9
+    elif type == 'end':
+        lsfr  = np.log10(0.2/(time))-9
+    return lsfr
+
 for s in range(0, len(progenref_data[0])+1):
 
     sim = caesar.load(caesarfile+snaps_sorted[s],LoadHalo=False) # load caesar file
@@ -78,8 +84,7 @@ for s in range(0, len(progenref_data[0])+1):
 
     ssfr_gal = sfr/ms
     sfgals = 0
-    time = [thubble]
-    ssfr_cond = sfr_condition_2('end',time,0)
+    ssfr_cond = sfr_condition('end',thubble)
     for i in range(0, len(gals)):
         if ssfr_gal[i] >= ssfr_cond:
             sfgals = sfgals + 1
