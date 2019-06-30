@@ -86,7 +86,7 @@ for s in range(0, len(progenref_data[0])+1):
     sfgals = 0
     ssfr_cond = sfr_condition('end',thubble)
     for i in range(0, len(gals)):
-        if ssfr_gal[i] >= ssfr_cond:
+        if ssfr_gal[i] >= 10**ssfr_cond:
             sfgals = sfgals + 1
     print('Number of star forming galaxies in this snapshot: '+str(sfgals))
     d['sf_galaxies_per_snap'][s] = sfgals
@@ -112,7 +112,7 @@ for s in range(0, len(progenref_data[0])+1):
             d['t_gal'+str(k)] = np.concatenate((d['t_gal'+str(k)], thubble), axis=None)
             d['z_gal'+str(k)] = np.concatenate((d['z_gal'+str(k)], redshift), axis=None)
             d['gal_type'+str(k)] = np.concatenate((d['gal_type'+str(k)],gals[k]), axis=None)
-            d['gal_pos'+str(k)] = np.concatenate((d['gal_pos'+str(k)],galpos[k]), axis=None)
+            d['gal_pos'+str(k)] = np.stack((d['gal_pos'+str(k)],galpos[k]))
 
         elif progenref_data[k][s-1] !=-1:
             index = progenref_data[k][s-1]
@@ -132,7 +132,7 @@ for s in range(0, len(progenref_data[0])+1):
             d['t_gal'+str(k)] = np.concatenate((d['t_gal'+str(k)], thubble), axis=None)
             d['z_gal'+str(k)] = np.concatenate((d['z_gal'+str(k)], redshift), axis=None)
             d['gal_type'+str(k)] = np.concatenate((d['gal_type'+str(k)],gals[index]), axis=None)
-            d['gal_pos'+str(k)] = np.concatenate((d['gal_pos'+str(k)],galpos[k]), axis=None)
+            d['gal_pos'+str(k)] = np.stack((d['gal_pos'+str(k)],galpos[k]))
 
 print('Data saved to dictionary.')
 output = open(results_folder+'progen'+str(simname)+'.pkl','wb')
