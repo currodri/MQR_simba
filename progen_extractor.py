@@ -88,6 +88,7 @@ for s in range(0, len(progenref_data[0])+1):
     for i in range(0, len(gals)):
         if ssfr_gal[i] >= ssfr_cond:
             sfgals = sfgals + 1
+    print('Number of star forming galaxies in this snapshot: '+str(sfgals))
     d['sf_galaxies_per_snap'][s] = sfgals
     if s==0:
         d['boxsize_in_kpccm'] = sim.simulation.boxsize.to('kpccm')
