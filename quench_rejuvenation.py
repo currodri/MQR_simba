@@ -136,7 +136,23 @@ print('Quenching and Rejuvenation analysis done.')
 print(' ')
 
 # Plot the results
-def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
+def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass, sf_data):
+    y_labels = [r'\log(t_q(Central)/t_U)',r'\log(t_q(Satellite)/t_U)',r'\log(N/N_{SF})']
+    x_labels = [r'z', r'\log(M_*)']
+    x_data = [redshifts, ste_mass]
+    for i in range(0, len(x_labels)):
+        fig, ax = plt.subplots(3, 1, num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
+        for j in range(0, len(y_labels)):
+            ax[j].set_xlabel(x_labels[i], fontsize=16)
+            ax[j].set_ylabel(y_labels[j], fontsize=16)
+            if j!=2:
+                ax[j].hexbin(x_data[i][j][0], quenching_times[j][0], bins='log')
+                ax[j].scatter(x_data[i][j][2], quenching_times[j][2], s=40, label='Final quenching with rejuvenation')
+            else:
+                x_datas = x_data[i][j][0] + x_data[i][j][2]
+                quenchs = quenching_times[j][0] + quenching_times[j][2]
+
+
 
 def Quenching_Scatter_Plot(redshifts2, quenching_times2, ste_mass2):
     scatter_labels = [['Final quenching Sat', 'Non-final quenching Sat', 'Final quenching Sat with rejuvenation' ],['Final quenching Central', 'Non-final quenching Central', 'Final quenching Central with rejuvenation']]

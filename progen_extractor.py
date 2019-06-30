@@ -15,7 +15,7 @@ from astropy.cosmology import FlatLambdaCDM
 import pickle
 from quenchingFinder import sfr_condition_2
 caesarfile = '/home/rad/data/m100n1024/s50/Groups/' #input('Final group file: ')
-progenref_file = '/home/rad/progen_m100n1024_151.dat'
+progenref_file = '/disk01/rad/sim/m100n1024/s50/Groups/progen_m100n1024_151.dat'
 simname = 'm100n1024'#input('SIMBA simulation version: ')
 results_folder = '../progen_analysis/'+str(simname)+'/'
 
