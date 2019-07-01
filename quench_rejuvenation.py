@@ -185,7 +185,9 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
             else:
                 for k in range(0, 2):
                     x_datas = x_data[i][k][0] + x_data[i][k][2]
+                    x_datas = np.asarray(x_datas)
                     quenchs = quenching_times[k][0] + quenching_times[k][2]
+                    quenchs = np.asarray(quenchs)
                     fast, slow, cent = Fraction_Fast_vs_Slow(x_datas, quenchs, d['sf_galaxies_per_snap'], sf_x[i])
                     ax[j].plot(cent, np.log10(fast), label = frac_labels[k]+'fast quenching')
                     ax[j].plot(cent, np.log10(slow), label = frac_labels[k]+'slow quenching')
