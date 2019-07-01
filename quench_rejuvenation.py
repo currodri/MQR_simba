@@ -24,7 +24,7 @@ simfolder = '../progen_analysis/m100n1024'#input('SIMBA simulation progen folder
 sys.path.insert(0, str(simfolder))
 counterfile = '../progen_analysis/m100n1024/galaxy_count_m100n1024.txt'#input('Text file with total number of galaxies per snapshot: ')
 simname = 'm100n1024'#input('SIMBA simulation version: ')
-results_folder = '../rate_analysis/'+str(simname)+'/'
+results_folder = '../quench_analysis/'+str(simname)+'/'
 timefile = '../quench_analysis'+str(simname)+'/times_m100n1024.txt'
 redshiftfile = '../quench_analysis'+str(simname)+'/redshifts_m100n1024.txt'
 pickle_file = '../progen_analysis/m100n1024/progen_'+str(simname)+'.pkl'
@@ -168,19 +168,19 @@ def Fraction_Fast_vs_Slow(x, times, sf_galaxies, sf_x):
 
 # Plot the results
 def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
-    y_labels = [r'\log(t_q(Central)/t_U)',r'\log(t_q(Satellite)/t_U)',r'\log(N/N_{SF})']
+    y_labels = [r'$\log(t_q(Central)/t_U)$',r'$\log(t_q(Satellite)/t_U)$',r'$\log(N/N_{SF})$']
     frac_labels = ['Fraction of satellites in ', 'Fraction of centrals in ']
-    x_labels = [r'z', r'\log(M_*)']
-    sf_x = [d['redshifts'],d['sf_galaxies_mass']]
+    x_labels = [r'z', r'$\log(M_*)$']
+    name_file = ['redshift', 'mass']
+    sf_x = [d['redshifts'],np.log10(d['sf_galaxies_mass'])]
     x_data = [redshifts, ste_mass]
     for i in range(0, len(x_labels)):
-        fig, ax = plt.subplots(3, 1, num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
+        fig, ax = plt.subplots(3, 1, sharex='col', num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
         for j in range(0, len(y_labels)):
-            ax[j].set_xlabel(x_labels[i], fontsize=16)
             ax[j].set_ylabel(y_labels[j], fontsize=16)
             if j!=2:
-                ax[j].hexbin(x_data[i][j][0], quenching_times[j][0], bins='log')
-                ax[j].scatter(x_data[i][j][2], quenching_times[j][2], s=40, label='Final quenching with rejuvenation')
+                ax[j].hexbin(x_data[i][j][0], quenching_times[j][0], bins='log', cmap='Greys')
+                ax[j].scatter(x_data[i][j][2], quenching_times[j][2], s=20, label='Final quenching with rejuvenation', facecolor='r')
                 ax[j].legend(loc='best', prop={'size': 10})
             else:
                 for k in range(0, 2):
@@ -192,8 +192,9 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
                     ax[j].plot(cent, np.log10(fast), label = frac_labels[k]+'fast quenching')
                     ax[j].plot(cent, np.log10(slow), label = frac_labels[k]+'slow quenching')
                 ax[j].legend(loc='best', prop={'size': 10})
+        ax[2].set_xlabel(x_labels[i], fontsize=16)
         fig.tight_layout()
-        fig.savefig(str(results_folder)+'quenching_scatter.png', format='png', dpi=250)
+        fig.savefig(str(results_folder)+'quenching_scatter_'+str(name_file[i])'.png', format='png', dpi=250)
 
 def Quenching_Scatter_Plot2(redshifts2, quenching_times2, ste_mass2):
     scatter_labels = [['Final quenching Sat', 'Non-final quenching Sat', 'Final quenching Sat with rejuvenation' ],['Final quenching Central', 'Non-final quenching Central', 'Final quenching Central with rejuvenation']]
