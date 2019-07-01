@@ -55,7 +55,7 @@ snaps_sorted = sorted(snaps,key=lambda file: int(file[-8:-5]), reverse=True)
 print('Progenitor indexes obtained from .dat file.')
 print('Saving data to dictionary...')
 d['sf_galaxies_per_snap'] = np.zeros(len(snaps_sorted))
-d['sf_galaxies_mass'] = np.zeros(len(snaps_sorted))
+d['sf_galaxies_mass'] = np.array([])
 d['redshifts'] = np.zeros(len(snaps_sorted))
 d['t_hubble'] = np.zeros(len(snaps_sorted))
 
@@ -93,7 +93,7 @@ for s in range(0, len(progenref_data[0])+1):
             sfgals = sfgals + 1
             sfmass.append(ms[i])
     sfmass = np.asarray(sfmass)
-    d['sf_galaxies_mass'][s] = sfmass
+    d['sf_galaxies_mass'] = np.concatenate((d['sf_galaxies_mass'],sfmass))
     print('Number of star forming galaxies in this snapshot: '+str(sfgals))
     print('Median mass of star forming galaxies in this snapshot: '+str(np.median(d['sf_galaxies_mass'][s]))+' M*')
     d['sf_galaxies_per_snap'][s] = sfgals
