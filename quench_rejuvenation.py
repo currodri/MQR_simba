@@ -192,7 +192,7 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass, sf_data, redshi
         fig.tight_layout()
         fig.savefig(str(results_folder)+'quenching_scatter.png', format='png', dpi=250)
 
-def Quenching_Scatter_Plot(redshifts2, quenching_times2, ste_mass2):
+def Quenching_Scatter_Plot2(redshifts2, quenching_times2, ste_mass2):
     scatter_labels = [['Final quenching Sat', 'Non-final quenching Sat', 'Final quenching Sat with rejuvenation' ],['Final quenching Central', 'Non-final quenching Central', 'Final quenching Central with rejuvenation']]
     scatter_markers = ['.','*', '.']
     cmaps = ['Reds', 'Blues']
