@@ -31,7 +31,8 @@ pickle_file = '../progen_analysis/m100n1024/progen_'+str(simname)+'.pkl'
 
 # Extract progen data from txt files
 #d, ngal = importApp(str(simfolder))
-d = pickle.load(pickle_file)
+obj = open(pickle_file, 'rb')
+d = pickle.load(obj)
 ngal = 49215
 print('Total number of galaxies at z = 0: '+str(ngal))
 
