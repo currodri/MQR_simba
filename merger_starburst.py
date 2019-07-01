@@ -10,6 +10,7 @@ Created on 24 December 2018
 import numpy as np
 import random
 import matplotlib
+import pickle
 matplotlib.use('Agg') # Must be before importing matplotlib.pyplot or pylab!
 import matplotlib.pyplot as plt
 from scipy import stats
