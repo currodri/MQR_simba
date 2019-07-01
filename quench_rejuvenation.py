@@ -198,6 +198,7 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
                     else:
                         sf_data = [sf_x[i]]
                     fast, slow, cent = Fraction_Fast_vs_Slow(x_datas, quenchs, sf_data)
+                    print(fast, slow, cent)
                     ax[j].plot(cent, np.log10(fast), label = frac_labels[k]+'fast quenching')
                     ax[j].plot(cent, np.log10(slow), label = frac_labels[k]+'slow quenching')
                 ax[j].legend(loc='best', prop={'size': 10})
