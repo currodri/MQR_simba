@@ -166,6 +166,7 @@ def Fraction_Fast_vs_Slow(x, times, sf_d):
         for j in range(0, len(fast)):
             if bins[i] <= fast[j] < bins[i+1]:
                 f = f + 1
+        print(i, f, s, sf)
         fast_bins[i] = float(f)/float(sf)
         slow_bins[i] = float(s)/float(sf)
     return fast_bins,slow_bins,cent
@@ -173,7 +174,7 @@ def Fraction_Fast_vs_Slow(x, times, sf_d):
 # Plot the results
 def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
     y_labels = [r'$\log(t_q(Satellite)/t_U)$',r'$\log(t_q(Central)/t_U)$',r'$\log(N/N_{SF})$']
-    frac_labels = ['Satellites in ', 'Centrals in ']
+    frac_labels = ['Satellites with ', 'Centrals with ']
     x_labels = [r'z', r'$\log(M_*)$']
     name_file = ['redshift', 'mass']
     sf_x = [d['redshifts'],np.log10(d['sf_galaxies_mass'])]

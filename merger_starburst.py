@@ -24,6 +24,7 @@ simfolder = '../progen_analysis/m100n1024'#input('SIMBA simulation progen folder
 sys.path.insert(0, str(simfolder))
 simname = 'm100n1024'#input('SIMBA simulation version: ')
 results_folder = '../mergers/'+str(simname)+'/'
+pickle_file = '../progen_analysis/m100n1024/progen_'+str(simname)+'.pkl'
 
 #d, ngal = importApp(str(simfolder))
 obj = open(pickle_file, 'rb')
