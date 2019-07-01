@@ -154,7 +154,7 @@ def Fraction_Fast_vs_Slow(x, times, sf_d):
         f = 0
         s = 0
         for j in range(0, len(sf_d[0])):
-            if len(sf)>1:
+            if len(sf_d)>1:
                 if bins[i] <= sf_d[1][j] < bins[i+1]:
                     sf = sf + sf_d[0][j]
             else:
