@@ -404,6 +404,7 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
     bins = np.linspace(9.5, 12.0, nbins)
     delta = bins[1] - bins[0]
     bin_cent = bins - delta/2
+    bin_cent = np.delete(bin_cent, 0)
     fgas = [0,0,0]
     sfe = [0,0,0]
     for i in range(0, len(ylabels)):
