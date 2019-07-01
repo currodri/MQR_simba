@@ -138,7 +138,7 @@ print(' ')
 def Fraction_Fast_vs_Slow(x, times, sf_d):
     slow = []
     fast = []
-    bins = np.linspace(x.min()*0.9,x.max()*1.1,10)
+    bins = np.linspace(9.5,12.5,7)
     delta = bins[1] - bins[0]
     cent = bins - delta/2
     cent = np.delete(cent, 0)
@@ -158,7 +158,6 @@ def Fraction_Fast_vs_Slow(x, times, sf_d):
                 if bins[i] <= sf_d[1][j] < bins[i+1]:
                     sf = sf + sf_d[0][j]
             else:
-                print(bins[i],sf_d[0][j],bins[i+1])
                 if bins[i] <= sf_d[0][j] < bins[i+1]:
                     sf = sf + 1
         for j in range(0, len(slow)):
