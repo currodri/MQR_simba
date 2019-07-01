@@ -158,6 +158,7 @@ def Fraction_Fast_vs_Slow(x, times, sf_d):
                 if bins[i] <= sf_d[1][j] < bins[i+1]:
                     sf = sf + sf_d[0][j]
             else:
+                print(bins[i],sf_d[0][j],bins[i+1])
                 if bins[i] <= sf_d[0][j] < bins[i+1]:
                     sf = sf + 1
         for j in range(0, len(slow)):
@@ -179,12 +180,13 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
     sf_x = [d['redshifts'],np.log10(d['sf_galaxies_mass'])]
     x_data = [redshifts, ste_mass]
     for i in range(0, len(x_labels)):
+        print(i)
         fig, ax = plt.subplots(3, 1, sharex='col', num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
         for j in range(0, len(y_labels)):
             ax[j].set_ylabel(y_labels[j], fontsize=16)
             if j!=2:
                 ax[j].hexbin(x_data[i][j][0], quenching_times[j][0], bins='log', cmap='Greys')
-                ax[j].scatter(x_data[i][j][2], quenching_times[j][2], s=20, label='Final quenching with rejuvenation', facecolor='r')
+                ax[j].scatter(x_data[i][j][2], quenching_times[j][2], s=8, alpha=0.8, label='Final quenching with rejuvenation', facecolor='b')
                 ax[j].legend(loc='best', prop={'size': 10})
             else:
                 for k in range(0, 2):
