@@ -42,7 +42,7 @@ for i in range(ngal):
     sfr_gal = d['sfr_gal' + str(i)][::-1]
     sfe_gal = d['sfe_gal' + str(i)][::-1]
     z_gal = d['z_gal' + str(i)][::-1]
-    galaxy_t = d['galaxy_t' + str(i)][::-1]
+    galaxy_t = d['t_gal' + str(i)][::-1]
     galaxy_m = d['m_gal'+str(i)][::-1]
     fgas_gal = d['h2_gal'+str(i)][::-1]
     gal_type = d['gal_type'+str(i)][::-1]
