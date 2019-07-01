@@ -135,10 +135,9 @@ print('Number of quenching events in second loop: '
 print('Quenching and Rejuvenation analysis done.')
 print(' ')
 
-def Fraction_Fast_vs_Slow(x, times, sf_d):
+def Fraction_Fast_vs_Slow(x, times, sf_d, bins):
     slow = []
     fast = []
-    bins = np.linspace(9.5,12.5,7)
     delta = bins[1] - bins[0]
     cent = bins - delta/2
     cent = np.delete(cent, 0)
@@ -196,9 +195,11 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
                     quenchs = np.asarray(quenchs)
                     if i==0:
                         sf_data = [d['sf_galaxies_per_snap'],sf_x[i]]
+                        bins = np.linspace(0,4,10)
                     else:
                         sf_data = [sf_x[i]]
-                    fast, slow, cent = Fraction_Fast_vs_Slow(x_datas, quenchs, sf_data)
+                        bins = np.linspace(9.5,12.5,10)
+                    fast, slow, cent = Fraction_Fast_vs_Slow(x_datas, quenchs, sf_data, bins)
                     print(fast, slow, cent)
                     ax[j].plot(cent, np.log10(fast), label = frac_labels[k]+'fast quenching')
                     ax[j].plot(cent, np.log10(slow), label = frac_labels[k]+'slow quenching')

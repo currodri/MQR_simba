@@ -479,6 +479,6 @@ elif u_selec==2:
 elif u_selec==3:
     distanceMSQ(mergers, sf_galaxies, 10)
 elif u_selec==4:
-    distanceMSQ_2(mergers, sf_galaxies, 10)
+    distanceMSQ_2(mergers, sf_galaxies, 9)
 else:
     print('ERROR: function not found')
