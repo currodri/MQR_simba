@@ -93,9 +93,9 @@ for s in range(0, len(progenref_data[0])+1):
             sfgals = sfgals + 1
             sfmass.append(ms[i])
     sfmass = np.asarray(sfmass)
-    d['sf_galaxies_mass'][s] = np.median(sfmass)
+    d['sf_galaxies_mass'][s] = sfmass
     print('Number of star forming galaxies in this snapshot: '+str(sfgals))
-    print('Median mass of star forming galaxies in this snapshot: '+str(d['sf_galaxies_mass'][s])+' M*')
+    print('Median mass of star forming galaxies in this snapshot: '+str(np.median(d['sf_galaxies_mass'][s]))+' M*')
     d['sf_galaxies_per_snap'][s] = sfgals
     d['redshifts'][s] = redshift
     d['t_hubble'][s] = thubble
