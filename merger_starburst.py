@@ -25,17 +25,21 @@ sys.path.insert(0, str(simfolder))
 simname = 'm100n1024'#input('SIMBA simulation version: ')
 results_folder = '../mergers/'+str(simname)+'/'
 
-d, ngal = importApp(str(simfolder))
+#d, ngal = importApp(str(simfolder))
+obj = open(pickle_file, 'rb')
+d = pickle.load(obj)
+ngal = 49215
 galaxies = []
 for i in range(ngal):
     sfr_gal = d['sfr_gal' + str(i)][::-1]
     sfe_gal = d['sfe_gal' + str(i)][::-1]
     z_gal = d['z_gal' + str(i)][::-1]
-    galaxy_t = d['galaxy_t' + str(i)][::-1]
+    galaxy_t = d['t_gal' + str(i)][::-1]
     galaxy_m = d['m_gal'+str(i)][::-1]
     fgas_gal = d['h2_gal'+str(i)][::-1]#+0.00000001
     gal_type = d['gal_type'+str(i)][::-1]
-    galaxy = GalaxyData(i, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type)
+    gal_pos = d['gal_pos'+str(i)][::-1]
+    galaxy = GalaxyData(i, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type,gal_pos)
     galaxies.append(galaxy)
 
 print('Data extracted from PROGEN files.')
@@ -406,11 +410,14 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
         for m in range(0, len(titles)):
             mer_m = []
             mer = []
+            mer_pos = []
             msq_m = []
             msq = []
+            msq_pos = []
             for j in range(0, len(mergers)):
                 if zlimits[m][0] <= mergers[j].z_gal[1] < zlimits[m][1]:
                     mer_m.append(np.log10(mergers[j].m_gal[1]))
+                    mer_pos.append(mergers[j].gal_pos[1])
                     if i==0:
                         mer.append(mergers[j].ssfr_gal[1])
                     elif i==1:
@@ -420,6 +427,7 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             for n in range(0, len(sf_galaxies)):
                 if zlimits[m][0] <= sf_galaxies[n].z_gal < zlimits[m][1]:
                     msq_m.append(np.log10(sf_galaxies[n].m_gal))
+                    msq_pos.append(sf_galaxies[n].gal_pos)
                     if i==0:
                         msq.append(sf_galaxies[n].ssfr_gal)
                     elif i==1:
@@ -428,18 +436,11 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
                         msq.append(sf_galaxies[n].sfe_gal)
             mer_m = np.asarray(mer_m)
             mer = np.asarray(mer)
+            mer_median, mer_var = plotmedian(mer_m,mer,pos=mer_pos,boxsize=d['boxsize_in_kpccm'],bin_choosen=bins)
             msq_m = np.asarray(msq_m)
             msq = np.asarray(msq)
-            idx = np.digitize(mer_m, bins)
-            running_median = [np.average(mer[idx==k]) for k in range(0,nbins)]
-            running_std_1 = np.asarray([np.std(mer[idx==k])/np.sqrt(len(mer[idx==k])) for k in range(0,nbins)])
-            mer_median = np.asarray(running_median)
-            idx = np.digitize(msq_m, bins)
-            running_median = [np.average(msq[idx==k]) for k in range(0,nbins)]
-            running_std_2 = np.asarray([np.std(msq[idx==k])/np.sqrt(len(msq[idx==k])) for k in range(0,nbins)])
-            msq_median = np.asarray(running_median)
-            print(running_std_1,running_std_2)
-            distance_std = np.sqrt(((1/msq_median)**2)*running_std_1**2 + (((mer_median/(msq_median**2)-1)**2)*running_std_2**2))
+            msq_median, msq_var = plotmedian(msq_m,msq,pos=msq_pos,boxsize=d['boxsize_in_kpccm'],bin_choosen=bins)
+            distance_std = np.sqrt(((msq_var/msq_median)**2) + ((mer_var/mer_median)**2))
             distance = np.log10(mer_median/msq_median)
             if i==1:
                 fgas[m] = distance

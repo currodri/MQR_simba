@@ -101,7 +101,7 @@ def histedges_equalN(x, nbin):
                      np.arange(npt),
                      np.sort(x))
 
-def plotmedian(x,y,yflag=[],c='k',ltype='--',lw=3,stat='median',ax='plt',bins=8,label=None,pos=None,boxsize=-1):
+def plotmedian(x,y,yflag=[],c='k',ltype='--',lw=3,stat='median',ax='plt',bins=8,label=None,pos=None,boxsize=-1, bin_choosen=0):
     if len(yflag) != len(x):
         #print 'Plotmedian: No flag provided, using all values'
         xp = x
@@ -110,12 +110,15 @@ def plotmedian(x,y,yflag=[],c='k',ltype='--',lw=3,stat='median',ax='plt',bins=8,
         xp = x[yflag]
         yp = y[yflag]
     # bins<0 sets bins such that there are equal numbers per bin
-    if bins < 0: bin_edges = histedges_equalN(xp,-bins)
-    else: bin_edges = np.arange(0.999*min(xp),1.001*max(xp),(max(xp)-min(xp))/(bins))
-    if bins < 0:	bin_means, bin_edges, binnumber = stats.binned_statistic(xp,yp,bins=bin_edges,statistic=stat)
-    else: bin_means, bin_edges, binnumber = stats.binned_statistic(xp,yp,bins=bins,statistic=stat)
-    bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
+    #if bins < 0: bin_edges = histedges_equalN(xp,-bins)
+    #else: bin_edges = np.arange(0.999*min(xp),1.001*max(xp),(max(xp)-min(xp))/(bins))
+    #else: bin_edges = bin_choosen
+    #if bins < 0:	bin_means, bin_edges, binnumber = stats.binned_statistic(xp,yp,bins=bin_edges,statistic=stat)
+    #else: bin_means, bin_edges, binnumber = stats.binned_statistic(xp,yp,bins=bins,statistic=stat)
+    #bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
     #ax.plot(bin_cent, bin_means, ltype, lw=lw, color=c, label=label)
+    bin_means, bin_edges, binnumber = stats.binned_statistic(xp,yp,bins=bin_choosen,statistic=stat)
+    bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
 
     if boxsize > 0:  # determine cosmic variance over 8 octants, plot errorbars
 	if len(yflag) != len(x): posp = pos
@@ -142,7 +145,7 @@ def plotmedian(x,y,yflag=[],c='k',ltype='--',lw=3,stat='median',ax='plt',bins=8,
         #ax.errorbar(bin_cent, bin_means, yerr=[var,var], fmt='o', linewidth=lw, color=c)
     else:
         var = np.zeros(len(bin_cent))
-    return bin_cent,bin_means,var
+    return bin_means,var
 
 # Running median through scatter data
 def myrunningmedian(x,y,nbins, sigma=True):
