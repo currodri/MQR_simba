@@ -184,8 +184,8 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
         for j in range(0, len(y_labels)):
             ax[j].set_ylabel(y_labels[j], fontsize=16)
             if j!=2:
-                ax[j].hexbin(x_data[i][j][0], quenching_times[j][0], bins='log', cmap='Greys')
-                ax[j].scatter(x_data[i][j][2], quenching_times[j][2], s=8, alpha=0.8, label='Final quenching with rejuvenation', facecolor='b')
+                ax[j].hexbin(x_data[i][j][0], quenching_times[j][0], bins='log', cmap='Greys', gridsize=30)
+                ax[j].scatter(x_data[i][j][2], quenching_times[j][2], s=8, alpha=0.8, label='Final quenching with rejuvenation', facecolor=None, edgecolor='b')
                 ax[j].legend(loc='best', prop={'size': 10})
             else:
                 for k in range(0, 2):

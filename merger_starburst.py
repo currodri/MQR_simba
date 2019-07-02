@@ -443,6 +443,7 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             msq_m = np.asarray(msq_m)
             msq = np.asarray(msq)
             msq_median, msq_var = plotmedian(msq_m,msq,pos=msq_pos,boxsize=d['boxsize_in_kpccm'],bin_choosen=bins)
+            print(i,m,msq_var,mer_var)
             distance_std = np.sqrt(((msq_var/msq_median)**2) + ((mer_var/mer_median)**2))
             distance_std = distance_std/np.log(10)
             distance = np.log10(mer_median/msq_median)
