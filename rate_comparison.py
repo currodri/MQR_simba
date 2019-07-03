@@ -210,8 +210,16 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
     ax[1].set_ylabel(r'$\log(\mathcal{R}_{Que})$ [Gyr$^{-1}$]', fontsize=16)
     ax[2].set_ylabel(r'$\log(\mathcal{R}_{Rej})$ [Gyr$^{-1}$]', fontsize=16)
     ax[2].set_xlabel(r'$\log(1+z)$', fontsize=16)
+    axR = ax[0].twiny()
+    topticks1 = np.array([0,1,2,4,6])  # desired redshift labels
+    topticks2 = np.log10(1+topticks1)  # tick locations in time
+    axR.set_xticklabels(topticks1)
+    axR.set_xticks(topticks2)
+    axR.xaxis.set_ticks_position('top') # set the position of the second x-axis to top
+    axR.xaxis.set_label_position('top') # set the position of the second x-axis to top
+    axR.set_xlabel('z', fontsize=16)
     ax[0].legend(loc='best', prop={'size': 12})
-    fig.tight_layout()
+    fig.subplots_adjust(hspace=0)
     fig.savefig(str(results_folder)+'mqr_fractional_rate.png', format='png', dpi=200)
 
 def Density_Rate(mergers,q_masses,q_reds,q_thubble,reju_z,reju_t,reju_m,n_bins,max_redshift_mergers):
@@ -266,8 +274,16 @@ def Density_Rate(mergers,q_masses,q_reds,q_thubble,reju_z,reju_t,reju_m,n_bins,m
     ax[1].set_ylabel(r'$\log(\Gamma_{Que})$ [cMpc$^{-3}$Gyr$^{-1}$]', fontsize=16)
     ax[2].set_ylabel(r'$\log(\Gamma_{Rej})$ [cMpc$^{-3}$Gyr$^{-1}$]', fontsize=16)
     ax[2].set_xlabel(r'$\log(1+z)$', fontsize=16)
+    axR = ax[0].twiny()
+    topticks1 = np.array([0,1,2,4,6])  # desired redshift labels
+    topticks2 = np.log10(1+topticks1)  # tick locations in time
+    axR.set_xticklabels(topticks1)
+    axR.set_xticks(topticks2)
+    axR.xaxis.set_ticks_position('top') # set the position of the second x-axis to top
+    axR.xaxis.set_label_position('top') # set the position of the second x-axis to top
+    axR.set_xlabel('z', fontsize=16)
     ax[0].legend(loc='best', prop={'size': 12})
-    fig.tight_layout()
+    fig.subplots_adjust(hspace=0)
     fig.savefig(str(results_folder)+'mqr_density_rate.png', format='png', dpi=200)
 
 Fractional_Rate(mergers,sf_galaxies,ste_mass2_all,redshifts2_all,thubble2_all,reju_z,reju_t,reju_m,10,max_redshift_mergers)
