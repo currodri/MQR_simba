@@ -138,6 +138,7 @@ def SFR_Evolution2(mergers, msq_galaxies, n_bins):
         msq_sort_idx = np.argsort(msq_m)
         msq_sorted = np.sort(msq_m)
         msq_sel = []
+        msq_sel_m = []
         for m in range(0, len(mergers_m)):
             if len(msq_sorted)>3:
                 loc = np.searchsorted(msq_sorted, mergers_m[m])
@@ -160,9 +161,11 @@ def SFR_Evolution2(mergers, msq_galaxies, n_bins):
             real_idx = msq_idx[msq_sel[selected]]
             msq_gal = msq_galaxies[real_idx]
             ssfr_nm.append(np.log10(msq_gal.ssfr_gal/msq_gal.m_gal))
+            msq_sel_m.append(np.log10(msq_gal.m_gal))
             pos_nm.append(msq.gal_pos)
         pos_nm = np.asarray(pos_nm)
         pos_m = np.asarray(pos_m)
+        msq_sel_m = np.asarray(msq_sel_m)
         ssfr_nm = np.asarray(ssfr_nm)
         ssfr_m_ave[i] = np.median(ssfr_m) #np.average(ssfr_m)
         a = float(mergers_m.min()*0.9)
@@ -171,7 +174,7 @@ def SFR_Evolution2(mergers, msq_galaxies, n_bins):
         ssfr_m_error[i] = err[0]
         a = float(msq_m.min()*0.9)
         b = float(msq_m.max()*1.1)
-        ssfr_nm_ave[i], err = plotmedian(msq_m,ssfr_nm, pos=pos_nm, boxsize=d['boxsize_in_kpccm'],bin_choosen=[a,b])
+        ssfr_nm_ave[i], err = plotmedian(msq_sel_m,ssfr_nm, pos=pos_nm, boxsize=d['boxsize_in_kpccm'],bin_choosen=[a,b])
         ssfr_nm_error[i] = err[0]
     return ssfr_m_ave,ssfr_m_error,ssfr_nm_ave,ssfr_nm_error,z_cent
     # plt.errorbar(z_cent, ssfr_m_ave, yerr=ssfr_m_error, linestyle='--', marker='o', label='Mergers star-forming', capsize=2, capthick=2)
