@@ -184,7 +184,8 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
     sf_x = [d['redshifts'],np.log10(d['sf_galaxies_mass'])]
     x_data = [redshifts, ste_mass]
     for i in range(0, len(x_labels)):
-        fig, ax = plt.subplots(3, 1, sharex='col', num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
+        fig, ax = plt.subplots(3, 1, sharex=True, num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
+        fig.subplots_adjust(hspace=0)
         for j in range(0, len(y_labels)):
             ax[j].set_ylabel(y_labels[j], fontsize=16)
             if j!=2:

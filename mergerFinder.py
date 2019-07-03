@@ -145,6 +145,7 @@ def plotmedian(x,y,yflag=[],c='k',ltype='--',lw=3,stat='median',ax='plt',bins=8,
         #ax.errorbar(bin_cent, bin_means, yerr=[var,var], fmt='o', linewidth=lw, color=c)
     else:
         var = np.zeros(len(bin_cent))
+    print(bin_means,var)
     return bin_means,var
 
 # Running median through scatter data
