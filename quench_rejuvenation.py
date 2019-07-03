@@ -222,10 +222,11 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
 
                 ax[j].legend(loc='best', prop={'size': 10})
         ax[2].set_xlabel(x_labels[i], fontsize=16)
-        topticks1 = np.array([0,1,2,4,6])  # desired redshift labels
-        topticks2 = np.log10(1+topticks1)  # tick locations in time
-        ax[0].set_xticklabels(topticks1)
-        ax[0].set_xticks(topticks2)
+        if i==0:
+            topticks1 = np.array([0,1,2,4,6])  # desired redshift labels
+            topticks2 = np.log10(1+topticks1)  # tick locations in time
+            ax[0].set_xticklabels(topticks1)
+            ax[0].set_xticks(topticks2)
         fig.subplots_adjust(hspace=0)
         fig.savefig(str(results_folder)+'quenching_scatter_'+str(name_file[i])+'.png', format='png', dpi=250)
 
