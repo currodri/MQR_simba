@@ -27,9 +27,10 @@ simname = 'm100n1024'#input('SIMBA simulation version: ')
 results_folder = '../mandq_relations/'+str(simname)+'/'
 timefile = '../quench_analysis'+str(simname)+'/times_m100n1024.txt'
 redshiftfile = '../quench_analysis'+str(simname)+'/redshifts_m100n1024.txt'
+pickle_file = '../progen_analysis/m100n1024/progen_'+str(simname)+'.pkl'
 
 # Extract progen data from txt files
-d, ngal = importApp(str(simfolder))
+#d, ngal = importApp(str(simfolder))
 obj = open(pickle_file, 'rb')
 d = pickle.load(obj)
 ngal = 49215
