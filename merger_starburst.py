@@ -454,6 +454,7 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             axes[i].plot(bin_cent, distance, label=titles[m], color=colours[m])
             axes[i].fill_between(bin_cent, distance-distance_std, distance+distance_std, facecolor=colours[m], alpha=0.25)
             axes[i].set_ylabel(ylabels[i], fontsize=16)
+            axes[i].set_ylim([0.5,-0.5])
     axes[0].legend(loc='best', prop={'size': 12})
     fig2.savefig(str(results_folder)+'distance_msq.png', format='png', dpi=200)
     for i in range(0, len(fgas)):

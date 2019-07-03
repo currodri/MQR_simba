@@ -18,25 +18,31 @@ import seaborn as sns
 sns.set(style="ticks")
 from import_progen import importApp
 from quenchingFinder import GalaxyData
-from mergerFinder import merger_finder, myrunningmedian
+from mergerFinder import merger_finder, myrunningmedian, plotmedian
 import sys
 simfolder = '../progen_analysis/m100n1024'#input('SIMBA simulation progen folder: ')
 sys.path.insert(0, str(simfolder))
 simname = 'm100n1024'#input('SIMBA simulation version: ')
 results_folder = '../mergers/'+str(simname)+'/'
+pickle_file = '../progen_analysis/m100n1024/progen_'+str(simname)+'.pkl'
 
-d, ngal = importApp(str(simfolder))
+#d, ngal = importApp(str(simfolder))
+obj = open(pickle_file, 'rb')
+d = pickle.load(obj)
+ngal = 49215
 galaxies = []
 for i in range(ngal):
     sfr_gal = d['sfr_gal' + str(i)][::-1]
     sfe_gal = d['sfe_gal' + str(i)][::-1]
     z_gal = d['z_gal' + str(i)][::-1]
-    galaxy_t = d['galaxy_t' + str(i)][::-1]
+    galaxy_t = d['t_gal' + str(i)][::-1]
     galaxy_m = d['m_gal'+str(i)][::-1]
-    fgas_gal = d['h2_gal'+str(i)][::-1]
+    fgas_gal = d['h2_gal'+str(i)][::-1]#+0.00000001
     gal_type = d['gal_type'+str(i)][::-1]
-    galaxy = GalaxyData(i, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type)
+    gal_pos = d['gal_pos'+str(i)][::-1]
+    galaxy = GalaxyData(i, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type,gal_pos)
     galaxies.append(galaxy)
+
 mergers, sf_galaxies = merger_finder(galaxies, 0.2, 10**9.5, 3.5)
 
 def SF_Budget(mergers, msq_galaxies, n_bins):
@@ -108,13 +114,16 @@ def SFR_Evolution2(mergers, msq_galaxies, n_bins):
     for i in range(0, n_bins-1):
         ssfr_m = []
         ssfr_nm = []
+        pos_nm = []
         mergers_m = []
         msq_m = []
+        pos_m = []
         msq_idx = []
         for j in range(0, len(mergers)):
             merger = mergers[j]
             if z_bins[i]<= merger.z_gal[1] < z_bins[i+1]:
                 ssfr_m.append(np.log10(merger.sfr_gal[1]/merger.m_gal[1]))
+                pos_m.append(merger.gal_pos[1])
                 mergers_m.append(np.log10(merger.m_gal[1]))
         for k in range(0, len(msq_galaxies)):
             msq = msq_galaxies[k]
@@ -150,18 +159,21 @@ def SFR_Evolution2(mergers, msq_galaxies, n_bins):
             real_idx = msq_idx[msq_sel[selected]]
             msq_gal = msq_galaxies[real_idx]
             ssfr_nm.append(np.log10(msq_gal.ssfr_gal/msq_gal.m_gal))
+            pos_nm.append(ms.gal_pos)
+        pos_nm = np.asarray(pos_nm)
+        pos_m = np.asarray(pos_m)
         ssfr_nm = np.asarray(ssfr_nm)
-        ssfr_m_ave[i] = np.average(ssfr_m)
-        ssfr_m_error[i] = np.std(ssfr_m)/np.sqrt(np.log10(len(ssfr_m)))
-        ssfr_nm_ave[i] = np.average(ssfr_nm)
-        ssfr_nm_error[i] = np.std(ssfr_nm)/np.sqrt(np.log10(len(ssfr_nm)))
-    plt.errorbar(z_cent, ssfr_m_ave, yerr=ssfr_m_error, linestyle='--', marker='o', label='Mergers star-forming', capsize=2, capthick=2)
-    plt.errorbar(z_cent, ssfr_nm_ave, yerr=ssfr_nm_error, linestyle='--', marker='s', label='Mass-matched sample of non-merger star-forming', capsize=2, capthick=2)
-    plt.xlabel(r'$z$')
-    plt.ylabel(r'$\log(\langle$sSFR (yr$^{-1}\rangle)$')
-    plt.tight_layout()
-    plt.legend(loc='best')
-    plt.savefig(str(results_folder)+'sfr_evolution_2.eps', dpi=250)
+        ssfr_m_ave[i] = np.median(ssfr_m) #np.average(ssfr_m)
+        ssfr_m_ave[i], ssfr_m_error[i] = plotmedian(merger_m,ssfr_m, pos=pos_m, boxsize=d['boxsize_in_kpccm'],bin_choosen=[z_bins[i],z_bins[i+1]])
+        ssfr_nm_ave[i], ssfr_nm_error[i] = plotmedian(msq_m,ssfr_nm, pos=pos_nm, boxsize=d['boxsize_in_kpccm'],bin_choosen=[z_bins[i],z_bins[i+1]])
+    return ssfr_m_ave,ssfr_m_error,ssfr_nm_ave,ssfr_nm_error,z_cent
+    # plt.errorbar(z_cent, ssfr_m_ave, yerr=ssfr_m_error, linestyle='--', marker='o', label='Mergers star-forming', capsize=2, capthick=2)
+    # plt.errorbar(z_cent, ssfr_nm_ave, yerr=ssfr_nm_error, linestyle='--', marker='s', label='Mass-matched sample of non-merger star-forming', capsize=2, capthick=2)
+    # plt.xlabel(r'$z$')
+    # plt.ylabel(r'$\log(\langle$sSFR (yr$^{-1}\rangle)$')
+    # plt.tight_layout()
+    # plt.legend(loc='best')
+    # plt.savefig(str(results_folder)+'sfr_evolution_2.eps', dpi=250)
 def Merger_Fraction(mergers, msq_galaxies, n_bins):
     z_bins = np.linspace(0.0, 3.5, n_bins)
     f_merger = np.zeros(n_bins-1)
@@ -239,19 +251,23 @@ def Merger_Contribution(mergers, msq_galaxies, n_bins):
                 nm_counter = nm_counter + 1
         f_merger[i] = float(Decimal(m_counter)/Decimal(m_counter+nm_counter))
         f_budget[i] = sfr_m/(sfr_m+sfr_nm)
-    fig = plt.figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
-    ax = fig.add_subplot(1,1,1)
-    ax.set_xscale("log")
-    ax.set_xticks([0.0, 0.5, 1.0, 2.5])
-    ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
-    ax.set_yscale("log")
-    plt.plot(z_cent, f_merger, linestyle='--', marker='o', label='Fraction of galaxies')
-    plt.plot(z_cent, f_budget, linestyle='--', marker='s', label='Fraction of SF Budget')
-    ax.set_xlabel(r'$z$', fontsize=16)
-    ax.set_ylabel('Merger contribution to star-forming galaxies', fontsize=16)
-    ax.legend(loc='best')
-    fig.tight_layout()
-    fig.savefig(str(results_folder)+'merger_contribution.png',format='png', dpi=250)
+    f_merger = np.asarray(f_merger)
+    f_budget = np.asarray(f_budget)
+    z_cent = np.asarray(z_cent)
+    return f_merger,f_budget,z_cent
+    # fig = plt.figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
+    # ax = fig.add_subplot(1,1,1)
+    # ax.set_xscale("log")
+    # ax.set_xticks([0.0, 0.5, 1.0, 2.5])
+    # ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+    # ax.set_yscale("log")
+    # plt.plot(z_cent, f_merger, linestyle='--', marker='o', label='Fraction of galaxies')
+    # plt.plot(z_cent, f_budget, linestyle='--', marker='s', label='Fraction of SF Budget')
+    # ax.set_xlabel(r'$z$', fontsize=16)
+    # ax.set_ylabel('Merger contribution to star-forming galaxies', fontsize=16)
+    # ax.legend(loc='best')
+    # fig.tight_layout()
+    # fig.savefig(str(results_folder)+'merger_contribution.png',format='png', dpi=250)
 
 def Fgas_mean(mergers, msq_galaxies, n_bins):
     z_bins = np.linspace(0.0, 3.5, n_bins)
@@ -395,6 +411,22 @@ def Contribution_and_Rate(mergers, msq_galaxies, n_bins):
     ax[1].legend(loc='best')
     fig.tight_layout()
     fig.savefig(str(results_folder)+'merger_contribution_and_rate.png',format='png', dpi=250)
+
+def SFR_Evolution_and_Contribution(mergers, msq_galaxies, n_bins):
+    ssfr_m_ave,ssfr_m_error,ssfr_nm_ave,ssfr_nm_error,z_cent1 = SFR_Evolution2(mergers,msq_galaxies,n_bins)
+    f_merger,f_budget,z_cent2 = Merger_Contribution(mergers,msq_galaxies,n_bins)
+    fig, axes = plt.figure(2, 1, sharex='x',num=None, figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
+    axes[0].errorbar(np.log10(1+z_cent1), ssfr_m_ave, yerr=ssfr_m_error, linestyle='--', marker='o', label='Mergers star-forming', capsize=2, capthick=2)
+    axes[0].errorbar(np.log10(1+z_cent1), ssfr_nm_ave, yerr=ssfr_nm_error, linestyle='--', marker='s', label='Mass-matched sample of non-merger star-forming', capsize=2, capthick=2)
+    axes[0].set_ylabel(r'$\log(\langle$sSFR (yr$^{-1}\rangle)$')
+    axes[0].legend(loc='best')
+    axes[1].plot(np.log10(1+z_cent2), np.log10(f_merger), linestyle='--', marker='o', label=r'$\log($Fraction of galaxies)')
+    axes[1].plot(np.log10(1+z_cent2), np.log10(f_budget), linestyle='--', marker='s', label=r'$\log($Fraction of SF Budget)')
+    axes[1].set_ylabel('Merger contribution to star-forming galaxies', fontsize=16)
+    axes[1].legend(loc='best')
+    axes[1].set_xlabel(r'$\log(1+z)$')
+    fig.tight_layout()
+    fig.savefig(str(results_folder)+'sfr_evo_and_contribution.png',format='png', dpi=250)
 
 #SFR_Evolution(mergers, sf_galaxies, 10)
 #Merger_Fraction(mergers, sf_galaxies, 10)

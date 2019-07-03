@@ -117,12 +117,16 @@ for i in range(0, len(galaxies_interpolated)):
             pos = 1
         #print(len(galaxy.z_gal), start, end, galaxy.id)
         if np.log10(galaxy.m_gal)>=mass_limit:
-            redshifts2[int(quench.type)][pos].append(galaxy.z_gal)
-            ste_mass2[int(quench.type)][pos].append(np.log10(galaxy.m_gal))
-            quenching_times2[int(quench.type)][pos].append(np.log10(quench.quench_time/galaxy.galaxy_t[end]))
-            frac_gas2[int(quench.type)][pos].append(np.log10(galaxy.fgas_gal))
-            thubble2[int(quench.type)][pos].append(np.log10(galaxy.galaxy_t[end]))
-            sfr_2[int(quench.type)][pos].append(np.log10(galaxy.ssfr_gal[start-1]*galaxy.m_gal))
+            if int(quench.type)==0:
+                q_type = 1
+            elif int(quench.type)==1:
+                q_type = 0
+            redshifts2[q_type][pos].append(galaxy.z_gal)
+            ste_mass2[q_type][pos].append(np.log10(galaxy.m_gal))
+            quenching_times2[q_type][pos].append(np.log10(quench.quench_time/galaxy.galaxy_t[end]))
+            frac_gas2[q_type][pos].append(np.log10(galaxy.fgas_gal))
+            thubble2[q_type][pos].append(np.log10(galaxy.galaxy_t[end]))
+            sfr_2[q_type][pos].append(np.log10(galaxy.ssfr_gal[start-1]*galaxy.m_gal))
             redshifts2_all.append(galaxy.z_gal)
             ste_mass2_all.append(galaxy.m_gal)
             quenching_times2_all.append(quench.quench_time)
@@ -171,19 +175,21 @@ def Fraction_Fast_vs_Slow(x, times, sf_d, bins):
 
 # Plot the results
 def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
-    y_labels = [r'$\log(t_q(Satellite)/t_U)$',r'$\log(t_q(Central)/t_U)$',r'$\log(N/N_{SF})$']
-    frac_labels = ['Satellites with ', 'Centrals with ']
-    x_labels = [r'z', r'$\log(M_*)$']
+    y_labels = [r'$\log(t_q(Central)/t_U)$',r'$\log(t_q(Satellite)/t_U)$',r'$\log(N/N_{SF})$']
+    frac_labels = ['Centrals with ','Satellites with ']
+    x_labels = [r'$\log(1+z)$', r'$\log(M_*)$']
     name_file = ['redshift', 'mass']
-    sf_x = [d['redshifts'],np.log10(d['sf_galaxies_mass'])]
-    x_data = [redshifts, ste_mass]
+    colours = ['r','b']
+    sf_x = [np.log10(1+d['redshifts']),np.log10(d['sf_galaxies_mass'])]
+    x_data = [np.log10(1+redshifts), ste_mass]
     for i in range(0, len(x_labels)):
         fig, ax = plt.subplots(3, 1, sharex='col', num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
         for j in range(0, len(y_labels)):
             ax[j].set_ylabel(y_labels[j], fontsize=16)
             if j!=2:
-                ax[j].hexbin(x_data[i][j][0], quenching_times[j][0], bins='log', cmap='Greys', gridsize=30)
+                ax[j].hexbin(x_data[i][j][0], quenching_times[j][0], bins='log', cmap='Greys', gridsize=30, label='Final quenching')
                 ax[j].scatter(x_data[i][j][2], quenching_times[j][2], s=8, alpha=0.8, label='Final quenching with rejuvenation', facecolor=None, edgecolor='b')
+                ax[j].plot([x_data[i][j][2].min(),x_data[i][j][2].max()],[-1.5,-1.5], 'k--')
                 ax[j].legend(loc='best', prop={'size': 10})
             else:
                 for k in range(0, 2):
@@ -198,8 +204,8 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
                         sf_data = [sf_x[i]]
                         bins = np.linspace(9.5,12.5,10)
                     fast, slow, cent = Fraction_Fast_vs_Slow(x_datas, quenchs, sf_data, bins)
-                    ax[j].plot(cent, np.log10(fast), label = frac_labels[k]+'fast quenching')
-                    ax[j].plot(cent, np.log10(slow), label = frac_labels[k]+'slow quenching')
+                    ax[j].plot(cent, np.log10(fast), label = frac_labels[k]+'fast quenching', colours[k]+'-')
+                    ax[j].plot(cent, np.log10(slow), label = frac_labels[k]+'slow quenching', colours[k]+'--')
                 ax[j].legend(loc='best', prop={'size': 10})
         ax[2].set_xlabel(x_labels[i], fontsize=16)
         fig.tight_layout()
