@@ -230,7 +230,7 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
             axR.set_xticks(topticks2)
             axR.xaxis.set_ticks_position('top') # set the position of the second x-axis to top
             axR.xaxis.set_label_position('top') # set the position of the second x-axis to top
-            axr.set_xlabel('z', fontsize=16)
+            axR.set_xlabel('z', fontsize=16)
         fig.subplots_adjust(hspace=0)
         fig.savefig(str(results_folder)+'quenching_scatter_'+str(name_file[i])+'.png', format='png', dpi=250)
 
