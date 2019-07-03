@@ -207,7 +207,7 @@ def mqr_relation():
                     merger_boost.append(merg.fgas_boost)
                 time_diff.append(possible_r[np.argmin(diff)]-merg.galaxy_t[1]+1e-7)
     time_diff = np.asarray(time_diff)
-    median = np.median(time_diff)
+    median = np.log10(np.median(time_diff))
     merger_boost = np.asarray(merger_boost)
     hist, bin_edges = np.histogram(time_diff, bins=12)
     bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
