@@ -145,6 +145,7 @@ def Fraction_Fast_vs_Slow(x, times, sf_d, bins):
     delta = bins[1] - bins[0]
     cent = bins - delta/2
     cent = np.delete(cent, 0)
+    cent = np.asarray(cent)
     fast_bins = np.zeros(len(bins)-1)
     slow_bins = np.zeros(len(bins)-1)
     for i in range(0, len(times)):
@@ -180,21 +181,21 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
     x_labels = [r'$\log(1+z)$', r'$\log(M_*)$']
     name_file = ['redshift', 'mass']
     colours = ['r','b']
-    sf_x = [np.log10(1+d['redshifts']),np.log10(d['sf_galaxies_mass'])]
+    sf_x = [d['redshifts'],np.log10(d['sf_galaxies_mass'])]
     x_data = [redshifts, ste_mass]
     for i in range(0, len(x_labels)):
         fig, ax = plt.subplots(3, 1, sharex='col', num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
         for j in range(0, len(y_labels)):
             ax[j].set_ylabel(y_labels[j], fontsize=16)
             if j!=2:
-                if j==0:
-                    a = np.asarray(x_data[i][j][0])
-                    a = np.log10(1+a)
-                    b =np.asarray(x_data[i][j][2])
-                    b = np.log10(1+b)
-                elif j==1:
-                    a = np.asarray(x_data[i][j][0])
-                    b = np.asarray(x_data[i][j][2])
+                # if j==0:
+                #     a = np.asarray(x_data[i][j][0])
+                #     a = np.log10(1+a)
+                #     b =np.asarray(x_data[i][j][2])
+                #     b = np.log10(1+b)
+                # elif j==1:
+                #     a = np.asarray(x_data[i][j][0])
+                #     b = np.asarray(x_data[i][j][2])
                 ax[j].hexbin(a, quenching_times[j][0], bins='log', cmap='Greys', gridsize=30)
                 ax[j].scatter(b, quenching_times[j][2], s=8, alpha=0.8, label='Final quenching with rejuvenation', facecolor=None, edgecolor='b')
                 ax[j].plot([a.min(),a.max()],[-1.5,-1.5], 'k--')
@@ -206,15 +207,19 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
                     quenchs = quenching_times[k][0] + quenching_times[k][2]
                     quenchs = np.asarray(quenchs)
                     if i==0:
-                        x_datas = np.log10(1+x_datas)
                         sf_data = [d['sf_galaxies_per_snap'],sf_x[i]]
                         bins = np.linspace(0,4,10)
                     else:
                         sf_data = [sf_x[i]]
                         bins = np.linspace(9.5,12.5,10)
                     fast, slow, cent = Fraction_Fast_vs_Slow(x_datas, quenchs, sf_data, bins)
-                    ax[j].plot(cent, np.log10(fast), label = frac_labels[k]+'fast quenching', color=colours[k], ls='-')
-                    ax[j].plot(cent, np.log10(slow), label = frac_labels[k]+'slow quenching', color=colours[k], ls='--')
+                    if i==0:
+                        ax[j].plot(np.log10(1+cent), np.log10(fast), label = frac_labels[k]+'fast quenching', color=colours[k], ls='-')
+                        ax[j].plot(np.log10(1+cent), np.log10(slow), label = frac_labels[k]+'slow quenching', color=colours[k], ls='--')
+                    elif i==1:
+                        ax[j].plot(cent, np.log10(fast), label = frac_labels[k]+'fast quenching', color=colours[k], ls='-')
+                        ax[j].plot(cent, np.log10(slow), label = frac_labels[k]+'slow quenching', color=colours[k], ls='--')
+
                 ax[j].legend(loc='best', prop={'size': 10})
         ax[2].set_xlabel(x_labels[i], fontsize=16)
         fig.tight_layout()
