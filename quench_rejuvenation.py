@@ -46,7 +46,8 @@ for i in range(ngal):
     galaxy_m = d['m_gal'+str(i)][::-1]
     fgas_gal = d['h2_gal'+str(i)][::-1]
     gal_type = d['gal_type'+str(i)][::-1]
-    gal_pos = d['gal_pos'+str(i)][::-1]
+    #gal_pos = d['gal_pos'+str(i)][::-1]
+    gal_pos = None
     galaxy = GalaxyData(i, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type, gal_pos)
     galaxies.append(galaxy)
 
