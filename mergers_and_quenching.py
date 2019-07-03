@@ -173,6 +173,7 @@ def mergerquench_relation():
     ax.set_xlabel(r'$\log(T_q - T_m)$(Gyr)', fontsize=16)
     ax.set_ylabel(r'$\log(N) $', fontsize=16)
     ax.hist(time_diff, bins=12, histtype='step', log=True, edgecolor='k')
+    fig.tight_layout()
     fig.savefig(str(results_folder)+'mergertime_and_quenching.png',format='png', dpi=250)
     return time_diff,quenching_times,merger_ratios
 

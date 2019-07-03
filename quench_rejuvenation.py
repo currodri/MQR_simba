@@ -185,7 +185,6 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
     x_data = [redshifts, ste_mass]
     for i in range(0, len(x_labels)):
         fig, ax = plt.subplots(3, 1, sharex=True, num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
-        fig.subplots_adjust(hspace=0)
         for j in range(0, len(y_labels)):
             ax[j].set_ylabel(y_labels[j], fontsize=16)
             if j!=2:
@@ -223,7 +222,7 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
 
                 ax[j].legend(loc='best', prop={'size': 10})
         ax[2].set_xlabel(x_labels[i], fontsize=16)
-        fig.tight_layout()
+        fig.subplots_adjust(hspace=0)
         fig.savefig(str(results_folder)+'quenching_scatter_'+str(name_file[i])+'.png', format='png', dpi=250)
 
 def Quenching_Scatter_Plot2(redshifts2, quenching_times2, ste_mass2):
