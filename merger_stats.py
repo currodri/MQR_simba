@@ -169,8 +169,8 @@ def SFR_Evolution2(mergers, msq_galaxies, n_bins):
         b = float(mergers_m.max()*1.1)
         ssfr_m_ave[i], err = plotmedian(mergers_m,ssfr_m, pos=pos_m, boxsize=d['boxsize_in_kpccm'],bin_choosen=[a,b])
         ssfr_m_error[i] = err[0]
-        a = float(mergers_m.min()*0.9)
-        b = float(mergers_m.max()*1.1)
+        a = float(msq_m.min()*0.9)
+        b = float(msq_m.max()*1.1)
         ssfr_nm_ave[i], err = plotmedian(msq_m,ssfr_nm, pos=pos_nm, boxsize=d['boxsize_in_kpccm'],bin_choosen=[a,b])
         ssfr_nm_error[i] = err[0]
     return ssfr_m_ave,ssfr_m_error,ssfr_nm_ave,ssfr_nm_error,z_cent
