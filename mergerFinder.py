@@ -129,7 +129,7 @@ def plotmedian(x,y,yflag=[],c='k',ltype='--',lw=3,stat='median',ax='plt',bins=8,
         for i0 in xrange(8):
             xq = xp[gal_index==i0]
             yq = yp[gal_index==i0]
-        print(xq, yq)
+            print(xq, yq)
 	    if bins < 0: bin_oct[:,i0], bin_edges, binnumber = stats.binned_statistic(xq,yq,bins=bin_edges,statistic=stat)
         else: bin_oct[:,i0], bin_edges, binnumber = stats.binned_statistic(xq,yq,bins=bin_choosen,statistic=stat)
         #else: bin_oct[:,i0], bin_edges, binnumber = stats.binned_statistic(xq,yq,bins=bin_edges,statistic=stat)
