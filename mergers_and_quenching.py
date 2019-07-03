@@ -172,9 +172,10 @@ def mqr_relation():
                 time_diff.append(possible_q[np.argmin(diff)]-merg.galaxy_t[1])
                 quenching_times.append(possible_q_time[np.argmin(diff)])
     time_diff = np.log10(np.asarray(time_diff))
+    median = np.median(time_diff)
     merger_ratios = np.asarray(merger_ratios)
     quenching_times = np.asarray(quenching_times)
-    fig = plt.figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
+    fig = plt.figure(num=None, figsize=(8, 4), dpi=80, facecolor='w', edgecolor='k')
     ax = fig.add_subplot(1,1,1)
     ax.set_xlabel(r'$\log(T - T_m)$(Gyr)', fontsize=16)
     ax.set_ylabel(r'$\log(N/N_{SF}(Total)) $', fontsize=16)
@@ -182,6 +183,7 @@ def mqr_relation():
     bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
     hist = hist/np.sum(d['sf_galaxies_per_snap'])
     ax.plot(bin_cent, hist, 'b', label='Quenchings')
+    ax.plot([median, median],[0, hist.max()], 'b--')
 
     print('Start finding for connection between mergers and rejuvenations')
     time_diff = []
@@ -209,7 +211,9 @@ def mqr_relation():
     hist, bin_edges = np.histogram(time_diff, bins=12)
     bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
     hist = hist/np.sum(d['sf_galaxies_per_snap'])
+    ax.plot([median, median],[0, hist.max()], 'r--')
     ax.plot(np.log10(bin_cent), hist, 'r', label='Rejuvenations')
+    ax.legend(loc='best', fontsize=16)
     fig.tight_layout()
     fig.savefig(str(results_folder)+'mergertime_and_quench_reju.png',format='png', dpi=250)
 
