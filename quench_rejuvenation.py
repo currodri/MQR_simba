@@ -223,13 +223,14 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
                 ax[j].legend(loc='best', prop={'size': 10})
         ax[2].set_xlabel(x_labels[i], fontsize=16)
         if i==0:
-            axR = ax[2].twiny()
+            axR = ax[0].twiny()
             topticks1 = np.array([0,1,2,4,6])  # desired redshift labels
             topticks2 = np.log10(1+topticks1)  # tick locations in time
             axR.set_xticklabels(topticks1)
             axR.set_xticks(topticks2)
-            axR.xaxis.set_ticks_position('top') # set the position of the second x-axis to bottom
-            axR.xaxis.set_label_position('top') # set the position of the second x-axis to bottom
+            axR.xaxis.set_ticks_position('top') # set the position of the second x-axis to top
+            axR.xaxis.set_label_position('top') # set the position of the second x-axis to top
+            axr.set_xlabel('z', fontsize=16)
         fig.subplots_adjust(hspace=0)
         fig.savefig(str(results_folder)+'quenching_scatter_'+str(name_file[i])+'.png', format='png', dpi=250)
 
