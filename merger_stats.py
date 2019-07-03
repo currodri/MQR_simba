@@ -167,10 +167,12 @@ def SFR_Evolution2(mergers, msq_galaxies, n_bins):
         ssfr_m_ave[i] = np.median(ssfr_m) #np.average(ssfr_m)
         a = float(mergers_m.min()*0.9)
         b = float(mergers_m.max()*1.1)
-        ssfr_m_ave[i], ssfr_m_error[i] = plotmedian(mergers_m,ssfr_m, pos=pos_m, boxsize=d['boxsize_in_kpccm'],bin_choosen=[a,b])
+        ssfr_m_ave[i], err = plotmedian(mergers_m,ssfr_m, pos=pos_m, boxsize=d['boxsize_in_kpccm'],bin_choosen=[a,b])
+        ssfr_m_error[i] = err[0]
         a = float(mergers_m.min()*0.9)
         b = float(mergers_m.max()*1.1)
-        ssfr_nm_ave[i], ssfr_nm_error[i] = plotmedian(msq_m,ssfr_nm, pos=pos_nm, boxsize=d['boxsize_in_kpccm'],bin_choosen=[a,b])
+        ssfr_nm_ave[i], err = plotmedian(msq_m,ssfr_nm, pos=pos_nm, boxsize=d['boxsize_in_kpccm'],bin_choosen=[a,b])
+        ssfr_nm_error[i] = err[0]
     return ssfr_m_ave,ssfr_m_error,ssfr_nm_ave,ssfr_nm_error,z_cent
     # plt.errorbar(z_cent, ssfr_m_ave, yerr=ssfr_m_error, linestyle='--', marker='o', label='Mergers star-forming', capsize=2, capthick=2)
     # plt.errorbar(z_cent, ssfr_nm_ave, yerr=ssfr_nm_error, linestyle='--', marker='s', label='Mass-matched sample of non-merger star-forming', capsize=2, capthick=2)
