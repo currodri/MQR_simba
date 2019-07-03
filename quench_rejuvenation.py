@@ -206,6 +206,7 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
                     quenchs = quenching_times[k][0] + quenching_times[k][2]
                     quenchs = np.asarray(quenchs)
                     if i==0:
+                        x_datas = np.log10(1+x_datas)
                         sf_data = [d['sf_galaxies_per_snap'],sf_x[i]]
                         bins = np.linspace(0,4,10)
                     else:

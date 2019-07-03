@@ -20,6 +20,7 @@ from import_progen import importApp
 from quenchingFinder import GalaxyData
 from mergerFinder import merger_finder, myrunningmedian, plotmedian
 import sys
+import pickle
 simfolder = '../progen_analysis/m100n1024'#input('SIMBA simulation progen folder: ')
 sys.path.insert(0, str(simfolder))
 simname = 'm100n1024'#input('SIMBA simulation version: ')
