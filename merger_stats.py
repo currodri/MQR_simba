@@ -449,7 +449,9 @@ print('- Evolution of contribution and merger rate with redshift. (Press 4)')
 print(' ')
 print('- Mass distribution of merger fraction in three redshift bins. (Press 5)')
 print(' ')
-print('- If you want to do all of them, just Press 6.')
+print('- Mass-matched comparison of sSFR between mergers and star-forming galaxies and contribution. (Press 6)')
+print(' ')
+print('- If you want to do all of them, just Press 7.')
 print(' ')
 u_selec = input('Write the number of the function you would like to use: ')
 
@@ -464,10 +466,13 @@ elif u_selec==4:
 elif u_selec==5:
     Merger_Fraction_Mass_Distribution(mergers, sf_galaxies, 15)
 elif u_selec==6:
+    SFR_Evolution_and_Contribution(mergers, sf_galaxies, 15)
+elif u_selec==7:
     SFR_Evolution2(mergers, sf_galaxies, 10)
     Merger_Contribution(mergers, sf_galaxies, 10)
     Frac_Merger_rate(mergers, sf_galaxies, 15)
     Contribution_and_Rate(mergers, sf_galaxies, 15)
     Merger_Fraction_Mass_Distribution(mergers, sf_galaxies, 15)
+    SFR_Evolution_and_Contribution(mergers, sf_galaxies, 15)
 else:
     print('ERROR: function not found')
