@@ -181,7 +181,7 @@ def mqr_relation():
     bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
     hist = hist/np.sum(d['sf_galaxies_per_snap'])
     ax.plot(bin_cent, hist, 'b', label='Quenchings')
-    
+
     print('Start finding for connection between mergers and rejuvenations')
     time_diff = []
     merger_boost = []
@@ -208,7 +208,7 @@ def mqr_relation():
     hist, bin_edges = np.histogram(time_diff, bins=12)
     bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
     hist = hist/np.sum(d['sf_galaxies_per_snap'])
-    ax.plot(bin_cent, hist, 'r', label='Rejuvenations')
+    ax.plot(np.log10(bin_cent), hist, 'r', label='Rejuvenations')
     fig.tight_layout()
     fig.savefig(str(results_folder)+'mergertime_and_quench_reju.png',format='png', dpi=250)
 
