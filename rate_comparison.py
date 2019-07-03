@@ -8,6 +8,7 @@ Created on 20 June 2019
 # Import required libraries
 import numpy as np
 import matplotlib
+import pickle
 matplotlib.use('Agg') # Must be before importing matplotlib.pyplot or pylab!
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -25,9 +26,14 @@ simname = 'm100n1024'#input('SIMBA simulation version: ')
 results_folder = '../rate_analysis/'+str(simname)+'/'
 timefile = '../quench_analysis'+str(simname)+'/times_m100n1024.txt'
 redshiftfile = '../quench_analysis'+str(simname)+'/redshifts_m100n1024.txt'
+pickle_file = '../progen_analysis/m100n1024/progen_'+str(simname)+'.pkl'
 
 # Extract progen data from txt files
-d, ngal = importApp(str(simfolder))
+# d, ngal = importApp(str(simfolder))
+# print('Total number of galaxies at z = 0: '+str(ngal))
+obj = open(pickle_file, 'rb')
+d = pickle.load(obj)
+ngal = 49215
 print('Total number of galaxies at z = 0: '+str(ngal))
 
 #Store the galaxies sorted in objects of type GalaxyData
@@ -36,11 +42,13 @@ for i in range(ngal):
     sfr_gal = d['sfr_gal' + str(i)][::-1]
     sfe_gal = d['sfe_gal' + str(i)][::-1]
     z_gal = d['z_gal' + str(i)][::-1]
-    galaxy_t = d['galaxy_t' + str(i)][::-1]
+    galaxy_t = d['t_gal' + str(i)][::-1]
     galaxy_m = d['m_gal'+str(i)][::-1]
     fgas_gal = d['h2_gal'+str(i)][::-1]
     gal_type = d['gal_type'+str(i)][::-1]
-    galaxy = GalaxyData(i, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type)
+    #gal_pos = d['gal_pos'+str(i)][::-1]
+    gal_pos = None
+    galaxy = GalaxyData(i, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type, gal_pos)
     galaxies.append(galaxy)
 
 max_ngal = len(galaxies)
