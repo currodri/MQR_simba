@@ -19,6 +19,7 @@ from import_progen import importApp
 from mergerFinder import myrunningmedian, merger_finder
 from quenchingFinder import GalaxyData, quenchingFinder2, rejuvenation_rate_calculator, quenching_histogram
 import sys
+import pickle
 simfolder = '../progen_analysis/m100n1024'#input('SIMBA simulation progen folder: ')
 sys.path.insert(0, str(simfolder))
 counterfile = '../progen_analysis/m100n1024/galaxy_count_m100n1024.txt'#input('Text file with total number of galaxies per snapshot: ')
@@ -29,6 +30,9 @@ redshiftfile = '../quench_analysis'+str(simname)+'/redshifts_m100n1024.txt'
 
 # Extract progen data from txt files
 d, ngal = importApp(str(simfolder))
+obj = open(pickle_file, 'rb')
+d = pickle.load(obj)
+ngal = 49215
 print('Total number of galaxies at z = 0: '+str(ngal))
 
 #Store the galaxies sorted in objects of type GalaxyData
@@ -37,11 +41,12 @@ for i in range(ngal):
     sfr_gal = d['sfr_gal' + str(i)][::-1]
     sfe_gal = d['sfe_gal' + str(i)][::-1]
     z_gal = d['z_gal' + str(i)][::-1]
-    galaxy_t = d['galaxy_t' + str(i)][::-1]
+    galaxy_t = d['t_gal' + str(i)][::-1]
     galaxy_m = d['m_gal'+str(i)][::-1]
     fgas_gal = d['h2_gal'+str(i)][::-1]
     gal_type = d['gal_type'+str(i)][::-1]
-    galaxy = GalaxyData(i, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type)
+    gal_pos = d['gal_pos'+str(i)][::-1]
+    galaxy = GalaxyData(i, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type, gal_pos)
     galaxies.append(galaxy)
 
 max_ngal = len(galaxies)
@@ -137,7 +142,7 @@ print('Quenching and Rejuvenation analysis done.')
 print(' ')
 
 
-def mergerquench_relation():
+def mqr_relation():
     print('Start finding for connection between mergers and quenching')
     time_diff = []
     merger_ratios = []
@@ -170,12 +175,42 @@ def mergerquench_relation():
     quenching_times = np.asarray(quenching_times)
     fig = plt.figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
     ax = fig.add_subplot(1,1,1)
-    ax.set_xlabel(r'$\log(T_q - T_m)$(Gyr)', fontsize=16)
-    ax.set_ylabel(r'$\log(N) $', fontsize=16)
-    ax.hist(time_diff, bins=12, histtype='step', log=True, edgecolor='k')
+    ax.set_xlabel(r'$\log(T - T_m)$(Gyr)', fontsize=16)
+    ax.set_ylabel(r'$\log(N/N_{SF}(Total)) $', fontsize=16)
+    hist, bin_edges = np.histogram(time_diff, bins=12)
+    bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
+    hist = hist/np.sum(d['sf_galaxies_per_snap'])
+    ax.plot(bin_cent, hist, 'b', label='Quenchings')
+    
+    print('Start finding for connection between mergers and rejuvenations')
+    time_diff = []
+    merger_boost = []
+
+    for i in range(0, len(mergers)):
+        merg = mergers[i]
+        possible_r = []
+        for j in range(0, len(reju_t)):
+            if reju_id[j]==merg.id:
+                possible_r.append(reju_t[j])
+        diff = []
+        for k in range(0, len(possible_r)):
+            diff.append(possible_r[k] - merg.galaxy_t[1])
+        diff = np.asarray(diff)
+        if len(possible_r)>0:
+            if diff[np.argmin(diff)]>=0:
+                if merg.fgas_boost<0:
+                    merger_boost.append(0.001)
+                else:
+                    merger_boost.append(merg.fgas_boost)
+                time_diff.append(possible_r[np.argmin(diff)]-merg.galaxy_t[1]+1e-7)
+    time_diff = np.asarray(time_diff)
+    merger_boost = np.asarray(merger_boost)
+    hist, bin_edges = np.histogram(time_diff, bins=12)
+    bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
+    hist = hist/np.sum(d['sf_galaxies_per_snap'])
+    ax.plot(bin_cent, hist, 'r', label='Rejuvenations')
     fig.tight_layout()
-    fig.savefig(str(results_folder)+'mergertime_and_quenching.png',format='png', dpi=250)
-    return time_diff,quenching_times,merger_ratios
+    fig.savefig(str(results_folder)+'mergertime_and_quench_reju.png',format='png', dpi=250)
 
 def quench_delay(delay,quenching_times, merger_ratios):
     print('Making scatter plot of quenching times vs delay of the quenching process after a merger...')
@@ -263,5 +298,6 @@ def merger_reju_scatter():
     fig.savefig(str(results_folder)+'mergertime_and_rejuvenation_scatter.png',format='png', dpi=250)
 #time_diff, q_times, m_ratios = mergerquench_relation()
 #quench_delay(time_diff,q_times,m_ratios)
-merger_reju_relation()
+#merger_reju_relation()
 #merger_reju_scatter()
+mqr_relation()
