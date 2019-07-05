@@ -217,6 +217,53 @@ def mqr_relation():
     ax.legend(loc='best', fontsize=16)
     fig.tight_layout()
     fig.savefig(str(results_folder)+'mergertime_and_quench_reju.png',format='png', dpi=250)
+def quench_merger_withreju():
+    print('Start finding for connection between mergers, quenching and rejuvenations')
+    quench_t = []
+    merger_t = []
+    reju_t = []
+    for i in range(0, len(mergers)):
+        merg = mergers[i]
+        possible_q = []
+        possible_r = []
+        for j in range(0, len(galaxies_interpolated)):
+            galaxy = galaxies_interpolated[j]
+            if galaxy.id == merg.id:
+                for r in range(0, len(reju_id)):
+                    if reju_id[r]==merg.id:
+                        possible_r.append(reju_t[r])
+                        for quench in galaxy.quenching:
+                            start = quench.above9 #+ 1
+                            end = quench.below11
+                            if np.log10(galaxy.m_gal)>=mass_limit:
+                                possible_q.append(galaxy.galaxy_t[start])
+        diff_q = []
+        diff_r = []
+        for k in range(0, len(possible_q)):
+            diff_q.append(possible_q[k] - merg.galaxy_t[1])
+        for k in range(0, len(possible_r)):
+            diff_r.append(possible_r[k] - merg.galaxy_t[1])
+        diff_q = np.asarray(diff_q)
+        diff_r = np.asarray(diff_r)
+        if len(possible_q)>0:
+            if diff_q[np.argmin(diff_q)]>=0 and diff_r[np.argmin(diff_r)]>=0 and merg.merger_ratio<=0.6:
+                quench_t.append(possible_q[np.argmin(diff_q)])
+                reju_t.append(possible_r[np.argmin(diff_r)])
+                merger_t.append(merg.galaxy_t[1])
+    quench_t = np.asarray(quench_t)
+    reju_t = np.asarray(reju_t)
+    merger_t = np.asarray(merger_t)
+    fig = plt.figure(num=None, figsize=(8, 8), dpi=80, facecolor='w', edgecolor='k')
+    ax = fig.add_subplot(1,1,1)
+    sc = ax.scatter(quench_t, merger_t, c = (reju_t-merger_t), cmap='winter')
+    ax.plot([3, 13], [3, 13], 'k--')
+    ax.set_xlim([quench_t.min(), quench_t.max()])
+    ax.set_ylim([merger_t.min(), merger_t.max()])
+    ax.set_xlabel(r'$T_q $(Gyr)', fontsize=16)
+    ax.set_ylabel(r'$T_m $(Gyr)', fontsize=16)
+    fig.colorbar(sc, ax=ax, label=r'$T_r - T_m$', orientation='horizontal')
+    fig.tight_layout()
+    fig.savefig(str(results_folder)+'merger_quench_scatter.png',format='png', dpi=250)
 
 def quench_delay(delay,quenching_times, merger_ratios):
     print('Making scatter plot of quenching times vs delay of the quenching process after a merger...')
