@@ -185,6 +185,8 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
     x_data = [redshifts, ste_mass]
     for i in range(0, len(x_labels)):
         fig, ax = plt.subplots(3, 1, sharex=True, num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
+        fig2 = plt.figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
+        ax2 = fig.add_subplot(1,1,1)
         for j in range(0, len(y_labels)):
             ax[j].set_ylabel(y_labels[j], fontsize=16)
             if j!=2:
@@ -219,19 +221,23 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
                     if i==0:
                         ax[j].plot(np.log10(1+cent), np.log10(fast), label = frac_labels[k]+'fast quenching', color=colours[k], ls='-')
                         ax[j].plot(np.log10(1+cent), np.log10(slow), label = frac_labels[k]+'slow quenching', color=colours[k], ls='--')
-                        ax[j].plot(np.log10(1+cent_r), np.log10(fast_r), label = frac_labels[k]+'fast quenching with rejuvenation', color=colours[k], ls=':')
-                        ax[j].plot(np.log10(1+cent_r), np.log10(slow_r), label = frac_labels[k]+'slow quenching with rejuvenation', color=colours[k], ls='-.')
+                        ax2.plot(np.log10(1+cent), np.log10(fast), color=colours[k], ls='-')
+                        ax2.plot(np.log10(1+cent), np.log10(slow), color=colours[k], ls='--')
+                        ax2.plot(np.log10(1+cent_r), np.log10(fast_r), label = frac_labels[k]+'fast quenching with rejuvenation', color=colours[k], ls=':')
+                        ax2.plot(np.log10(1+cent_r), np.log10(slow_r), label = frac_labels[k]+'slow quenching with rejuvenation', color=colours[k], ls='-.')
                     elif i==1:
                         ax[j].plot(cent, np.log10(fast), label = frac_labels[k]+'fast quenching', color=colours[k], ls='-')
                         ax[j].plot(cent, np.log10(slow), label = frac_labels[k]+'slow quenching', color=colours[k], ls='--')
-                        ax[j].plot(cent_r, np.log10(fast_r), label = frac_labels[k]+'fast quenching with rejuvenation', color=colours[k], ls=':')
-                        ax[j].plot(cent_r, np.log10(slow_r), label = frac_labels[k]+'slow quenching with rejuvenation', color=colours[k], ls='-.')
+                        ax2.plot(cent, np.log10(fast), color=colours[k], ls='-')
+                        ax2.plot(cent, np.log10(slow), color=colours[k], ls='--')
+                        ax2.plot(cent_r, np.log10(fast_r), label = frac_labels[k]+'fast quenching with rejuvenation', color=colours[k], ls=':')
+                        ax2.plot(cent_r, np.log10(slow_r), label = frac_labels[k]+'slow quenching with rejuvenation', color=colours[k], ls='-.')
 
-                ax[j].legend(loc='best', prop={'size': 10})
+                ax[j].legend(loc='best', prop={'size': 8})
         ax[2].set_xlabel(x_labels[i], fontsize=16)
         if i==0:
             axR = ax[0].twiny()
-            topticks1 = np.array([0,1,2,4,6])  # desired redshift labels
+            topticks1 = np.array([0,1,2,3,4])  # desired redshift labels
             topticks2 = np.log10(1+topticks1)  # tick locations in time
             axR.set_xticklabels(topticks1)
             axR.set_xticks(topticks2)
@@ -240,7 +246,10 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
             axR.set_xlabel('z', fontsize=16)
         fig.subplots_adjust(hspace=0)
         fig.savefig(str(results_folder)+'quenching_scatter_'+str(name_file[i])+'.png', format='png', dpi=250)
-
+        ax2.set_xlabel(x_labels[i], fontsize=16)
+        ax2.set_ylabel(y_labels[2], fontsize=16)
+        ax2.legend(loc='best', prop={'size': 10})
+        fig2.savefig(str(results_folder)+'quenching_rej_'+str(name_file[i])+'.png', format='png', dpi=250)
 def Quenching_Scatter_Plot2(redshifts2, quenching_times2, ste_mass2):
     scatter_labels = [['Final quenching Sat', 'Non-final quenching Sat', 'Final quenching Sat with rejuvenation' ],['Final quenching Central', 'Non-final quenching Central', 'Final quenching Central with rejuvenation']]
     scatter_markers = ['.','*', '.']
