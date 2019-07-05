@@ -125,7 +125,7 @@ def SFR_Evolution2(mergers, msq_galaxies, n_bins):
         for j in range(0, len(mergers)):
             merger = mergers[j]
             if z_bins[i]<= merger.z_gal[1] < z_bins[i+1]:
-                ssfr_m.append(np.log10(merger.sfr_gal[1]/merger.m_gal[1]))
+                ssfr_m.append(np.log10(merger.ssfr_gal[1]))
                 pos_m.append(merger.gal_pos[1])
                 mergers_m.append(np.log10(merger.m_gal[1]))
                 red_m.append(merger.z_gal[1])
@@ -161,7 +161,7 @@ def SFR_Evolution2(mergers, msq_galaxies, n_bins):
         for selected  in range(0, len(msq_sel)):
             real_idx = msq_idx[msq_sel[selected]]
             msq_gal = msq_galaxies[real_idx]
-            ssfr_nm.append(np.log10(msq_gal.ssfr_gal/msq_gal.m_gal))
+            ssfr_nm.append(np.log10(msq_gal.ssfr_gal))
             pos_nm.append(msq_gal.gal_pos)
             red_nm.append(msq_gal.z_gal)
     ssfr_m = np.asarray(ssfr_m)
@@ -241,7 +241,7 @@ def Merger_Contribution(mergers, msq_galaxies, n_bins):
         for j in range(0, len(mergers)):
             merger = mergers[j]
             if z_bins[i]<= merger.z_gal[1] < z_bins[i+1]:
-                sfr_m = sfr_m + merger.sfr_gal[1]
+                sfr_m = sfr_m + merger.ssfr_gal[1]
                 m_counter = m_counter + 1
         for k in range(0, len(msq_galaxies)):
             msq = msq_galaxies[k]
