@@ -219,7 +219,7 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
             b = b + r_quench['massbin'+str(ty)][i]
             c = c + r_reju['massbin'+str(ty)][i]
             sf = sf + sf_counter['massbin'+str(ty)]
-        normalization = float(float(a+b)*delta_t)
+        normalization = float(float(a+sf)*delta_t)
         r_merger['all'][i] = float(a)/normalization
         r_quench['all'][i] = float(b)/normalization
         r_reju['all'][i] = float(c)/normalization
@@ -232,17 +232,17 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
 
     ax[0].plot(x_dat, np.log10(r_merger['all']),linestyle='--', marker='d', color='k', label='All')
     slope, intercept, r_value, p_value, std_err = stats.linregress(x_dat, np.log10(r_merger['all']))
-    ax[0].plot(x_dat,np.log10((10**intercept)*(1+z_cent)**(slope)), 'k-', label=r'$10^{%f}*(1+z)^{%f}$' % (intercept, slope) )
+    ax[0].plot(x_dat,np.log10((10**intercept)*(1+z_cent)**(slope)), 'k-', label=r'$10^{%.2f}*(1+z)^{%.2f}$' % (intercept, slope) )
     print("slope: %f    intercept: %f    r_value: %f    p_value: %f    std_error: %f" % (slope, intercept,r_value, p_value, std_err))
 
     ax[1].plot(x_dat, np.log10(r_quench['all']),linestyle='--', marker='d', color='k')
     slope, intercept, r_value, p_value, std_err = stats.linregress(x_dat, np.log10(r_quench['all']))
-    ax[1].plot(x_dat,np.log10((10**intercept)*(1+z_cent)**(slope)), 'k-', label=r'$10^{%f}*(1+z)^{%f}$' % (intercept, slope) )
-    print("slope: %f    intercept: %f    r_value: %f    p_value: %f    std_error: %f" % (slope, intercept,r_value, p_value, std_err))
+    ax[1].plot(x_dat,np.log10((10**intercept)*(1+z_cent)**(slope)), 'k-', label=r'$10^{%.2f}*(1+z)^{%.2f}$' % (intercept, slope) )
+    print("slope: %.f    intercept: %f    r_value: %f    p_value: %f    std_error: %f" % (slope, intercept,r_value, p_value, std_err))
 
     ax[2].plot(x_dat, np.log10(r_reju['all']),linestyle='--', marker='d', color='k')
     slope, intercept, r_value, p_value, std_err = stats.linregress(x_dat, np.log10(r_reju['all']))
-    ax[2].plot(x_dat,np.log10((10**intercept)*(1+z_cent)**(slope)), 'k-', label=r'$10^{%f}*(1+z)^{%f}$' % (intercept, slope) )
+    ax[2].plot(x_dat,np.log10((10**intercept)*(1+z_cent)**(slope)), 'k-', label=r'$10^{%.2f}*(1+z)^{%.2f}$' % (intercept, slope) )
     print("slope: %f    intercept: %f    r_value: %f    p_value: %f    std_error: %f" % (slope, intercept,r_value, p_value, std_err))
     ax[0].set_ylabel(r'$\log(\mathcal{R}_{Mer})$ [Gyr$^{-1}$]', fontsize=16)
     ax[1].set_ylabel(r'$\log(\mathcal{R}_{Que})$ [Gyr$^{-1}$]', fontsize=16)
