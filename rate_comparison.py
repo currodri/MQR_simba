@@ -209,16 +209,16 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
         c = 0
         sf = 0
         for ty in range(0, len(mass_limits)):
-            print(counter)
-            print(r_merger['massbin'+str(ty)][i], r_quench['massbin'+str(ty)][i], r_merger['massbin'+str(ty)][i])
+            #print(counter)
+            #print(r_merger['massbin'+str(ty)][i], r_quench['massbin'+str(ty)][i], r_merger['massbin'+str(ty)][i])
             normalization = float(float(r_merger['massbin'+str(ty)][i]+sf_counter['massbin'+str(ty)])*delta_t)
-            r_merger['massbin'+str(ty)][i] = float(r_merger['massbin'+str(ty)][i])/normalization
-            r_quench['massbin'+str(ty)][i] = float(r_quench['massbin'+str(ty)][i])/normalization
-            r_reju['massbin'+str(ty)][i] = float(r_reju['massbin'+str(ty)][i])/normalization
             a = a + r_merger['massbin'+str(ty)][i]
             b = b + r_quench['massbin'+str(ty)][i]
             c = c + r_reju['massbin'+str(ty)][i]
             sf = sf + sf_counter['massbin'+str(ty)]
+            r_merger['massbin'+str(ty)][i] = float(r_merger['massbin'+str(ty)][i])/normalization
+            r_quench['massbin'+str(ty)][i] = float(r_quench['massbin'+str(ty)][i])/normalization
+            r_reju['massbin'+str(ty)][i] = float(r_reju['massbin'+str(ty)][i])/normalization
         normalization = float(float(a+sf)*delta_t)
         r_merger['all'][i] = float(a)/normalization
         r_quench['all'][i] = float(b)/normalization
