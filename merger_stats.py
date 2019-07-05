@@ -171,8 +171,8 @@ def SFR_Evolution2(mergers, msq_galaxies, n_bins):
     red_m = np.asarray(red_m)
     red_nm = np.asarray(red_nm)
     print(z_bins)
-    cent_m, ssfr_m_ave, ssfr_m_error = plotmedian2(red_m,ssfr_m, pos=pos_m, boxsize=d['boxsize_in_kpccm'])
-    cent_nm, ssfr_nm_ave, ssfr_nm_error = plotmedian2(red_nm,ssfr_nm, pos=pos_nm, boxsize=d['boxsize_in_kpccm'])
+    cent_m, ssfr_m_ave, ssfr_m_error = plotmedian2(red_m,ssfr_m, pos=pos_m, boxsize=d['boxsize_in_kpccm'], stat='mean')
+    cent_nm, ssfr_nm_ave, ssfr_nm_error = plotmedian2(red_nm,ssfr_nm, pos=pos_nm, boxsize=d['boxsize_in_kpccm'], stat='mean')
     return cent_m,ssfr_m_ave,ssfr_m_error,cent_nm,ssfr_nm_ave,ssfr_nm_error
 def Merger_Fraction(mergers, msq_galaxies, n_bins):
     z_bins = np.linspace(0.0, 3.5, n_bins)
