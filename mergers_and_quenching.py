@@ -353,4 +353,5 @@ def merger_reju_scatter():
 #quench_delay(time_diff,q_times,m_ratios)
 #merger_reju_relation()
 #merger_reju_scatter()
-mqr_relation()
+#mqr_relation()
+quench_merger_withreju()
