@@ -161,7 +161,7 @@ def SFR_Evolution2(mergers, msq_galaxies, n_bins):
         for selected  in range(0, len(msq_sel)):
             real_idx = msq_idx[msq_sel[selected]]
             print(real_idx)
-            print(msq.z_gal)
+            print(msq.id)
             msq_gal = msq_galaxies[real_idx]
             ssfr_nm.append(np.log10(msq_gal.ssfr_gal/msq_gal.m_gal))
             pos_nm.append(msq.gal_pos)
