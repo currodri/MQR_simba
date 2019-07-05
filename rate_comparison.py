@@ -206,6 +206,8 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
         delta_t = float(times.max() - times.min())
         a = 0
         b = 0
+        c = 0
+        sf = 0
         for ty in range(0, len(mass_limits)):
             print(counter)
             print(r_merger['massbin'+str(ty)][i], r_quench['massbin'+str(ty)][i], r_merger['massbin'+str(ty)][i])
