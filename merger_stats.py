@@ -421,7 +421,7 @@ def Contribution_and_Rate(mergers, msq_galaxies, n_bins):
 def SFR_Evolution_and_Contribution(mergers, msq_galaxies, n_bins):
     ssfr_m_ave,ssfr_m_error,ssfr_nm_ave,ssfr_nm_error,z_cent1 = SFR_Evolution2(mergers,msq_galaxies,n_bins)
     f_merger,f_budget,z_cent2 = Merger_Contribution(mergers,msq_galaxies,n_bins)
-    fig, axes = plt.figure(2, 1, sharex='col',num=None, figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
+    fig, axes = plt.figure(2, 1, sharex='col', figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
     axes[0].errorbar(np.log10(1+z_cent1), ssfr_m_ave, yerr=ssfr_m_error, linestyle='--', marker='o', label='Mergers star-forming', capsize=2, capthick=2)
     axes[0].errorbar(np.log10(1+z_cent1), ssfr_nm_ave, yerr=ssfr_nm_error, linestyle='--', marker='s', label='Mass-matched sample of non-merger star-forming', capsize=2, capthick=2)
     axes[0].set_ylabel(r'$\log(\langle$sSFR (yr$^{-1}\rangle)$')
