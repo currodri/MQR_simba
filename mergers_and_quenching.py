@@ -221,7 +221,7 @@ def quench_merger_withreju():
     print('Start finding for connection between mergers, quenching and rejuvenations')
     quench_t = []
     merger_t = []
-    reju_t = []
+    rejuvenation_t = []
     for i in range(0, len(mergers)):
         merg = mergers[i]
         possible_q = []
@@ -248,14 +248,14 @@ def quench_merger_withreju():
         if len(possible_q)>0:
             if diff_q[np.argmin(diff_q)]>=0 and diff_r[np.argmin(diff_r)]>=0 and merg.merger_ratio<=0.6:
                 quench_t.append(possible_q[np.argmin(diff_q)])
-                reju_t.append(possible_r[np.argmin(diff_r)])
+                rejuvenation_t.append(possible_r[np.argmin(diff_r)])
                 merger_t.append(merg.galaxy_t[1])
     quench_t = np.asarray(quench_t)
-    reju_t = np.asarray(reju_t)
+    rejuvenation_t = np.asarray(reju_t)
     merger_t = np.asarray(merger_t)
     fig = plt.figure(num=None, figsize=(8, 8), dpi=80, facecolor='w', edgecolor='k')
     ax = fig.add_subplot(1,1,1)
-    sc = ax.scatter(quench_t, merger_t, c = (reju_t-merger_t), cmap='winter')
+    sc = ax.scatter(quench_t, merger_t, c = (rejuvenation_t-merger_t), cmap='winter')
     ax.plot([3, 13], [3, 13], 'k--')
     ax.set_xlim([quench_t.min(), quench_t.max()])
     ax.set_ylim([merger_t.min(), merger_t.max()])
