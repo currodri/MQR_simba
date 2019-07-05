@@ -125,7 +125,7 @@ def SFR_Evolution2(mergers, msq_galaxies, n_bins):
         for j in range(0, len(mergers)):
             merger = mergers[j]
             if z_bins[i]<= merger.z_gal[1] < z_bins[i+1]:
-                ssfr_m.append(np.log10(merger.ssfr_gal[1]))
+                ssfr_m.append(merger.ssfr_gal[1])
                 pos_m.append(merger.gal_pos[1])
                 mergers_m.append(np.log10(merger.m_gal[1]))
                 red_m.append(merger.z_gal[1])
@@ -161,7 +161,7 @@ def SFR_Evolution2(mergers, msq_galaxies, n_bins):
         for selected  in range(0, len(msq_sel)):
             real_idx = msq_idx[msq_sel[selected]]
             msq_gal = msq_galaxies[real_idx]
-            ssfr_nm.append(np.log10(msq_gal.ssfr_gal))
+            ssfr_nm.append(msq_gal.ssfr_gal)
             pos_nm.append(msq_gal.gal_pos)
             red_nm.append(msq_gal.z_gal)
     ssfr_m = np.asarray(ssfr_m)
@@ -403,8 +403,8 @@ def SFR_Evolution_and_Contribution(mergers, msq_galaxies, n_bins):
     cent_m,ssfr_m_ave,ssfr_m_error,cent_nm,ssfr_nm_ave,ssfr_nm_error = SFR_Evolution2(mergers,msq_galaxies,n_bins)
     f_merger,f_budget,z_cent2 = Merger_Contribution(mergers,msq_galaxies,n_bins)
     fig, axes = plt.subplots(2, 1, sharex='col', figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
-    axes[0].errorbar(np.log10(1+cent_m), ssfr_m_ave, yerr=ssfr_m_error, linestyle='--', marker='o', label='Mergers star-forming', capsize=2, capthick=2)
-    axes[0].errorbar(np.log10(1+cent_nm), ssfr_nm_ave, yerr=ssfr_nm_error, linestyle='--', marker='s', label='Mass-matched sample of non-merger star-forming', capsize=2, capthick=2)
+    axes[0].errorbar(np.log10(1+cent_m), np.log10(ssfr_m_ave), yerr=(ssfr_m_error/(ssfr_m_ave*np.log(10))), linestyle='--', marker='o', label='Mergers star-forming', capsize=2, capthick=2)
+    axes[0].errorbar(np.log10(1+cent_nm), np.log10(ssfr_nm_ave), yerr=(ssfr_nm_error/(ssfr_nm_ave*np.log(10))), linestyle='--', marker='s', label='Mass-matched sample of non-merger star-forming', capsize=2, capthick=2)
     axes[0].set_ylabel(r'$\log(\langle$sSFR (yr$^{-1}\rangle)$', fontsize=16)
     axes[0].legend(loc='best')
     axes[1].plot(np.log10(1+z_cent2), np.log10(f_merger), linestyle='--', marker='o', label=r'$\log($Fraction of galaxies)')
