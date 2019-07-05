@@ -229,7 +229,7 @@ def quench_merger_withreju():
         for j in range(0, len(galaxies_interpolated)):
             galaxy = galaxies_interpolated[j]
             if galaxy.id == merg.id:
-                for r in range(0, len(reju_id)):
+                for r in range(0, len(reju_t)):
                     if reju_id[r]==merg.id:
                         possible_r.append(reju_t[r])
                         for quench in galaxy.quenching:
