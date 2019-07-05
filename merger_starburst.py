@@ -403,8 +403,8 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
     axes[2].set_xlabel(r'$\log(M_{*})$', fontsize=16)
     bins = np.linspace(9.5, 12.0, nbins)
     delta = bins[1] - bins[0]
-    bin_cent = bins - delta/2
-    bin_cent = np.delete(bin_cent, 0)
+    #bin_cent = bins - delta/2
+    #bin_cent = np.delete(bin_cent, 0)
     fgas = [0,0,0]
     sfe = [0,0,0]
     for i in range(0, len(ylabels)):
@@ -440,21 +440,23 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             mer_m = np.asarray(mer_m)
             mer = np.asarray(mer)
             print(bins)
-            mer_median, mer_var = plotmedian2(mer_m,mer,pos=mer_pos,boxsize=d['boxsize_in_kpccm'])
+            mer_cen, mer_median, mer_var = plotmedian2(mer_m,mer,pos=mer_pos,boxsize=d['boxsize_in_kpccm'])
             #mer_median, mer_var = plotmedian(mer_m,mer,pos=mer_pos,boxsize=d['boxsize_in_kpccm'],bin_choosen=bins)
             msq_m = np.asarray(msq_m)
             msq = np.asarray(msq)
-            msq_median, msq_var = plotmedian2(msq_m,msq,pos=msq_pos,boxsize=d['boxsize_in_kpccm'])
+            msq_cen, msq_median, msq_var = plotmedian2(msq_m,msq,pos=msq_pos,boxsize=d['boxsize_in_kpccm'])
             #msq_median, msq_var = plotmedian(msq_m,msq,pos=msq_pos,boxsize=d['boxsize_in_kpccm'],bin_choosen=bins)
             distance_std = np.sqrt(((msq_var/msq_median)**2) + ((mer_var/mer_median)**2))
             distance_std = distance_std/np.log(10)
             distance = np.log10(mer_median/msq_median)
+            print(mer_cen)
+            print(msq_cen)
             if i==1:
                 fgas[m] = distance
             elif i==2:
                 sfe[m] = distance
-            axes[i].plot(bin_cent, distance, label=titles[m], color=colours[m])
-            axes[i].fill_between(bin_cent, distance-distance_std, distance+distance_std, facecolor=colours[m], alpha=0.25)
+            axes[i].plot(mer_cen, distance, label=titles[m], color=colours[m])
+            axes[i].fill_between(mer_cen, distance-distance_std, distance+distance_std, facecolor=colours[m], alpha=0.25)
             axes[i].set_ylabel(ylabels[i], fontsize=16)
             axes[i].set_ylim([-0.3,0.85])
     axes[0].legend(loc='best', prop={'size': 12})
