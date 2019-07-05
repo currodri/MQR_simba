@@ -439,7 +439,8 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
                         msq.append(sf_galaxies[n].sfe_gal)
             mer_m = np.asarray(mer_m)
             mer = np.asarray(mer)
-            print(bins)
+            #print('Real')
+            #print(bins)
             mer_cen, mer_median, mer_var = plotmedian2(mer_m,mer,pos=mer_pos,boxsize=d['boxsize_in_kpccm'])
             #mer_median, mer_var = plotmedian(mer_m,mer,pos=mer_pos,boxsize=d['boxsize_in_kpccm'],bin_choosen=bins)
             msq_m = np.asarray(msq_m)
@@ -449,8 +450,10 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             distance_std = np.sqrt(((msq_var/msq_median)**2) + ((mer_var/mer_median)**2))
             distance_std = distance_std/np.log(10)
             distance = np.log10(mer_median/msq_median)
-            print(mer_cen)
-            print(msq_cen)
+            #print('mer')
+            #print(mer_cen)
+            #print('msq')
+            #print(msq_cen)
             if i==1:
                 fgas[m] = distance
             elif i==2:
@@ -462,7 +465,7 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
     axes[0].legend(loc='best', prop={'size': 12})
     fig2.savefig(str(results_folder)+'distance_msq.png', format='png', dpi=200)
     for i in range(0, len(fgas)):
-        ax1.plot(bin_cent, fgas[i]*sfe[i], label=titles[i])
+        ax1.plot(mer_cen, fgas[i]*sfe[i], label=titles[i])
     ax1.legend(loc='best', prop={'size': 12})
     fig1.savefig(str(results_folder)+'test_distance.png', format='png', dpi=200)
 print('MERGER-INDUCED STARBURST ANALYSIS')

@@ -166,6 +166,7 @@ def plotmedian2(x,y,yflag=[],c='k',ltype='--',lw=3,stat='median',ax='plt',bins=8
     if bins < 0:	bin_means, bin_edges, binnumber = stats.binned_statistic(xp,yp,bins=bin_edges,statistic=stat)
     else: bin_means, bin_edges, binnumber = stats.binned_statistic(xp,yp,bins=bins,statistic=stat)
     print(bin_edges)
+    print(np.arange(0.999*min(xp),1.001*max(xp),(max(xp)-min(xp))/(bins)))
     bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
     #ax.plot(bin_cent, bin_means, ltype, lw=lw, color=c, label=label)
 
