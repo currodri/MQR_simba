@@ -9,7 +9,7 @@ Created on 20 June 2019
 import numpy as np
 import matplotlib
 import pickle
-import stats
+from scipy import stats
 matplotlib.use('Agg') # Must be before importing matplotlib.pyplot or pylab!
 import matplotlib.pyplot as plt
 import seaborn as sns
