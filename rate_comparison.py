@@ -308,20 +308,12 @@ def Density_Rate(mergers,q_masses,q_reds,q_thubble,reju_z,reju_t,reju_m,n_bins,m
         c = 0
         sf = 0
         for ty in range(0, len(mass_limits)):
-            print(counter)
-            print(r_merger['massbin'+str(ty)][i], r_quench['massbin'+str(ty)][i], r_merger['massbin'+str(ty)][i])
-            normalization = float(float(r_merger['massbin'+str(ty)][i]+sf_counter['massbin'+str(ty)])*delta_t)
-            r_merger['massbin'+str(ty)][i] = float(r_merger['massbin'+str(ty)][i])/normalization
-            r_quench['massbin'+str(ty)][i] = float(r_quench['massbin'+str(ty)][i])/normalization
-            r_reju['massbin'+str(ty)][i] = float(r_reju['massbin'+str(ty)][i])/normalization
-            a = a + r_merger['massbin'+str(ty)][i]
-            b = b + r_quench['massbin'+str(ty)][i]
-            c = c + r_reju['massbin'+str(ty)][i]
-            sf = sf + sf_counter['massbin'+str(ty)]
-        normalization = float(float(a+b)*delta_t)
-        r_merger['all'][i] = float(a)/normalization
-        r_quench['all'][i] = float(b)/normalization
-        r_reju['all'][i] = float(c)/normalization
+            r_merger['massbin'+str(ty)][i] = float(r_merger['massbin'+str(ty)][i])/total_v
+            r_quench['massbin'+str(ty)][i] = float(r_quench['massbin'+str(ty)][i])/total_v
+            r_reju['massbin'+str(ty)][i] = float(r_reju['massbin'+str(ty)][i])/total_v
+            r_merger['all'][i] = r_merger['all'][i] + r_merger['massbin'+str(ty)][i]
+            r_quench['all'][i] = r_quench['all'][i] + r_quench['massbin'+str(ty)][i]
+            r_reju['all'][i] = r_reju['all'][i] + r_reju['massbin'+str(ty)][i]
     fig, ax = plt.subplots(3, 1, sharex='col', num=None, figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
     x_dat = np.log10(1+z_cent)
     for i in range(0, len(mass_limits)):
