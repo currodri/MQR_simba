@@ -159,6 +159,8 @@ def SFR_Evolution2(mergers, msq_galaxies, n_bins):
                     msq_sorted = np.delete(msq_sorted, idx)
                     msq_sort_idx = np.delete(msq_sort_idx, idx)
         for selected  in range(0, len(msq_sel)):
+            print(real_idx)
+            print(msq.z_gal)
             real_idx = msq_idx[msq_sel[selected]]
             msq_gal = msq_galaxies[real_idx]
             ssfr_nm.append(np.log10(msq_gal.ssfr_gal/msq_gal.m_gal))
@@ -170,11 +172,6 @@ def SFR_Evolution2(mergers, msq_galaxies, n_bins):
     pos_nm = np.asarray(pos_nm)
     red_m = np.asarray(red_m)
     red_nm = np.asarray(red_nm)
-    print(pos_m)
-    print(pos_nm)
-    print(red_m)
-    print(red_nm)
-
     ssfr_m_ave, ssfr_m_error = plotmedian(red_m,ssfr_m, pos=pos_m, boxsize=d['boxsize_in_kpccm'],bin_choosen=z_bins)
     ssfr_nm_ave, ssfr_nm_error = plotmedian(red_nm,ssfr_nm, pos=pos_nm, boxsize=d['boxsize_in_kpccm'],bin_choosen=z_bins)
     return ssfr_m_ave,ssfr_m_error,ssfr_nm_ave,ssfr_nm_error,z_cent
