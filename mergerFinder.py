@@ -165,7 +165,7 @@ def plotmedian2(x,y,yflag=[],c='k',ltype='--',lw=3,stat='median',ax='plt',bins=8
     else: bin_edges = np.arange(0.999*min(xp),1.001*max(xp),(max(xp)-min(xp))/(bins))
     if bins < 0:	bin_means, bin_edges, binnumber = stats.binned_statistic(xp,yp,bins=bin_edges,statistic=stat)
     else: bin_means, bin_edges, binnumber = stats.binned_statistic(xp,yp,bins=bins,statistic=stat)
-    if edges != 0: bin_means, bin_edges, binnumber = stats.binned_statistic(xp,yp,bins=edges,statistic=stat)
+    if isinstance(edges, np.ndarray): bin_means, bin_edges, binnumber = stats.binned_statistic(xp,yp,bins=edges,statistic=stat)
     print('edges')
     print(bin_edges)
     #print(np.arange(0.999*min(xp),1.001*max(xp),(max(xp)-min(xp))/(bins)))
