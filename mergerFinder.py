@@ -118,6 +118,7 @@ def plotmedian(x,y,yflag=[],c='k',ltype='--',lw=3,stat='median',ax='plt',bins=8,
     #bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
     #ax.plot(bin_cent, bin_means, ltype, lw=lw, color=c, label=label)
     bin_means, bin_edges, binnumber = stats.binned_statistic(xp,yp,bins=bin_choosen,statistic=stat)
+    print(bin_means, bin_edges, binnumber)
     bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
 
     if boxsize > 0:  # determine cosmic variance over 8 octants, plot errorbars
@@ -134,6 +135,8 @@ def plotmedian(x,y,yflag=[],c='k',ltype='--',lw=3,stat='median',ax='plt',bins=8,
         else: bin_oct[:,i0], bin_edges, binnumber = stats.binned_statistic(xq,yq,bins=bin_edges,statistic=stat)
         bin_oct  = np.ma.masked_invalid(bin_oct)
         var  = np.ma.std(bin_oct, axis=1)
+        print(bin_oct[:,i0], bin_edges, binnumber)
+        print(var)
         #ax.errorbar(bin_cent, bin_means, yerr=[var,var], fmt='o', linewidth=lw, color=c)
     elif boxsize == -1:
         var = []
@@ -146,7 +149,6 @@ def plotmedian(x,y,yflag=[],c='k',ltype='--',lw=3,stat='median',ax='plt',bins=8,
         #ax.errorbar(bin_cent, bin_means, yerr=[var,var], fmt='o', linewidth=lw, color=c)
     else:
         var = np.zeros(len(bin_cent))
-    print(bin_means,var)
     return bin_means,var
 
 # Running median through scatter data
