@@ -176,7 +176,7 @@ def Fraction_Fast_vs_Slow(x, times, sf_d, bins):
 
 # Plot the results
 def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
-    y_labels = [r'$\log(t_q(Central)/t_U)$',r'$\log(t_q(Satellite)/t_U)$',r'$\log(N/N_{SF})$']
+    y_labels = [r'$\log(t_q(Central)/t_H)$',r'$\log(t_q(Satellite)/t_H)$',r'$\log(N/N_{SF})$']
     frac_labels = ['Centrals with ','Satellites with ']
     x_labels = [r'$\log(1+z)$', r'$\log(M_*)$']
     name_file = ['redshift', 'mass']

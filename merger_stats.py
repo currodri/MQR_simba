@@ -112,13 +112,15 @@ def SFR_Evolution2(mergers, msq_galaxies, n_bins):
     delta = z_bins[1]-z_bins[0]
     z_cent = z_bins - delta/2
     z_cent = np.delete(z_cent, 0)
+    ssfr_m = []
+    ssfr_nm = []
+    pos_nm = []
+    pos_m = []
+    red_m = []
+    red_nm = []
     for i in range(0, n_bins-1):
-        ssfr_m = []
-        ssfr_nm = []
-        pos_nm = []
         mergers_m = []
         msq_m = []
-        pos_m = []
         msq_idx = []
         for j in range(0, len(mergers)):
             merger = mergers[j]
@@ -126,19 +128,18 @@ def SFR_Evolution2(mergers, msq_galaxies, n_bins):
                 ssfr_m.append(np.log10(merger.sfr_gal[1]/merger.m_gal[1]))
                 pos_m.append(merger.gal_pos[1])
                 mergers_m.append(np.log10(merger.m_gal[1]))
+                red_m.append(merger.z_gal[1])
         for k in range(0, len(msq_galaxies)):
             msq = msq_galaxies[k]
             if z_bins[i]<= msq.z_gal < z_bins[i+1]:
                 msq_idx.append(k)
                 msq_m.append(np.log10(msq.m_gal))
-        ssfr_m = np.asarray(ssfr_m)
         mergers_m = np.asarray(mergers_m)
         msq_idx = np.asarray(msq_idx)
         msq_m = np.asarray(msq_m)
         msq_sort_idx = np.argsort(msq_m)
         msq_sorted = np.sort(msq_m)
         msq_sel = []
-        msq_sel_m = []
         for m in range(0, len(mergers_m)):
             if len(msq_sorted)>3:
                 loc = np.searchsorted(msq_sorted, mergers_m[m])
@@ -161,21 +162,16 @@ def SFR_Evolution2(mergers, msq_galaxies, n_bins):
             real_idx = msq_idx[msq_sel[selected]]
             msq_gal = msq_galaxies[real_idx]
             ssfr_nm.append(np.log10(msq_gal.ssfr_gal/msq_gal.m_gal))
-            msq_sel_m.append(np.log10(msq_gal.m_gal))
             pos_nm.append(msq.gal_pos)
-        pos_nm = np.asarray(pos_nm)
-        pos_m = np.asarray(pos_m)
-        msq_sel_m = np.asarray(msq_sel_m)
-        ssfr_nm = np.asarray(ssfr_nm)
-        ssfr_m_ave[i] = np.median(ssfr_m) #np.average(ssfr_m)
-        a = float(mergers_m.min()*0.9)
-        b = float(mergers_m.max()*1.1)
-        ssfr_m_ave[i], err = plotmedian(mergers_m,ssfr_m, pos=pos_m, boxsize=d['boxsize_in_kpccm'],bin_choosen=[a,b])
-        ssfr_m_error[i] = err[0]
-        a = float(msq_m.min()*0.9)
-        b = float(msq_m.max()*1.1)
-        ssfr_nm_ave[i], err = plotmedian(msq_sel_m,ssfr_nm, pos=pos_nm, boxsize=d['boxsize_in_kpccm'],bin_choosen=[a,b])
-        ssfr_nm_error[i] = err[0]
+            red_nm.append(msq.z_gal)
+    ssfr_m = np.asarray(ssfr_m)
+    ssfr_nm = np.asarray(ssfr_nm)
+    pos_m = np.asarray(pos_m)
+    pos_nm = np.asarray(pos_nm)
+    red_m = np.asarray(red_m)
+    red_nm = np.asarray(red_nm)
+    ssfr_m_ave, ssfr_m_error = plotmedian(red_m,ssfr_m, pos=pos_m, boxsize=d['boxsize_in_kpccm'],bin_choosen=z_bins)
+    ssfr_nm_ave, ssfr_nm_error = plotmedian(red_nm,ssfr_nm, pos=pos_nm, boxsize=d['boxsize_in_kpccm'],bin_choosen=z_bins)
     return ssfr_m_ave,ssfr_m_error,ssfr_nm_ave,ssfr_nm_error,z_cent
     # plt.errorbar(z_cent, ssfr_m_ave, yerr=ssfr_m_error, linestyle='--', marker='o', label='Mergers star-forming', capsize=2, capthick=2)
     # plt.errorbar(z_cent, ssfr_nm_ave, yerr=ssfr_nm_error, linestyle='--', marker='s', label='Mass-matched sample of non-merger star-forming', capsize=2, capthick=2)
