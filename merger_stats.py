@@ -472,7 +472,7 @@ elif u_selec==4:
 elif u_selec==5:
     Merger_Fraction_Mass_Distribution(mergers, sf_galaxies, 15)
 elif u_selec==6:
-    SFR_Evolution_and_Contribution(mergers, sf_galaxies, 15)
+    SFR_Evolution_and_Contribution(mergers, sf_galaxies, 9)
 elif u_selec==7:
     SFR_Evolution2(mergers, sf_galaxies, 10)
     Merger_Contribution(mergers, sf_galaxies, 10)
