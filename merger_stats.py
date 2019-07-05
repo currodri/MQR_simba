@@ -131,8 +131,8 @@ def SFR_Evolution2(mergers, msq_galaxies, n_bins):
                 red_m.append(merger.z_gal[1])
         for k in range(0, len(msq_galaxies)):
             msq = msq_galaxies[k]
-            print(msq.id)
             if z_bins[i]<= msq.z_gal < z_bins[i+1]:
+                print(msq.id)
                 msq_idx.append(k)
                 msq_m.append(np.log10(msq.m_gal))
         mergers_m = np.asarray(mergers_m)
