@@ -204,8 +204,10 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
                 for k in range(0, 2):
                     x_datas = x_data[i][k][0] + x_data[i][k][2]
                     x_datas = np.asarray(x_datas)
+                    x_datas_r = np.asarray(x_data[i][k][2])
                     quenchs = quenching_times[k][0] + quenching_times[k][2]
                     quenchs = np.asarray(quenchs)
+                    quenchs_r = np.asarray(quenching_times[k][2])
                     if i==0:
                         sf_data = [d['sf_galaxies_per_snap'],sf_x[i]]
                         bins = np.linspace(0,4,10)
@@ -213,12 +215,17 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
                         sf_data = [sf_x[i]]
                         bins = np.linspace(9.5,12.5,10)
                     fast, slow, cent = Fraction_Fast_vs_Slow(x_datas, quenchs, sf_data, bins)
+                    fast_r, slow_r, cent_r = Fraction_Fast_vs_Slow(x_datas_r, quenchs_r, sf_data, bins)
                     if i==0:
                         ax[j].plot(np.log10(1+cent), np.log10(fast), label = frac_labels[k]+'fast quenching', color=colours[k], ls='-')
                         ax[j].plot(np.log10(1+cent), np.log10(slow), label = frac_labels[k]+'slow quenching', color=colours[k], ls='--')
+                        ax[j].plot(np.log10(1+cent_r), np.log10(fast_r), label = frac_labels[k]+'fast quenching with rejuvenation', color=colours[k], ls='..')
+                        ax[j].plot(np.log10(1+cent_r), np.log10(slow_r), label = frac_labels[k]+'slow quenching with rejuvenation', color=colours[k], ls='-.')
                     elif i==1:
                         ax[j].plot(cent, np.log10(fast), label = frac_labels[k]+'fast quenching', color=colours[k], ls='-')
                         ax[j].plot(cent, np.log10(slow), label = frac_labels[k]+'slow quenching', color=colours[k], ls='--')
+                        ax[j].plot(cent_r, np.log10(fast_r), label = frac_labels[k]+'fast quenching with rejuvenation', color=colours[k], ls='..')
+                        ax[j].plot(cent_r, np.log10(slow_r), label = frac_labels[k]+'slow quenching with rejuvenation', color=colours[k], ls='-.')
 
                 ax[j].legend(loc='best', prop={'size': 10})
         ax[2].set_xlabel(x_labels[i], fontsize=16)
