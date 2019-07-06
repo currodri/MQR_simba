@@ -213,10 +213,10 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
                     quenchs_r = np.asarray(quenching_times[k][2])
                     if i==0:
                         sf_data = [d['sf_galaxies_per_snap'],sf_x[i]]
-                        bins = np.linspace(0,4,10)
+                        bins = np.linspace(0,4,6)
                     else:
                         sf_data = [sf_x[i]]
-                        bins = np.linspace(9.5,12.5,10)
+                        bins = np.linspace(9.5,12.5,6)
                     fast, slow, cent = Fraction_Fast_vs_Slow(x_datas, quenchs, sf_data, bins)
                     print(fast, slow, cent)
                     fast_r, slow_r, cent_r = Fraction_Fast_vs_Slow(x_datas_r, quenchs_r, sf_data, bins)
