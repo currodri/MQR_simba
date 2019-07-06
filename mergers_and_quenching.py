@@ -256,7 +256,7 @@ def quench_merger_withreju():
     fig = plt.figure(num=None, figsize=(8, 8), dpi=80, facecolor='w', edgecolor='k')
     ax = fig.add_subplot(1,1,1)
     sc = ax.scatter(quench_t, merger_t, c = (rejuvenation_t-merger_t), cmap='winter', s=10)
-    ax.plot([1.9, 14], [1.9, 11], 'k--')
+    ax.plot([1.9, 14], [1.9, 14], 'k--')
     ax.set_xlim([quench_t.min()*0.9, quench_t.max()*1.1])
     ax.set_ylim([merger_t.min()*0.9, merger_t.max()*1.1])
     ax.set_xlabel(r'$T_q $(Gyr)', fontsize=16)
