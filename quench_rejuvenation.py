@@ -237,7 +237,7 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
         ax[2].set_xlabel(x_labels[i], fontsize=16)
         if i==0:
             axZ = ax[0].twiny()
-            maxlz = 0.8
+            maxlz = 0.65
             ax[0].set_xlim(0,maxlz)
             axZ.set_xlim(0,maxlz)
             topticks1 = np.array([0,1,2,3,4])  # desired redshift labels

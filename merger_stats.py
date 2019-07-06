@@ -413,7 +413,7 @@ def SFR_Evolution_and_Contribution(mergers, msq_galaxies, n_bins):
     axes[1].legend(loc='best')
     axes[1].set_xlabel(r'$\log(1+z)$')
     axZ = axes[0].twiny()
-    maxlz = 0.8
+    maxlz = 0.65
     axes[0].set_xlim(0,maxlz)
     axZ.set_xlim(0,maxlz)
     topticks1 = np.array([0,1,2,3,4])  # desired redshift labels
