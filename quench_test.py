@@ -126,8 +126,8 @@ ax1 = fig.add_subplot(1,1,1)
 ax1.plot(galaxy_t, np.log10(ssfr_gal), 'k-')
 ax1.plot(galaxy_t, above, 'b--', label=r'Star-forming threshold: sSFR $=1/t_{U}$')
 ax1.plot(galaxy_t, below, 'r--', label=r'Quench threshold: sSFR $=0.2/t_{U}$')
-mergers_idx = np.asarray([np.where(galaxy_t==merg.galaxy_t[1])[0][0] for merg in mergers]
-rejuvenations_idx = np.asarray([np.where(galaxy_t==rej)[0][0] for rej in reju_t]
+mergers_idx = np.asarray([np.where(galaxy_t==merg.galaxy_t[1])[0][0] for merg in mergers])
+rejuvenations_idx = np.asarray([np.where(galaxy_t==rej)[0][0] for rej in reju_t])
 for i in range(0, len(thubble_start)):
     ax1.plot([thubble_start[i],thubble_start[i]],[-12,-8], linestyle=':', color='b')
     ax1.plot([thubble_end[i],thubble_end[i]],[-12,-8], linestyle=':', color='r')
