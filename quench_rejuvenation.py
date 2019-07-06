@@ -200,9 +200,10 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
                     a = np.asarray(x_data[i][j][0])
                     b = np.asarray(x_data[i][j][2])
                 ax[j].hexbin(a, quenching_times[j][0], bins='log', cmap='Greys', gridsize=30)
-                ax[j].scatter(b, quenching_times[j][2], s=8, alpha=0.8, label='Final quenching with rejuvenation', facecolor=None, edgecolor='r')
+                ax[j].scatter(b, quenching_times[j][2], s=8, alpha=0.8, label='Final quenching with rejuvenation', facecolor='g')
                 ax[j].plot([a.min(),a.max()],[-1.5,-1.5], 'k--')
-                ax[j].legend(loc='best', prop={'size': 10})
+                if i==0:
+                    ax[j].legend(loc='best', prop={'size': 10})
             else:
                 for k in range(0, 2):
                     x_datas = x_data[i][k][0] + x_data[i][k][2]
@@ -239,7 +240,7 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
         ax[2].set_xlabel(x_labels[i], fontsize=16)
         if i==0:
             axZ = ax[0].twiny()
-            maxlz = 0.65
+            maxlz = 0.7
             ax[0].set_xlim(0,maxlz)
             axZ.set_xlim(0,maxlz)
             topticks1 = np.array([0,1,2,3,4])  # desired redshift labels
