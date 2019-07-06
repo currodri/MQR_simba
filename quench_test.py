@@ -17,7 +17,6 @@ import seaborn as sns
 sns.set(style="white")
 
 # Import other codes
-from import_progen import importApp
 from mergerFinder import myrunningmedian, merger_finder
 from quenchingFinder import GalaxyData, quenchingFinder2, rejuvenation_rate_calculator, quenching_histogram
 import sys
@@ -42,6 +41,7 @@ print('Total number of galaxies at z = 0: '+str(ngal))
 galaxies = []
 ourgalaxy_n = 54
 sfr_gal = d['sfr_gal' + str(ourgalaxy_n)][::-1]
+ssfr_gal = (d['sfr_gal' + str(ourgalaxy_n)]/d['m_gal'+str(ourgalaxy_n)])[::-1]
 sfe_gal = d['sfe_gal' + str(ourgalaxy_n)][::-1]
 z_gal = d['z_gal' + str(ourgalaxy_n)][::-1]
 galaxy_t = d['t_gal' + str(ourgalaxy_n)][::-1]
