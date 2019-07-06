@@ -126,10 +126,15 @@ ax1 = fig.add_subplot(1,1,1)
 ax1.plot(galaxy_t, np.log10(ssfr_gal), 'k-')
 ax1.plot(galaxy_t, above, 'b--', label=r'Star-forming threshold: sSFR $=1/t_{U}$')
 ax1.plot(galaxy_t, below, 'r--', label=r'Quench threshold: sSFR $=0.2/t_{U}$')
-print(np.where(galaxy_t==mergers[0].galaxy_t[1]))
+mergers_idx = np.asarray([np.where(galaxy_t==merg.galaxy_t[1])[0][0] for merg in mergers]
+rejuvenations_idx = np.asarray([np.where(galaxy_t==rej)[0][0] for rej in reju_t]
 for i in range(0, len(thubble_start)):
     ax1.plot([thubble_start[i],thubble_start[i]],[-12,-8], linestyle=':', color='b')
     ax1.plot([thubble_end[i],thubble_end[i]],[-12,-8], linestyle=':', color='r')
+for i in range(0, len(mergers_idx)):
+    ax1.plot(mergers[i].galaxy_t[1], galaxy_t[mergers_idx[i]], marker='o', alpha=0.5, color='r', markersize=10)
+for i in range(0, len(rejuvenation_idx)):
+    ax1.plot(reju_t[i], galaxy_t[rejuvenations_idx[i]], marker='o', alpha=0.5, color='g', markersize=10)
 # ax1.plot(7.668095312278215, np.log10(1.9816408261273213e-10), marker='o', alpha=0.5, color='g', markersize=10)
 # ax1.text(2.0, -12.8, r'$t_{q} = $'+'{:.3}'.format(quenching_times[0])+r' Gyr')
 # ax1.text(6.0, -12.8, r'$t_{q} = $'+'{:.3}'.format(quenching_times[1])+r' Gyr')
