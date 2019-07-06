@@ -199,7 +199,7 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
                     a = np.asarray(x_data[i][j][0])
                     b = np.asarray(x_data[i][j][2])
                 ax[j].hexbin(a, quenching_times[j][0], bins='log', cmap='Greys', gridsize=30)
-                ax[j].scatter(b, quenching_times[j][2], s=8, alpha=0.8, label='Final quenching with rejuvenation', facecolor=None, edgecolor='b')
+                ax[j].scatter(b, quenching_times[j][2], s=8, alpha=0.8, label='Final quenching with rejuvenation', facecolor=None, edgecolor='r')
                 ax[j].plot([a.min(),a.max()],[-1.5,-1.5], 'k--')
                 ax[j].legend(loc='best', prop={'size': 10})
             else:
