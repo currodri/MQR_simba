@@ -133,8 +133,8 @@ print(mergers_idx, rejuvenations_idx)
 for i in range(0, len(thubble_start)):
     ax1.plot([thubble_start[i],thubble_start[i]],[-12,-8], linestyle=':', color='b')
     ax1.plot([thubble_end[i],thubble_end[i]],[-12,-8], linestyle=':', color='r')
-    xpos = thubble_start[i]-0.1
-    ax1.text(xpos, -9, r'$t_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8)
+    xpos = thubble_start[i]-0.4
+    ax1.text(xpos, -9, r'$t_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox='round')
 for i in range(0, len(mergers_idx)):
     ax1.plot(mergers[i].galaxy_t[1], np.log10(ssfr_gal[mergers_idx[i]]), marker='o', alpha=0.5, color='r', markersize=10)
 for i in range(0, len(rejuvenations_idx)):
