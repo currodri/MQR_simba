@@ -141,7 +141,7 @@ for i in range(0, len(rejuvenations_idx)):
 # ax1.text(2.0, -12.8, r'$t_{q} = $'+'{:.3}'.format(quenching_times[0])+r' Gyr')
 # ax1.text(6.0, -12.8, r'$t_{q} = $'+'{:.3}'.format(quenching_times[1])+r' Gyr')
 ax1.set_xlim([galaxy_t.min(),12])
-ax1.set_ylim([-12,-8])
+ax1.set_ylim([-11.5,-8])
 ax1.set_xlabel(r't (Gyr)', fontsize=16)
 ax1.set_ylabel(r'$\log$ sSFR ($M_'+u'\u2609'+r'$yr$^{-1}$)', fontsize=16)
 ax1.legend(loc=1)
