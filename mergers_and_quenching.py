@@ -231,12 +231,12 @@ def quench_merger_withreju():
             if galaxy.id == merg.id:
                 for r in range(0, len(reju_t)):
                     if reju_id[r]==merg.id:
-                        possible_r.append(reju_t[r])
                         for quench in galaxy.quenching:
                             start = quench.above9 #+ 1
                             end = quench.below11
                             if np.log10(galaxy.m_gal)>=mass_limit:
                                 possible_q.append(galaxy.galaxy_t[start])
+                                possible_r.append(reju_t[r])
         diff_q = []
         diff_r = []
         for k in range(0, len(possible_q)):
@@ -253,6 +253,7 @@ def quench_merger_withreju():
                 if len(quench_t) != len(rejuvenation_t) or len(quench_t) != len(merger_t) or len(rejuvenation_t) != len(merger_t):
                     print(len(quench_t),len(rejuvenation_t),len(merger_t))
                     print(possible_q[np.argmin(diff_q)],possible_r[np.argmin(diff_r)],merg.galaxy_t[1])
+    print(len(quench_t), len(rejuvenation_t), len(merger_t))
     quench_t = np.asarray(quench_t)
     rejuvenation_t = np.asarray(reju_t)
     merger_t = np.asarray(merger_t)
