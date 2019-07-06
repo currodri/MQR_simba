@@ -39,7 +39,7 @@ print('Total number of galaxies at z = 0: '+str(ngal))
 
 #Store the galaxies sorted in objects of type GalaxyData
 galaxies = []
-ourgalaxy_n = 54
+ourgalaxy_n = int(input('What galaxy do you wanna plot: '))
 sfr_gal = d['sfr_gal' + str(ourgalaxy_n)][::-1]
 ssfr_gal = (d['sfr_gal' + str(ourgalaxy_n)]/d['m_gal'+str(ourgalaxy_n)])[::-1]
 sfe_gal = d['sfe_gal' + str(ourgalaxy_n)][::-1]
@@ -57,7 +57,7 @@ below = []
 for i in range(0, len(galaxy_t)):
     above.append(np.log10(1/galaxy_t[i])-9)
     below.append(np.log10(0.2/galaxy_t[i])-9)
-    
+
 max_ngal = len(galaxies)
 mass_limit = 9.5
 min_merger_ratio = 0.2
