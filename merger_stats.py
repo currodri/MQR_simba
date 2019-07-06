@@ -412,9 +412,9 @@ def SFR_Evolution_and_Contribution(mergers, msq_galaxies, n_bins):
     axes[1].set_ylabel('Merger contribution', fontsize=16)
     axes[1].legend(loc='best')
     axes[1].set_xlabel(r'$\log(1+z)$')
-    axZ = ax[0].twiny()
+    axZ = axes[0].twiny()
     maxlz = 0.8
-    ax[0].set_xlim(0,maxlz)
+    axes[0].set_xlim(0,maxlz)
     axZ.set_xlim(0,maxlz)
     topticks1 = np.array([0,1,2,3,4])  # desired redshift labels
     topticks2 = np.log10(1+topticks1)  # tick locations in time

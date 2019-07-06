@@ -181,7 +181,7 @@ def mqr_relation():
     ax.set_ylabel(r'$\log(N/N_{SF}(Total)) $', fontsize=16)
     hist, bin_edges = np.histogram(time_diff, bins=12)
     bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
-    hist = hist/np.sum(d['sf_galaxies_per_snap'])
+    hist = np.log10(hist/np.sum(d['sf_galaxies_per_snap']))
     ax.plot(bin_cent, hist, 'b', label='Quenchings')
     ax.plot([median, median],[0, hist.max()], 'b--')
 
@@ -211,7 +211,7 @@ def mqr_relation():
     merger_boost = np.asarray(merger_boost)
     hist, bin_edges = np.histogram(time_diff, bins=12)
     bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
-    hist = hist/np.sum(d['sf_galaxies_per_snap'])
+    hist = np.log10(hist/np.sum(d['sf_galaxies_per_snap']))
     ax.plot([median, median],[0, hist.max()], 'r--')
     ax.plot(np.log10(bin_cent), hist, 'r', label='Rejuvenations')
     ax.legend(loc='best', fontsize=16)
