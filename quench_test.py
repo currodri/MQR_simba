@@ -114,7 +114,7 @@ for i in range(0, len(galaxies_interpolated)):
         thubble_end.append(galaxy.galaxy_t[end])
 
 print(redshifts, quenching_times, thubble_start, thubble_end)
-print([merg.galaxy_t[1] for merg in range(0, len(mergers))])
+print([merg.galaxy_t[1] for merg in mergers])
 print(reju_t)
 print('Number of quenching events in second loop: '
         +str(sum([1 for galaxy in galaxies_interpolated for quench in galaxy.quenching])))
