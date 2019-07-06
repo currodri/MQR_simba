@@ -129,12 +129,12 @@ ax1.plot(galaxy_t, below, 'r--', label=r'Quench threshold: sSFR $=0.2/t_{U}$')
 ax1.plot(galaxies_interpolated[0].galaxy_t, np.log10(galaxies_interpolated[0].ssfr_gal), linestyle='--', color='grey', alpha=0.7)
 mergers_idx = np.asarray([np.where(galaxy_t==merg.galaxy_t[1])[0][0] for merg in mergers])
 rejuvenations_idx = np.asarray([np.where(galaxy_t==rej)[0][0] for rej in reju_t])
-print(mergers_idx, rejuvenations_idx)
+props = dict(boxstyle='round', facecolor='white', alpha=0.7)
 for i in range(0, len(thubble_start)):
     ax1.plot([thubble_start[i],thubble_start[i]],[-12,-8], linestyle=':', color='b')
     ax1.plot([thubble_end[i],thubble_end[i]],[-12,-8], linestyle=':', color='r')
     xpos = thubble_start[i]-0.4
-    ax1.text(xpos, -9, r'$t_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox='round')
+    ax1.text(xpos, -9, r'$t_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox=props)
 for i in range(0, len(mergers_idx)):
     ax1.plot(mergers[i].galaxy_t[1], np.log10(ssfr_gal[mergers_idx[i]]), marker='o', alpha=0.5, color='r', markersize=10)
 for i in range(0, len(rejuvenations_idx)):
