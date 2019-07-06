@@ -250,12 +250,8 @@ def quench_merger_withreju():
                 quench_t.append(possible_q[np.argmin(diff_q)])
                 rejuvenation_t.append(possible_r[np.argmin(diff_r)])
                 merger_t.append(merg.galaxy_t[1])
-                if len(quench_t) != len(rejuvenation_t) or len(quench_t) != len(merger_t) or len(rejuvenation_t) != len(merger_t):
-                    print(len(quench_t),len(rejuvenation_t),len(merger_t))
-                    print(possible_q[np.argmin(diff_q)],possible_r[np.argmin(diff_r)],merg.galaxy_t[1])
-    print(len(quench_t), len(rejuvenation_t), len(merger_t))
     quench_t = np.asarray(quench_t)
-    rejuvenation_t = np.asarray(reju_t)
+    rejuvenation_t = np.asarray(rejuvenation_t)
     merger_t = np.asarray(merger_t)
     fig = plt.figure(num=None, figsize=(8, 8), dpi=80, facecolor='w', edgecolor='k')
     ax = fig.add_subplot(1,1,1)
