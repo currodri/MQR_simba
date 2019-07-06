@@ -170,7 +170,6 @@ def Fraction_Fast_vs_Slow(x, times, sf_d, bins):
         for j in range(0, len(fast)):
             if bins[i] <= fast[j] < bins[i+1]:
                 f = f + 1
-        print(sf, f, s)
         fast_bins[i] = float(f)/float(sf)
         slow_bins[i] = float(s)/float(sf)
     return fast_bins,slow_bins,cent
@@ -219,7 +218,6 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
                         sf_data = [sf_x[i]]
                         bins = np.linspace(9.5,12.5,8)
                     fast, slow, cent = Fraction_Fast_vs_Slow(x_datas, quenchs, sf_data, bins)
-                    print(fast, slow, cent)
                     fast_r, slow_r, cent_r = Fraction_Fast_vs_Slow(x_datas_r, quenchs_r, sf_data, bins)
                     if i==0:
                         ax[j].plot(np.log10(1+cent), np.log10(fast), label = frac_labels[k]+'fast quenching', color=colours[k], ls='-')
