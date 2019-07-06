@@ -52,6 +52,12 @@ gal_pos = d['gal_pos'+str(ourgalaxy_n)][::-1]
 galaxy = GalaxyData(ourgalaxy_n, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type, gal_pos)
 galaxies.append(galaxy)
 
+above = []
+below = []
+for i in range(0, len(galaxy_t)):
+    above.append(np.log10(1/galaxy_t[i])-9)
+    below.append(np.log10(0.2/galaxy_t[i])-9)
+    
 max_ngal = len(galaxies)
 mass_limit = 9.5
 min_merger_ratio = 0.2
