@@ -213,10 +213,10 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
                     quenchs_r = np.asarray(quenching_times[k][2])
                     if i==0:
                         sf_data = [d['sf_galaxies_per_snap'],sf_x[i]]
-                        bins = np.linspace(0,4,6)
+                        bins = np.linspace(0,4,8)
                     else:
                         sf_data = [sf_x[i]]
-                        bins = np.linspace(9.5,12.5,6)
+                        bins = np.linspace(9.5,12.5,8)
                     fast, slow, cent = Fraction_Fast_vs_Slow(x_datas, quenchs, sf_data, bins)
                     print(fast, slow, cent)
                     fast_r, slow_r, cent_r = Fraction_Fast_vs_Slow(x_datas_r, quenchs_r, sf_data, bins)
@@ -240,8 +240,8 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
         if i==0:
             axZ = ax[0].twiny()
             maxlz = 0.65
-            ax[0].set_xlim(0.06,maxlz)
-            axZ.set_xlim(0.06,maxlz)
+            ax[0].set_xlim(0,maxlz)
+            axZ.set_xlim(0,maxlz)
             topticks1 = np.array([0,1,2,3,4])  # desired redshift labels
             topticks2 = np.log10(1+topticks1)  # tick locations in time
             axZ.set_xticklabels(topticks1)
