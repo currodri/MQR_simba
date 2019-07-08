@@ -229,9 +229,9 @@ def SFR_Evolution3(mergers, msq_galaxies, n_bins):
             ssfr_nm.append(msq_gal.ssfr_gal)
         ssfr_nm = np.asarray(ssfr_nm)
         ssfr_m_ave[i] = np.average(ssfr_m)
-        ssfr_m_error[i] = np.std(ssfr_m)/np.sqrt(len(ssfr_m))
+        ssfr_m_error[i] = float(np.std(ssfr_m))/np.sqrt(len(ssfr_m))
         ssfr_nm_ave[i] = np.average(ssfr_nm)
-        ssfr_nm_error[i] = np.std(ssfr_nm)/np.sqrt(len(ssfr_nm))
+        ssfr_nm_error[i] = float(np.std(ssfr_nm))/np.sqrt(len(ssfr_nm))
     return z_cent,ssfr_m_ave,ssfr_m_error,ssfr_nm_ave,ssfr_nm_error
 
 def Merger_Fraction(mergers, msq_galaxies, n_bins):
@@ -462,10 +462,11 @@ def Contribution_and_Rate(mergers, msq_galaxies, n_bins):
 def SFR_Evolution_and_Contribution(mergers, msq_galaxies, n_bins):
     z_cent,ssfr_m_ave,ssfr_m_error,ssfr_nm_ave,ssfr_nm_error = SFR_Evolution3(mergers,msq_galaxies,n_bins)
     f_merger,f_budget,z_cent2 = Merger_Contribution(mergers,msq_galaxies,n_bins)
+    print(ssfr_m_ave,ssfr_m_error)
     fig, axes = plt.subplots(2, 1, sharex='col', figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
     axes[0].errorbar(np.log10(1+z_cent), np.log10(ssfr_m_ave), yerr=(ssfr_m_error/(ssfr_m_ave*np.log(10))), linestyle='--', marker='o', label='Mergers star-forming', capsize=2, capthick=2)
     axes[0].errorbar(np.log10(1+z_cent), np.log10(ssfr_nm_ave), yerr=(ssfr_nm_error/(ssfr_nm_ave*np.log(10))), linestyle='--', marker='s', label='Mass-matched sample of non-merger star-forming', capsize=2, capthick=2)
-    axes[0].set_ylabel(r'$\log($\langle sSFR (yr$^{-1})\rangle$', fontsize=16)
+    axes[0].set_ylabel(r'$\log(\langle$ sSFR (yr$^{-1})\rangle$', fontsize=16)
     axes[0].legend(loc='best')
     axes[1].plot(np.log10(1+z_cent2), np.log10(f_merger), linestyle='--', marker='o', label=r'$\log($Fraction of galaxies)')
     axes[1].plot(np.log10(1+z_cent2), np.log10(f_budget), linestyle='--', marker='s', label=r'$\log($Fraction of SF Budget)')
@@ -473,7 +474,7 @@ def SFR_Evolution_and_Contribution(mergers, msq_galaxies, n_bins):
     axes[1].legend(loc='best')
     axes[1].set_xlabel(r'$\log(1+z)$')
     axZ = axes[0].twiny()
-    maxlz = np.log10(1+2.5)*1.1
+    maxlz = 0.56
     axes[0].set_xlim(0.06,maxlz)
     axZ.set_xlim(0.06,maxlz)
     topticks1 = np.array([0,1,2,3])  # desired redshift labels

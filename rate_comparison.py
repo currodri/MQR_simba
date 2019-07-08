@@ -232,24 +232,24 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
 
     ax[0].plot(x_dat, np.log10(r_merger['all']),linestyle='--', marker='d', color='k', label='All')
     slope, intercept, r_value, p_value, std_err = stats.linregress(x_dat, np.log10(r_merger['all']))
-    ax[0].plot(x_dat,np.log10((10**intercept)*(1+z_cent)**(slope)), 'k-', label=r'$10^{%.2f}*(1+z)^{%.2f}$' % (intercept, slope) )
+    ax[0].plot(x_dat,np.log10((10**intercept)*(1+z_cent)**(slope)), 'k-', label=r'$10^{%.2f}\cdot(1+z)^{%.2f}$' % (intercept, slope) )
     print("slope: %f    intercept: %f    r_value: %f    p_value: %f    std_error: %f" % (slope, intercept,r_value, p_value, std_err))
 
     ax[1].plot(x_dat, np.log10(r_quench['all']),linestyle='--', marker='d', color='k')
     slope, intercept, r_value, p_value, std_err = stats.linregress(x_dat, np.log10(r_quench['all']))
-    ax[1].plot(x_dat,np.log10((10**intercept)*(1+z_cent)**(slope)), 'k-', label=r'$10^{%.2f}*(1+z)^{%.2f}$' % (intercept, slope) )
+    ax[1].plot(x_dat,np.log10((10**intercept)*(1+z_cent)**(slope)), 'k-', label=r'$10^{%.2f}\cdot(1+z)^{%.2f}$' % (intercept, slope) )
     print("slope: %.f    intercept: %f    r_value: %f    p_value: %f    std_error: %f" % (slope, intercept,r_value, p_value, std_err))
 
     ax[2].plot(x_dat, np.log10(r_reju['all']),linestyle='--', marker='d', color='k')
     slope, intercept, r_value, p_value, std_err = stats.linregress(x_dat, np.log10(r_reju['all']))
-    ax[2].plot(x_dat,np.log10((10**intercept)*(1+z_cent)**(slope)), 'k-', label=r'$10^{%.2f}*(1+z)^{%.2f}$' % (intercept, slope) )
+    ax[2].plot(x_dat,np.log10((10**intercept)*(1+z_cent)**(slope)), 'k-', label=r'$10^{%.2f}\cdot(1+z)^{%.2f}$' % (intercept, slope) )
     print("slope: %f    intercept: %f    r_value: %f    p_value: %f    std_error: %f" % (slope, intercept,r_value, p_value, std_err))
     ax[0].set_ylabel(r'$\log(\mathcal{R}_{Mer})$ [Gyr$^{-1}$]', fontsize=16)
     ax[1].set_ylabel(r'$\log(\mathcal{R}_{Que})$ [Gyr$^{-1}$]', fontsize=16)
     ax[2].set_ylabel(r'$\log(\mathcal{R}_{Rej})$ [Gyr$^{-1}$]', fontsize=16)
     ax[2].set_xlabel(r'$\log(1+z)$', fontsize=16)
     axR = ax[0].twiny()
-    maxlz = 0.65
+    maxlz = 0.56
     ax[0].set_xlim(0.06,maxlz)
     axR.set_xlim(0.06,maxlz)
     topticks1 = np.array([0,1,2,3,4])  # desired redshift labels
@@ -318,7 +318,7 @@ def Density_Rate(mergers,q_masses,q_reds,q_thubble,reju_z,reju_t,reju_m,n_bins,m
     ax[2].set_ylabel(r'$\log(\Gamma_{Rej})$ [cMpc$^{-3}$Gyr$^{-1}$]', fontsize=16)
     ax[2].set_xlabel(r'$\log(1+z)$', fontsize=16)
     axR = ax[0].twiny()
-    maxlz = 0.65
+    maxlz = 0.56
     ax[0].set_xlim(0.06,maxlz)
     axR.set_xlim(0.06,maxlz)
     topticks1 = np.array([0,1,2,3,4])  # desired redshift labels
