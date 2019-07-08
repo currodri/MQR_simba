@@ -175,30 +175,33 @@ def SFR_Evolution2(mergers, msq_galaxies, n_bins):
 
 def SFR_Evolution3(mergers, msq_galaxies, n_bins):
     z_bins = np.linspace(0.0, 2.5, n_bins)
-    ssfr_m_ave = np.zeros(n_bins-1)
-    ssfr_m_error = np.zeros(n_bins-1)
+    ssfr_m_ave = [np.zeros(n_bins-1), np.zeros(n_bins-1)]
+    ssfr_m_error = [np.zeros(n_bins-1), np.zeros(n_bins-1)]
     ssfr_nm_ave = np.zeros(n_bins-1)
     ssfr_nm_error = np.zeros(n_bins-1)
     delta = z_bins[1]-z_bins[0]
     z_cent = z_bins - delta/2
     z_cent = np.delete(z_cent, 0)
     for i in range(0, n_bins-1):
-        ssfr_m = []
+        ssfr_m_a = []
         ssfr_nm = []
+        ssfr_m_b = []
         mergers_m = []
         msq_m = []
         msq_idx = []
         for j in range(0, len(mergers)):
             merger = mergers[j]
             if z_bins[i]<= merger.z_gal[1] < z_bins[i+1]:
-                ssfr_m.append(merger.ssfr_gal[1])
-                mergers_m.append(np.log10(merger.m_gal[1]))
+                ssfr_m_a.append(merger.ssfr_gal[2])
+                ssfr_m_b.append(merger.ssfr_gal[1])
+                mergers_m.append(np.log10(merger.m_gal[2]))
         for k in range(0, len(msq_galaxies)):
             msq = msq_galaxies[k]
             if z_bins[i]<= msq.z_gal < z_bins[i+1]:
                 msq_idx.append(k)
                 msq_m.append(np.log10(msq.m_gal))
-        ssfr_m = np.asarray(ssfr_m)
+        ssfr_m_a = np.asarray(ssfr_m_a)
+        ssfr_m_b = np.asarray(ssfr_m_b)
         mergers_m = np.asarray(mergers_m)
         msq_idx = np.asarray(msq_idx)
         msq_m = np.asarray(msq_m)
@@ -228,8 +231,10 @@ def SFR_Evolution3(mergers, msq_galaxies, n_bins):
             msq_gal = msq_galaxies[real_idx]
             ssfr_nm.append(msq_gal.ssfr_gal)
         ssfr_nm = np.asarray(ssfr_nm)
-        ssfr_m_ave[i] = np.average(ssfr_m)
-        ssfr_m_error[i] = float(np.std(ssfr_m))#/np.sqrt(len(ssfr_m))
+        ssfr_m_ave[0][i] = np.average(ssfr_m_a)
+        ssfr_m_ave[1][i] = np.average(ssfr_m_b)
+        ssfr_m_error[0][i] = float(np.std(ssfr_m_a))#/np.sqrt(len(ssfr_m))
+        ssfr_m_error[1][i] = float(np.std(ssfr_m_b))
         ssfr_nm_ave[i] = np.average(ssfr_nm)
         ssfr_nm_error[i] = float(np.std(ssfr_nm))#/np.sqrt(len(ssfr_nm))
     return z_cent,ssfr_m_ave,ssfr_m_error,ssfr_nm_ave,ssfr_nm_error
@@ -464,7 +469,8 @@ def SFR_Evolution_and_Contribution(mergers, msq_galaxies, n_bins):
     f_merger,f_budget,z_cent2 = Merger_Contribution(mergers,msq_galaxies,n_bins)
     print(ssfr_m_ave,ssfr_m_error)
     fig, axes = plt.subplots(2, 1, sharex='col', figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
-    axes[0].errorbar(np.log10(1+z_cent), np.log10(ssfr_m_ave), yerr=(ssfr_m_error/(ssfr_m_ave*np.log(10))), linestyle='--', marker='o', label='Mergers star-forming', capsize=2, capthick=2)
+    axes[0].errorbar(np.log10(1+z_cent), np.log10(ssfr_m_ave[0]), yerr=(ssfr_m_error[0]/(ssfr_m_ave[0]*np.log(10))), linestyle='--', marker='o', label='After mergers star-forming', capsize=2, capthick=2)
+    axes[0].errorbar(np.log10(1+z_cent), np.log10(ssfr_m_ave[1]), yerr=(ssfr_m_error[1]/(ssfr_m_ave[1]*np.log(10))), linestyle='--', marker='o', label='Before mergers star-forming', capsize=2, capthick=2)
     axes[0].errorbar(np.log10(1+z_cent), np.log10(ssfr_nm_ave), yerr=(ssfr_nm_error/(ssfr_nm_ave*np.log(10))), linestyle='--', marker='s', label='Mass-matched sample of non-merger star-forming', capsize=2, capthick=2)
     axes[0].set_ylabel(r'$\log(\langle$ sSFR (yr$^{-1})\rangle$', fontsize=16)
     axes[0].legend(loc='best')
