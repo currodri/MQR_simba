@@ -137,7 +137,7 @@ for i in range(0, len(rejuvenations_idx)):
 ax1.set_xlim([galaxy_t.min(),12])
 #ax1.set_ylim([-11.5,-8])
 ax1.set_xlabel(r't (Gyr)', fontsize=16)
-ax1.set_ylabel(r'$\log$ $M_* (M_$'+u'\u2609)', fontsize=16)
+ax1.set_ylabel(r'$\log M_*$ ($M_'+u'\u2609'+')', fontsize=16)
 ax1.legend(loc=1)
 fig.tight_layout()
 fig.savefig('merger_finder_test.png', dpi=250)
