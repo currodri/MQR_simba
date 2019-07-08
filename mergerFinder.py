@@ -79,7 +79,7 @@ def merger_finder(galaxies, merger_ratio, mass_limit, redshift_limit):
                 condition,ratio = merger_condition(mass, i, merger_ratio, mass_limit)
                 sfcondition = sfr_condition_2('end', gal, i)
                 ssfr = sfr[i]/mass[i]
-                if condition == True and ssfr>=(10**sfcondition) and fgas[i]>0:
+                if condition == True and ssfr>=(10**sfcondition):# and fgas[i]>0:
                     boost = (fgas[i+1]-fgas[i-1])/fgas[i-1]
                     # Save data at the merger, after and before
                     merger = Merger(id,sfr[i-1:i+2],sfe[i-1:i+2],z[i-1:i+2],time[i-1:i+2],mass[i-1:i+2],fgas[i-1:i+2],type[i-1:i+2],pos[i-1:i+2],ratio, boost)
