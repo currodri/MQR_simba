@@ -83,7 +83,7 @@ def quenchingFinder2(galaxies,sfr_condition, mass_limit, interpolation=False):
             last_snapshot = len(galaxy.galaxy_t)
 
             #Go over each snapshot and save the new data of the galaxy
-            for j in range(0, last_snapshot):
+            for j in range(0, last_snapshot-3):
                 state = analyseState[state[0]](galaxy,j, state, sfr_condition)
             #Check if the last quenching is a valid one:
             if galaxy.quenching and galaxy.quenching[-1].below11 == None:
