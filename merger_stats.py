@@ -483,7 +483,7 @@ def SFR_Evolution_and_Contribution(mergers, msq_galaxies, n_bins):
     maxlz = 0.56
     axes[0].set_xlim(0.03,maxlz)
     axZ.set_xlim(0.03,maxlz)
-    topticks1 = np.array([0,1,2,3])  # desired redshift labels
+    topticks1 = np.array([0,1,2])  # desired redshift labels
     topticks2 = np.log10(1+topticks1)  # tick locations in time
     axZ.set_xticklabels(topticks1)
     axZ.set_xticks(topticks2)
