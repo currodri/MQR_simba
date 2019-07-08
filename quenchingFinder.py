@@ -194,7 +194,7 @@ def quench (galaxy,j,curr_state, sfr_condition, interpolation=False):
 
         if ssfr_gal > 10**current_lssfr:
             #We have found a sign change
-            if not interpolation:
+            if not interpolation and reju_condition(galaxy, j):
                 galaxy.rate.append(galaxy.z_gal[j])
                 galaxy.rate.append(galaxy_t)
                 galaxy.rate.append(galaxy.m_gal[j])
@@ -259,7 +259,8 @@ def ssfr_interpolation(galaxy):
 
 ##########################################################################################
 """
-FUNCTIONS THAT DEFINE THE DIFFERENT THRESHOLDS FOR STAR FORMING AND QUENCHED GALAXIES
+FUNCTIONS THAT DEFINE THE DIFFERENT THRESHOLDS FOR STAR FORMING AND QUENCHED GALAXIES,
+AND THE CONDITION FOR REJUVENATION
 """
 
 def sfr_condition_1(type, galaxy, j):
@@ -279,6 +280,17 @@ def sfr_condition_2(type, galaxy, j):
     elif type == 'end':
         lsfr  = np.log10(0.2/(galaxy.galaxy_t[j]))-9
     return lsfr
+
+def reju_condition(galaxy, j):
+    mass_list = galaxy.m_gal
+    condition = False
+    diff = (mass_list[j+1]-mass_list[j])/mass_list[j]
+    diff2 = abs((mass_list[j+2]-mass_list[j])/mass_list[j])
+    diff3 = abs((mass_list[j+1]-mass_list[j-1])/mass_list[j-1])
+    if abs(diff-diff2) < 0.001 and abs(diff-diff3) < 0.001:
+        condition = True
+    return condition
+
 
 analyseState = {0:initial, 1:readyToLook, 2:pre_quench, 3:quench}
 
