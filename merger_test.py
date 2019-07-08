@@ -135,7 +135,7 @@ for i in range(0, len(rejuvenations_idx)):
 # ax1.plot(7.668095312278215, np.log10(1.9816408261273213e-10), marker='o', alpha=0.5, color='g', markersize=10)
 # ax1.text(2.0, -12.8, r'$t_{q} = $'+'{:.3}'.format(quenching_times[0])+r' Gyr')
 # ax1.text(6.0, -12.8, r'$t_{q} = $'+'{:.3}'.format(quenching_times[1])+r' Gyr')
-ax1.set_xlim([galaxy_t.min(),12])
+ax1.set_xlim([galaxy_t.min(),galaxy_t.max()])
 #ax1.set_ylim([-11.5,-8])
 ax1.set_xlabel(r't (Gyr)', fontsize=16)
 ax1.set_ylabel(r'$\log M_*$ ($M_'+u'\u2609'+'$)', fontsize=16)
