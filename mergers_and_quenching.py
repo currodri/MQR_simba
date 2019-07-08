@@ -161,8 +161,8 @@ def mqr_relation():
                     if np.log10(galaxy.m_gal)>=mass_limit:
                         possible_q.append(galaxy.galaxy_t[start])
                         possible_q_time.append(quench.quench_time/galaxy.galaxy_t[end])
-                        if merg.galaxy_t[1]>8 and len(galaxy.quenching)>=2:
-                            print(galaxy.id)
+                        # if merg.galaxy_t[1]>8 and len(galaxy.quenching)>=2:
+                        #     print(galaxy.id)
         diff = []
         for k in range(0, len(possible_q)):
             diff.append(possible_q[k] - merg.galaxy_t[1])
@@ -239,8 +239,8 @@ def quench_merger_withreju():
                             if np.log10(galaxy.m_gal)>=mass_limit:
                                 possible_q.append(galaxy.galaxy_t[start])
                                 possible_r.append(reju_t[r])
-                                if merg.galaxy_t[1] > 8:
-                                    print(galaxy.id)
+                                # if merg.galaxy_t[1] > 8:
+                                #     print(galaxy.id)
         diff_q = []
         diff_r = []
         for k in range(0, len(possible_q)):
@@ -356,6 +356,6 @@ def merger_reju_scatter():
 #time_diff, q_times, m_ratios = mergerquench_relation()
 #quench_delay(time_diff,q_times,m_ratios)
 #merger_reju_relation()
-#merger_reju_scatter()
+merger_reju_scatter()
 mqr_relation()
-#quench_merger_withreju()
+quench_merger_withreju()
