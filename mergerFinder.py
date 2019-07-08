@@ -44,6 +44,7 @@ def merger_condition(mass_list, index, merger_ratio, mass_limit):
     print(diff, diff2, diff-diff3, diff4)
     if diff>=merger_ratio and diff2>=merger_ratio and diff-diff3 < 0.001 and diff4>=merger_ratio and mass_list[index]>=mass_limit:
         condition = True
+        print('hey')
     return (condition, diff)
 ###########################################################################################
 """
