@@ -56,7 +56,7 @@ galaxies.append(galaxy)
 max_ngal = len(galaxies)
 mass_limit = 9.5
 min_merger_ratio = 0.2
-max_redshift_mergers = 3.5
+max_redshift_mergers = 2.5
 
 # Perform the search for mergers
 mergers, sf_galaxies = merger_finder(galaxies, min_merger_ratio, 10**mass_limit, max_redshift_mergers)
