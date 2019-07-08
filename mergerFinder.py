@@ -37,7 +37,7 @@ FUNCTION THAT DEFINES THE CONDITIONS FOLLOWED TO DETECT A MERGER
 """
 def merger_condition(sfr, delta_t, mass_list, index, merger_ratio, mass_limit):
     condition = False
-    predicted = sfr*delta_t
+    predicted = sfr*delta_t*(10**9)
     actual = mass_list[index+1] - mass_list[index]
     print(predicted, actual)
     diff = (mass_list[index+1]-mass_list[index])/mass_list[index]
