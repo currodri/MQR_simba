@@ -123,10 +123,10 @@ mergers_idx = np.asarray([np.where(galaxy_t==merg.galaxy_t[1])[0][0] for merg in
 rejuvenations_idx = np.asarray([np.where(galaxy_t==rej)[0][0] for rej in reju_t])
 props = dict(boxstyle='round', facecolor='white', edgecolor='k', alpha=0.7)
 for i in range(0, len(thubble_start)):
-    ax1.plot([thubble_start[i],thubble_start[i]],[-12,-8], linestyle=':', color='b')
-    ax1.plot([thubble_end[i],thubble_end[i]],[-12,-8], linestyle=':', color='r')
+    ax1.plot([thubble_start[i],thubble_start[i]],[np.log10(galaxy_m).min(),np.log10(galaxy_m).max()], linestyle=':', color='b')
+    ax1.plot([thubble_end[i],thubble_end[i]],[np.log10(galaxy_m).min(),np.log10(galaxy_m).max()], linestyle=':', color='r')
     xpos = thubble_start[i]-0.6
-    ax1.text(xpos, -9, r'$t_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox=props)
+    ax1.text(xpos, 10, r'$t_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox=props)
 for i in range(0, len(mergers_idx)):
     ax1.plot(mergers[i].galaxy_t[1], np.log10(galaxy_m[mergers_idx[i]]), marker='o', alpha=0.5, color='r', markersize=10)
 for i in range(0, len(rejuvenations_idx)):
@@ -137,7 +137,7 @@ for i in range(0, len(rejuvenations_idx)):
 ax1.set_xlim([galaxy_t.min(),12])
 #ax1.set_ylim([-11.5,-8])
 ax1.set_xlabel(r't (Gyr)', fontsize=16)
-ax1.set_ylabel(r'$\log M_*$ ($M_'+u'\u2609'+')', fontsize=16)
+ax1.set_ylabel(r'$\log M_*$ ($M_'+u'\u2609'+'$)', fontsize=16)
 ax1.legend(loc=1)
 fig.tight_layout()
 fig.savefig('merger_finder_test.png', dpi=250)
