@@ -42,7 +42,7 @@ def merger_condition(mass_list, index, merger_ratio, mass_limit):
     diff3 = abs((mass_list[index+1]-mass_list[index-1])/mass_list[index-1])
     diff4 = abs((mass_list[index+3]-mass_list[index])/mass_list[index])
     print(diff, diff2, diff-diff3, diff4)
-    if diff>=merger_ratio and diff2>=merger_ratio and diff-diff3 < 0.001 and diff4>=merger_ratio and mass_list[index]>=mass_limit:
+    if diff>=merger_ratio and diff2>=merger_ratio and abs(diff-diff3) < 0.001 and diff4>=merger_ratio and mass_list[index]>=mass_limit:
         condition = True
         print('hey')
     return (condition, diff)
@@ -79,7 +79,7 @@ def merger_finder(galaxies, merger_ratio, mass_limit, redshift_limit):
                 condition,ratio = merger_condition(mass, i, merger_ratio, mass_limit)
                 sfcondition = sfr_condition_2('end', gal, i)
                 ssfr = sfr[i]/mass[i]
-                if condition == True: #and ssfr>=(10**sfcondition) and fgas[i]>0:
+                if condition == True and ssfr>=(10**sfcondition) and fgas[i]>0:
                     boost = (fgas[i+1]-fgas[i-1])/fgas[i-1]
                     # Save data at the merger, after and before
                     merger = Merger(id,sfr[i-1:i+2],sfe[i-1:i+2],z[i-1:i+2],time[i-1:i+2],mass[i-1:i+2],fgas[i-1:i+2],type[i-1:i+2],pos[i-1:i+2],ratio, boost)
