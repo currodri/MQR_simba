@@ -250,9 +250,9 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
     ax[2].set_xlabel(r'$\log(1+z)$', fontsize=16)
     axR = ax[0].twiny()
     maxlz = 0.56
-    ax[0].set_xlim(0.06,maxlz)
-    axR.set_xlim(0.06,maxlz)
-    topticks1 = np.array([0,1,2,3,4])  # desired redshift labels
+    ax[0].set_xlim(0.0,maxlz)
+    axR.set_xlim(0.0,maxlz)
+    topticks1 = np.array([0,1,2])  # desired redshift labels
     topticks2 = np.log10(1+topticks1)  # tick locations in time
     axR.set_xticklabels(topticks1)
     axR.set_xticks(topticks2)
@@ -319,9 +319,9 @@ def Density_Rate(mergers,q_masses,q_reds,q_thubble,reju_z,reju_t,reju_m,n_bins,m
     ax[2].set_xlabel(r'$\log(1+z)$', fontsize=16)
     axR = ax[0].twiny()
     maxlz = 0.56
-    ax[0].set_xlim(0.06,maxlz)
-    axR.set_xlim(0.06,maxlz)
-    topticks1 = np.array([0,1,2,3,4])  # desired redshift labels
+    ax[0].set_xlim(0.0,maxlz)
+    axR.set_xlim(0.0,maxlz)
+    topticks1 = np.array([0,1,2])  # desired redshift labels
     topticks2 = np.log10(1+topticks1)  # tick locations in time
     axR.set_xticklabels(topticks1)
     axR.set_xticks(topticks2)

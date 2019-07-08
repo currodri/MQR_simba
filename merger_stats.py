@@ -229,9 +229,9 @@ def SFR_Evolution3(mergers, msq_galaxies, n_bins):
             ssfr_nm.append(msq_gal.ssfr_gal)
         ssfr_nm = np.asarray(ssfr_nm)
         ssfr_m_ave[i] = np.average(ssfr_m)
-        ssfr_m_error[i] = float(np.std(ssfr_m))/np.sqrt(len(ssfr_m))
+        ssfr_m_error[i] = float(np.std(ssfr_m))#/np.sqrt(len(ssfr_m))
         ssfr_nm_ave[i] = np.average(ssfr_nm)
-        ssfr_nm_error[i] = float(np.std(ssfr_nm))/np.sqrt(len(ssfr_nm))
+        ssfr_nm_error[i] = float(np.std(ssfr_nm))#/np.sqrt(len(ssfr_nm))
     return z_cent,ssfr_m_ave,ssfr_m_error,ssfr_nm_ave,ssfr_nm_error
 
 def Merger_Fraction(mergers, msq_galaxies, n_bins):
