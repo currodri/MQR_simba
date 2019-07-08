@@ -16,7 +16,6 @@ from scipy import stats
 from scipy.optimize import curve_fit
 import seaborn as sns
 sns.set(style="ticks")
-from import_progen import importApp
 from quenchingFinder import GalaxyData
 from mergerFinder import merger_finder, myrunningmedian, plotmedian, plotmedian2
 import sys
@@ -191,9 +190,9 @@ def SFR_Evolution3(mergers, msq_galaxies, n_bins):
         msq_idx = []
         for j in range(0, len(mergers)):
             merger = mergers[j]
-            if z_bins[i]<= merger.z_gal < z_bins[i+1]:
-                ssfr_m.append(merger.ssfr_gal)
-                mergers_m.append(np.log10(merger.m_gal))
+            if z_bins[i]<= merger.z_gal[1] < z_bins[i+1]:
+                ssfr_m.append(merger.ssfr_gal[1])
+                mergers_m.append(np.log10(merger.m_gal[1]))
         for k in range(0, len(msq_galaxies)):
             msq = msq_galaxies[k]
             if z_bins[i]<= msq.z_gal < z_bins[i+1]:
