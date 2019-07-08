@@ -41,7 +41,7 @@ def merger_condition(mass_list, index, merger_ratio, mass_limit):
     diff2 = abs((mass_list[index+2]-mass_list[index])/mass_list[index])
     diff3 = abs((mass_list[index+1]-mass_list[index-1])/mass_list[index-1])
     diff4 = abs((mass_list[index+3]-mass_list[index])/mass_list[index])
-    if diff>=merger_ratio and diff2>=merger_ratio and diff-diff3 < 0.001 and diff4>=merger_ratio and mass_list[index]>=mass_limit:
+    if diff>=merger_ratio and diff2>=merger_ratio and diff-diff3 < 0.0001 and diff4>=merger_ratio and mass_list[index]>=mass_limit:
         condition = True
     return (condition, diff)
 ###########################################################################################
