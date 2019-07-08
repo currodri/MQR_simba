@@ -39,6 +39,7 @@ def merger_condition(sfr, delta_t, mass_list, index, merger_ratio, mass_limit):
     condition = False
     predicted = mass_list[index] + sfr*delta_t
     actual = mass_list[index+1] - mass_list[index]
+    print(predicted, actual)
     diff = (mass_list[index+1]-mass_list[index])/mass_list[index]
     diff2 = abs((mass_list[index+2]-mass_list[index])/mass_list[index])
     diff3 = abs((mass_list[index+1]-mass_list[index-1])/mass_list[index-1])
