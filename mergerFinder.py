@@ -45,7 +45,7 @@ def merger_condition(sfr, delta_t, mass_list, index, merger_ratio, mass_limit):
     diff3 = abs((mass_list[index+1]-mass_list[index-1])/mass_list[index-1])
     diff4 = abs((mass_list[index+3]-mass_list[index])/mass_list[index])
     #print(diff, diff2, diff-diff3, diff4)
-    if diff>=merger_ratio and diff2>=merger_ratio and predicted <= 0.5*actual and diff-diff3 < 0.001 and diff4>=merger_ratio and mass_list[index]>=mass_limit:
+    if diff>=merger_ratio and diff2>=merger_ratio and predicted <= 0.25*actual and diff-diff3 < 0.001 and diff4>=merger_ratio and mass_list[index]>=mass_limit:
         condition = True
         #print('hey')
     return (condition, diff)
