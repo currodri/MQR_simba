@@ -237,7 +237,7 @@ def quench_merger_withreju():
                             if np.log10(galaxy.m_gal)>=mass_limit:
                                 possible_q.append(galaxy.galaxy_t[start])
                                 possible_r.append(reju_t[r])
-                                if galaxy.galaxy_t[start] > 8:
+                                if merg.galaxy_t[1] > 8:
                                     print(galaxy.id)
         diff_q = []
         diff_r = []

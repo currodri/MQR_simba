@@ -52,11 +52,6 @@ gal_pos = d['gal_pos'+str(ourgalaxy_n)][::-1]
 galaxy = GalaxyData(ourgalaxy_n, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type, gal_pos)
 galaxies.append(galaxy)
 
-above = []
-below = []
-for i in range(0, len(galaxy_t)):
-    above.append(np.log10(1/galaxy_t[i])-9)
-    below.append(np.log10(0.2/galaxy_t[i])-9)
 
 max_ngal = len(galaxies)
 mass_limit = 9.5
@@ -123,10 +118,7 @@ import seaborn as sns
 sns.set(style="white")
 fig = plt.figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
 ax1 = fig.add_subplot(1,1,1)
-ax1.plot(galaxy_t, np.log10(ssfr_gal), 'k-')
-ax1.plot(galaxy_t, above, 'b--', label=r'Star-forming threshold: sSFR $=1/t_{U}$')
-ax1.plot(galaxy_t, below, 'r--', label=r'Quench threshold: sSFR $=0.2/t_{U}$')
-ax1.plot(galaxies_interpolated[0].galaxy_t, np.log10(galaxies_interpolated[0].ssfr_gal), linestyle='--', color='grey', alpha=0.7)
+ax1.plot(galaxy_t, np.log10(galaxy_m), 'k-')
 mergers_idx = np.asarray([np.where(galaxy_t==merg.galaxy_t[1])[0][0] for merg in mergers])
 rejuvenations_idx = np.asarray([np.where(galaxy_t==rej)[0][0] for rej in reju_t])
 props = dict(boxstyle='round', facecolor='white', edgecolor='k', alpha=0.7)
@@ -136,16 +128,16 @@ for i in range(0, len(thubble_start)):
     xpos = thubble_start[i]-0.6
     ax1.text(xpos, -9, r'$t_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox=props)
 for i in range(0, len(mergers_idx)):
-    ax1.plot(mergers[i].galaxy_t[1], np.log10(ssfr_gal[mergers_idx[i]]), marker='o', alpha=0.5, color='r', markersize=10)
+    ax1.plot(mergers[i].galaxy_t[1], np.log10(galaxy_m[mergers_idx[i]]), marker='o', alpha=0.5, color='r', markersize=10)
 for i in range(0, len(rejuvenations_idx)):
-    ax1.plot(reju_t[i], np.log10(ssfr_gal[rejuvenations_idx[i]]), marker='o', alpha=0.5, color='g', markersize=10)
+    ax1.plot(reju_t[i], np.log10(galaxy_m[rejuvenations_idx[i]]), marker='o', alpha=0.5, color='g', markersize=10)
 # ax1.plot(7.668095312278215, np.log10(1.9816408261273213e-10), marker='o', alpha=0.5, color='g', markersize=10)
 # ax1.text(2.0, -12.8, r'$t_{q} = $'+'{:.3}'.format(quenching_times[0])+r' Gyr')
 # ax1.text(6.0, -12.8, r'$t_{q} = $'+'{:.3}'.format(quenching_times[1])+r' Gyr')
 ax1.set_xlim([galaxy_t.min(),12])
-ax1.set_ylim([-11.5,-8])
+#ax1.set_ylim([-11.5,-8])
 ax1.set_xlabel(r't (Gyr)', fontsize=16)
-ax1.set_ylabel(r'$\log$ sSFR ($M_'+u'\u2609'+r'$yr$^{-1}$)', fontsize=16)
+ax1.set_ylabel(r'$\log$ $M_* (M_$'+u'\u2609)', fontsize=16)
 ax1.legend(loc=1)
 fig.tight_layout()
-fig.savefig('quench_finder_test.png', dpi=250)
+fig.savefig('merger_finder_test.png', dpi=250)
