@@ -37,7 +37,7 @@ FUNCTION THAT DEFINES THE CONDITIONS FOLLOWED TO DETECT A MERGER
 """
 def merger_condition(sfr, delta_t, mass_list, index, merger_ratio, mass_limit):
     condition = False
-    predicted = mass_list[index] + sfr*delta_t
+    predicted = sfr*delta_t
     actual = mass_list[index+1] - mass_list[index]
     print(predicted, actual)
     diff = (mass_list[index+1]-mass_list[index])/mass_list[index]
@@ -80,7 +80,7 @@ def merger_finder(galaxies, merger_ratio, mass_limit, redshift_limit):
             if z[i]<=redshift_limit:
                 print(time[i])
                 delta_t = time[i+1]-time[i]
-                condition,ratio = merger_condition(sfr[i-1], delta_t, mass, i, merger_ratio, mass_limit)
+                condition,ratio = merger_condition(sfr[i], delta_t, mass, i, merger_ratio, mass_limit)
                 sfcondition = sfr_condition_2('end', gal, i)
                 ssfr = sfr[i]/mass[i]
                 if condition == True and ssfr>=(10**sfcondition) and fgas[i]>0:
