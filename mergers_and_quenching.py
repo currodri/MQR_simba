@@ -161,7 +161,7 @@ def mqr_relation():
                     if np.log10(galaxy.m_gal)>=mass_limit:
                         possible_q.append(galaxy.galaxy_t[start])
                         possible_q_time.append(quench.quench_time/galaxy.galaxy_t[end])
-                        if merg.galaxy_t[1]>8:
+                        if merg.galaxy_t[1]>8 and len(galaxy.quenching)>=2:
                             print(galaxy.id)
         diff = []
         for k in range(0, len(possible_q)):
