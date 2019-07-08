@@ -60,7 +60,7 @@ max_redshift_mergers = 2.5
 
 # Perform the search for mergers
 mergers, sf_galaxies = merger_finder(galaxies, min_merger_ratio, 10**mass_limit, max_redshift_mergers)
-
+print(mergers)
 print('Merger analysis done.')
 
 # Perform the quenching and rejuvenation analysis
