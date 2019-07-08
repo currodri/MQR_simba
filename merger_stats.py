@@ -306,8 +306,8 @@ def Merger_Contribution(mergers, msq_galaxies, n_bins):
         sfr_nm = 0
         for j in range(0, len(mergers)):
             merger = mergers[j]
-            if z_bins[i]<= merger.z_gal[1] < z_bins[i+1]:
-                sfr_m = sfr_m + merger.ssfr_gal[1]
+            if z_bins[i]<= merger.z_gal[2] < z_bins[i+1]:
+                sfr_m = sfr_m + merger.ssfr_gal[2]
                 m_counter = m_counter + 1
         for k in range(0, len(msq_galaxies)):
             msq = msq_galaxies[k]
