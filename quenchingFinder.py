@@ -287,7 +287,7 @@ def reju_condition(galaxy, j):
     diff = (mass_list[j+1]-mass_list[j])/mass_list[j]
     diff2 = abs((mass_list[j+2]-mass_list[j])/mass_list[j])
     diff3 = abs((mass_list[j+1]-mass_list[j-1])/mass_list[j-1])
-    if abs(diff-diff2) < 0.001 and abs(diff-diff3) < 0.001:
+    if abs(diff-diff2) < 0.1 and abs(diff-diff3) < 0.1:
         condition = True
     return condition
 
