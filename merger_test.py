@@ -126,9 +126,10 @@ for i in range(0, len(thubble_start)):
     ax1.plot([thubble_start[i],thubble_start[i]],[np.log10(galaxy_m).min(),np.log10(galaxy_m).max()], linestyle=':', color='b')
     ax1.plot([thubble_end[i],thubble_end[i]],[np.log10(galaxy_m).min(),np.log10(galaxy_m).max()], linestyle=':', color='r')
     xpos = thubble_start[i]-0.6
-    ax1.text(xpos, 10, r'$t_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox=props)
+    ax1.text(xpos, 10.5, r'$t_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox=props)
 for i in range(0, len(mergers_idx)):
-    ax1.plot(mergers[i].galaxy_t[1], np.log10(galaxy_m[mergers_idx[i]]), marker='o', alpha=0.5, color='r', markersize=10)
+    print(mergers[i].galaxy_t[2],np.log10(mergers[i].m_gal[2])
+    ax1.plot(mergers[i].galaxy_t[2], np.log10(mergers[i].m_gal[2]), marker='o', alpha=0.5, color='r', markersize=10)
 for i in range(0, len(rejuvenations_idx)):
     ax1.plot(reju_t[i], np.log10(galaxy_m[rejuvenations_idx[i]]), marker='o', alpha=0.5, color='g', markersize=10)
 # ax1.plot(7.668095312278215, np.log10(1.9816408261273213e-10), marker='o', alpha=0.5, color='g', markersize=10)
