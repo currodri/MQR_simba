@@ -219,7 +219,7 @@ def mqr_relation():
     ax.legend(loc='best', fontsize=16)
     fig.tight_layout()
     fig.savefig(str(results_folder)+'mergertime_and_quench_reju.png',format='png', dpi=250)
-def quench_merger_withreju():
+def quench_merger_scatter():
     print('Start finding for connection between mergers, quenching and rejuvenations')
     quench_t = []
     merger_t = []
@@ -325,7 +325,7 @@ def merger_reju_scatter():
             rejuvenation_t.append(possible_r[np.argmin(diff)])
             merger_t.append(merg.galaxy_t[2])
             b = merg.ssfr_gal[2]/merg.ssfr_gal[1]
-            merger_boost.append(merg.)
+            merger_boost.append(b)
     merger_t = np.asarray(merger_t)
     rejuvenation_t = np.asarray(rejuvenation_t)
     merger_boost = np.asarray(merger_boost)
@@ -348,4 +348,4 @@ def merger_reju_scatter():
 #merger_reju_relation()
 merger_reju_scatter()
 mqr_relation()
-quench_merger_withreju()
+quench_merger_scatter()
