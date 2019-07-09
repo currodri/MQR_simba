@@ -134,8 +134,8 @@ def merger_vs_msqPlots(mergers, sf_galaxies):
                     elif i==2:
                         b.append(np.log10(sf_galaxies[n].sfe_gal))
             x,y,ysig = myrunningmedian(np.asarray(a),np.asarray(b),20)
-            axes[m].plot(x, y, color = colours[2], label=merger_labels[2])
-            axes[m].fill_between(x, y-ysig, y+ysig, facecolor=colours[2], alpha=0.25)
+            axes[m].plot(x, y, color = colours[1], label=merger_labels[1])
+            axes[m].fill_between(x, y-ysig, y+ysig, facecolor=colours[1], alpha=0.25)
             axes[m].text(0.05, 0.05, titles[m], transform=axes[m].transAxes, fontsize=14,
                             verticalalignment='bottom', bbox=props)
             axes[m].margins(.2)
