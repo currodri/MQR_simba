@@ -19,7 +19,7 @@ import seaborn as sns
 sns.set(style="white")
 from import_progen import importApp
 from quenchingFinder import GalaxyData
-from mergerFinder import merger_finder, myrunningmedian, plotmedian, plotmedian2
+from mergerFinder import merger_finder, myrunningmedian, plotmedian, plotmedian2, histedges_equalN
 import sys
 simfolder = '../progen_analysis/m100n1024'#input('SIMBA simulation progen folder: ')
 sys.path.insert(0, str(simfolder))
@@ -500,7 +500,8 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
     fig2, axes = plt.subplots(3, 1, sharex=True, num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
     fig2.subplots_adjust(hspace=0)
     axes[2].set_xlabel(r'$\log(M_{*})$', fontsize=16)
-    bins = np.linspace(9.5, 12.0, nbins)
+    mergers_m = np.asarray([np.log10(merg.m_gal[2]) for merg in mergers])
+    bins = histedges_equalN(mergers_m, nbins)
     delta = bins[1] - bins[0]
     #bin_cent = bins - delta/2
     #bin_cent = np.delete(bin_cent, 0)
