@@ -120,7 +120,7 @@ def merger_vs_msqPlots(mergers, sf_galaxies):
                                                             color=colours[0])
             x,y,ysig = myrunningmedian(np.asarray(a),np.asarray(b),10)
             axes[m].scatter(np.asarray(a),np.asarray(b), color=colours[0], label=merger_labels[0],
-                                marker='.', s=10.0, alpha=0.7)
+                                marker='.', s=30.0, alpha=0.7)
             axes[m].plot(x, y, color = colour_lines[0], linewidth=2.5)
             a = []
             b = []
