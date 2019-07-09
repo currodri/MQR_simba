@@ -189,7 +189,7 @@ def plotmedian2(x,y,yflag=[],c='k',ltype='--',lw=3,stat='median',ax='plt',bins=8
 	    if bins < 0: bin_oct[:,i0], bin_edges, binnumber = stats.binned_statistic(xq,yq,bins=bin_edges,statistic=stat)
 	    else: bin_oct[:,i0], bin_edges, binnumber = stats.binned_statistic(xq,yq,bins=bin_edges,statistic=stat)
         bin_oct  = np.ma.masked_invalid(bin_oct)
-        if stat=='median' or stat='count':
+        if stat=='median' or stat=='count':
             var  = np.ma.std(bin_oct, axis=1)
         elif stat=='mean':
             lens = np.zeros(len(bin_oct))
