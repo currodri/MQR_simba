@@ -17,7 +17,7 @@ from scipy.optimize import curve_fit
 import seaborn as sns
 sns.set(style="ticks")
 from quenchingFinder import GalaxyData
-from mergerFinder import merger_finder, myrunningmedian, plotmedian, plotmedian2
+from mergerFinder import merger_finder, myrunningmedian, plotmedian, plotmedian2, histedges_equalN
 import sys
 import pickle
 simfolder = '../progen_analysis/m100n1024'#input('SIMBA simulation progen folder: ')
@@ -263,30 +263,43 @@ def Merger_Fraction(mergers, msq_galaxies, n_bins):
     plt.savefig(str(results_folder)+'mfr_evolution.png', dpi=250)
 def Merger_Fraction_Mass_Distribution(mergers, msq_galaxies, n_bins):
     zlimits = [[0.0, 0.5], [1.0, 1.5], [2.0, 2.5]]
+    colours = ['b','r','m']
     titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
     markers = ['o','v', 's']
-    mass_bins = np.linspace(9.5, 12, n_bins)
+    mergers_m = np.asarray([np.log10(merg.m_gal[2]) for merg in mergers])
+    mass_bins = histedges_equalN(mergers_m, n_bins)#np.linspace(9.5, 12, n_bins)
     delta = mass_bins[1]-mass_bins[0]
     mass_cent = mass_bins - delta/2
     mass_cent = np.delete(mass_cent, 0)
     fig = plt.figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
     ax = fig.add_subplot(1,1,1)
     for zs in range(0, len(zlimits)):
-        f_merger = np.zeros(n_bins-1)
-        for i in range(0, n_bins-1):
-            m_counter = 0
-            nm_counter = 0
-            for j in range(0, len(mergers)):
-                merger = mergers[j]
-                if zlimits[zs][0] <= merger.z_gal[1] < zlimits[zs][1] and mass_bins[i] <= np.log10(merger.m_gal[1]) < mass_bins[i+1]:
-                    m_counter = m_counter + 1
-            for k in range(0, len(msq_galaxies)):
-                msq = msq_galaxies[k]
-                if zlimits[zs][0] <= msq.z_gal < zlimits[zs][1] and mass_bins[i] <= np.log10(msq.m_gal) < mass_bins[i+1]:
-                    nm_counter = nm_counter + 1
-            if m_counter != 0 or nm_counter != 0:
-                f_merger[i] = float(m_counter)/(float(m_counter)+float(nm_counter))
-        ax.plot(mass_cent, f_merger, label=titles[zs], linestyle='--', marker=markers[zs])
+        merg_m = []
+        merg_pos = []
+        msq_m = []
+        msq_pos = []
+        for j in range(0, len(mergers)):
+            merger = mergers[j]
+            if zlimits[zs][0] <= merger.z_gal[2] < zlimits[zs][1]:
+                merg_m.append(np.log10(merger.m_gal[2]))
+                merg_pos.append(merger.gal_pos[2])
+        for k in range(0, len(msq_galaxies)):
+            msq = msq_galaxies[k]
+            if zlimits[zs][0] <= msq.z_gal < zlimits[zs][1]:
+                msq_m.append(np.log10(msq.m_gal))
+                msq_pos.append(msq.gal_pos)
+        merg_m = np.asarray(merg_m)
+        merg_pos = np.asarray(merg_pos)
+        merg_y = np.zeros(len(merg_m))
+        msq_m = np.asarray(msq_m)
+        msq_pos = np.asarray(msq_pos)
+        msq_y = np.zeros(len(msq_m))
+        cent_m, c_m_ave, c_m_error = plotmedian2(merg_m,merg_y,pos=merg_pos,boxsize=d['boxsize_in_kpccm'], edges=mass_bins)
+        cent_msq, c_msq_ave, c_msq_error = plotmedian2(msq_m,msq_y,pos=msq_pos,boxsize=d['boxsize_in_kpccm'], edges=mass_bins)
+        f_merger = float(c_m_ave)/float(c_msq_ave)
+        f_error = f_merger*np.sqrt((c_m_error/c_m_ave)**2+(c_msq_error/c_msq_ave)**2)
+        ax.plot(mass_cent, f_merger, label=titles[zs], linestyle='-', color=colours[zs])
+        ax.fill_between(cent_msq, f_merger-f_error, f_merger+f_error, facecolor=colours[zs], alpha=0.25)
     ax.set_xlabel(r'$\log(M_{*})$', fontsize=16)
     ax.legend(loc='best')
     ax.set_ylabel('Merger fraction of star-forming galaxies')
