@@ -43,7 +43,7 @@ for i in range(ngal):
     galaxy = GalaxyData(i, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type,gal_pos)
     galaxies.append(galaxy)
 
-mergers, sf_galaxies = merger_finder(galaxies, 0.2, 10**9.5, 3.5)
+mergers, sf_galaxies = merger_finder(galaxies, 0.2, 10**9.5, 2.5)
 
 def SF_Budget(mergers, msq_galaxies, n_bins):
     z_bins = np.linspace(0.0, 3.5, n_bins)
