@@ -79,11 +79,11 @@ def merger_vs_msqPlots(mergers, sf_galaxies):
                             axes[m].arrow(a[-1],b[-1],0,-0.2, head_width=0.018,
                                                             width=0.005, head_length=0.1,
                                                             color=colours[0])
-                        elif m==2 and b[s][-1]<-10:
-                            b[s][-1] = -10 + 0.01*random.randint(0,10)
-                            axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
+                        elif m==2 and b[-1]<-10:
+                            b[-1] = -10 + 0.01*random.randint(0,10)
+                            axes[m].arrow(a[-1],b[-1],0,-0.2, head_width=0.018,
                                                             width=0.005, head_length=0.1,
-                                                            color=colours[s])
+                                                            color=colours[0])
                     elif i==1:
                         b.append(np.log10(mergers[j].fgas_gal[2]))
                         if m==0 and b[-1]<-2:
