@@ -173,13 +173,13 @@ def mqr_relation():
                 merger_ratios.append(merg.merger_ratio)
                 time_diff.append(possible_q[np.argmin(diff)]-merg.galaxy_t[1])
                 quenching_times.append(possible_q_time[np.argmin(diff)])
-    time_diff = np.log10(np.asarray(time_diff))
+    time_diff = np.asarray(time_diff)
     median = np.median(time_diff)
     merger_ratios = np.asarray(merger_ratios)
     quenching_times = np.asarray(quenching_times)
     fig = plt.figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
     ax = fig.add_subplot(1,1,1)
-    ax.set_xlabel(r'$\log(T - T_m)$(Gyr)', fontsize=16)
+    ax.set_xlabel(r'$T - T_m$(Gyr)', fontsize=16)
     ax.set_ylabel(r'$N/N_{SF}(Total)$', fontsize=16)
     hist, bin_edges = np.histogram(time_diff, bins=12)
     bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
@@ -215,7 +215,7 @@ def mqr_relation():
     bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
     hist = hist/np.sum(d['sf_galaxies_per_snap'])
     ax.plot([median, median],[0, hist.max()], 'r--')
-    ax.plot(np.log10(bin_cent), hist, 'r', label='Rejuvenations')
+    ax.plot(bin_cent, hist, 'r', label='Rejuvenations')
     ax.legend(loc='best', fontsize=16)
     fig.tight_layout()
     fig.savefig(str(results_folder)+'mergertime_and_quench_reju.png',format='png', dpi=250)
@@ -223,49 +223,41 @@ def quench_merger_withreju():
     print('Start finding for connection between mergers, quenching and rejuvenations')
     quench_t = []
     merger_t = []
-    rejuvenation_t = []
+    quench_scale = []
     for i in range(0, len(mergers)):
         merg = mergers[i]
         possible_q = []
-        possible_r = []
+        possible_q_t = []
         for j in range(0, len(galaxies_interpolated)):
             galaxy = galaxies_interpolated[j]
             if galaxy.id == merg.id:
-                for r in range(0, len(reju_t)):
-                    if reju_id[r]==merg.id:
-                        for quench in galaxy.quenching:
-                            start = quench.above9 #+ 1
-                            end = quench.below11
-                            if np.log10(galaxy.m_gal)>=mass_limit:
-                                possible_q.append(galaxy.galaxy_t[start])
-                                possible_r.append(reju_t[r])
-                                # if merg.galaxy_t[1] > 8:
-                                #     print(galaxy.id)
+                for quench in galaxy.quenching:
+                    start = quench.above9 #+ 1
+                    end = quench.below11
+                    if np.log10(galaxy.m_gal)>=mass_limit:
+                        possible_q.append(galaxy.galaxy_t[start])
+                        possible_q_t.append(np.log10(quench.quench_time/galaxy.galaxy_t[end]))
         diff_q = []
-        diff_r = []
         for k in range(0, len(possible_q)):
             diff_q.append(possible_q[k] - merg.galaxy_t[1])
-        for k in range(0, len(possible_r)):
-            diff_r.append(possible_r[k] - merg.galaxy_t[1])
         diff_q = np.asarray(diff_q)
-        diff_r = np.asarray(diff_r)
         if len(possible_q)>0:
-            if diff_q[np.argmin(diff_q)]>=0 and diff_r[np.argmin(diff_r)]>=0 and merg.merger_ratio<=0.6:
+            if diff_q[np.argmin(diff_q)]>=0 and merg.merger_ratio<=0.6:
                 quench_t.append(possible_q[np.argmin(diff_q)])
-                rejuvenation_t.append(possible_r[np.argmin(diff_r)])
+                quench_scale.append(possible_q_t[np.argmin(diff_q)])
                 merger_t.append(merg.galaxy_t[1])
     quench_t = np.asarray(quench_t)
-    rejuvenation_t = np.asarray(rejuvenation_t)
+    quench_scale = np.asarray(quench_scale)
     merger_t = np.asarray(merger_t)
     fig = plt.figure(num=None, figsize=(8, 8), dpi=80, facecolor='w', edgecolor='k')
     ax = fig.add_subplot(1,1,1)
-    sc = ax.scatter(quench_t, merger_t, c = (rejuvenation_t-merger_t), cmap='winter', s=10)
+    sc = ax.scatter(quench_t, merger_t, c = quench_scale, cmap='winter', s=10)
     ax.plot([1.9, 14], [1.9, 14], 'k--')
     ax.set_xlim([quench_t.min()*0.9, quench_t.max()*1.1])
     ax.set_ylim([merger_t.min()*0.9, merger_t.max()*1.1])
     ax.set_xlabel(r'$T_q $(Gyr)', fontsize=16)
     ax.set_ylabel(r'$T_m $(Gyr)', fontsize=16)
-    fig.colorbar(sc, ax=ax, label=r'$T_r - T_m$', orientation='horizontal')
+    fig.colorbar(sc, ax=ax, label=r'$\log(T_q/t_H)$', orientation='horizontal')
     fig.tight_layout()
     fig.savefig(str(results_folder)+'merger_quench_scatter.png',format='png', dpi=250)
 
@@ -296,7 +288,7 @@ def merger_reju_relation():
                 possible_r.append(reju_t[j])
         diff = []
         for k in range(0, len(possible_r)):
-            diff.append(possible_r[k] - merg.galaxy_t[1])
+            diff.append(possible_r[k] - merg.galaxy_t[2])
         diff = np.asarray(diff)
         if len(possible_r)>0:
             if diff[np.argmin(diff)]>=0:
@@ -327,15 +319,13 @@ def merger_reju_scatter():
                 possible_r.append(reju_t[j])
         diff = []
         for k in range(0, len(possible_r)):
-            diff.append(possible_r[k] - merg.galaxy_t[1])
+            diff.append(possible_r[k] - merg.galaxy_t[2])
         diff = np.asarray(diff)
         if len(possible_r)>0:
             rejuvenation_t.append(possible_r[np.argmin(diff)])
-            merger_t.append(merg.galaxy_t[1])
-            if merg.fgas_boost<0:
-                merger_boost.append(0.001)
-            else:
-                merger_boost.append(merg.fgas_boost)
+            merger_t.append(merg.galaxy_t[2])
+            b = merg.ssfr_gal[2]/merg.ssfr_gal[1]
+            merger_boost.append(merg.)
     merger_t = np.asarray(merger_t)
     rejuvenation_t = np.asarray(rejuvenation_t)
     merger_boost = np.asarray(merger_boost)
@@ -350,7 +340,7 @@ def merger_reju_scatter():
     ax.set_ylim([merger_t.min(), merger_t.max()])
     ax.set_xlabel(r'$T_r $(Gyr)', fontsize=16)
     ax.set_ylabel(r'$T_m $(Gyr)', fontsize=16)
-    fig.colorbar(sc, ax=ax, label=r'$\log(\Delta f_{H_2})$', orientation='horizontal')
+    fig.colorbar(sc, ax=ax, label=r'$\log(\Delta sSFR)$', orientation='horizontal')
     fig.tight_layout()
     fig.savefig(str(results_folder)+'mergertime_and_rejuvenation_scatter.png',format='png', dpi=250)
 #time_diff, q_times, m_ratios = mergerquench_relation()
