@@ -48,6 +48,7 @@ print('Data extracted from PROGEN files.')
 print('Performing search of mergers...')
 mergers, sf_galaxies = merger_finder(galaxies, 0.2, 10**9.5, 2.5)
 print('Search of mergers finished!!')
+print('Number of mergers found: '+str(len(mergers)))
 
 def merger_vs_msqPlots(mergers, sf_galaxies):
     ylabels = [r'$\log(sSFR)$',r'$\log(f_{H_2})$',r'$\log(SFE)$']
@@ -122,6 +123,8 @@ def merger_vs_msqPlots(mergers, sf_galaxies):
             axes[m].scatter(np.asarray(a),np.asarray(b), color=colours[0], label=merger_labels[0],
                                 marker='.', s=30.0, alpha=0.7)
             axes[m].plot(x, y, color = colour_lines[0], linewidth=2.5)
+            if i==0:
+                print('Number of mergers in redshift range '+str(titles[m])+' : '+str(len(a)))
             a = []
             b = []
             for n in range(0, len(sf_galaxies)):
