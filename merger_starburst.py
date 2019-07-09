@@ -49,6 +49,105 @@ print('Performing search of mergers...')
 mergers, sf_galaxies = merger_finder(galaxies, 0.2, 10**9.5, 2.5)
 print('Search of mergers finished!!')
 
+def merger_vs_msqPlots(mergers, sf_galaxies):
+    ylabels = [r'$\log(sSFR)$',r'$\log(f_{H_2})$',r'$\log(SFE)$']
+    names = ['burst_ssfr','gas_frac','sfe_gal']
+    merger_labels = ['Merger','MSQ non merger']
+    titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
+    zlimits = [[0.0, 0.5], [1.0, 1.5], [2.0, 2.5]]
+    colours = ['b','k']
+    colour_lines = ['r']
+    props = dict(boxstyle='round', facecolor='white', alpha=0.5, edgecolor='k')
+    for i in range(0, len(ylabels)):
+        fig, axes = plt.subplots(len(titles), 1, sharex='col', num=None, figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
+        for m in range(0, len(titles)):
+            axes[m].set_ylabel(ylabels[i], fontsize=16)
+            a = []
+            b = []
+            for j in range(0, len(mergers)):
+                if zlimits[m][0] <= mergers[j].z_gal[1] < zlimits[m][1]:
+                    a.append(np.log10(mergers[j].m_gal[2]))
+                    if i==0:
+                        b.append(np.log10(mergers[j].ssfr_gal[2]))
+                        if m==0 and b[-1]<-11:
+                            b[-1] = -11 + 0.01*random.randint(0,10)
+                            axes[m].arrow(a[-1],b[-1],0,-0.2, head_width=0.018,
+                                                            width=0.005, head_length=0.1,
+                                                            color=colours[0])
+                        elif m==1 and b[-1]<-10.2:
+                            b[-1] = -10.2 + 0.01*random.randint(0,10)
+                            axes[m].arrow(a[-1],b[-1],0,-0.2, head_width=0.018,
+                                                            width=0.005, head_length=0.1,
+                                                            color=colours[0])
+                        elif m==2 and b[s][-1]<-10:
+                            b[s][-1] = -10 + 0.01*random.randint(0,10)
+                            axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
+                                                            width=0.005, head_length=0.1,
+                                                            color=colours[s])
+                    elif i==1:
+                        b.append(np.log10(mergers[j].fgas_gal[2]))
+                        if m==0 and b[-1]<-2:
+                            b[-1] = -2 + 0.01*random.randint(0,10)
+                            axes[m].arrow(a[-1],b[-1],0,-0.2, head_width=0.018,
+                                                            width=0.005, head_length=0.1,
+                                                            color=colours[0])
+                        elif m==1 and b[-1]<-1.7:
+                            b[-1] = -1.7 + 0.01*random.randint(0,10)
+                            axes[m].arrow(a[-1],b[-1],0,-0.2, head_width=0.018,
+                                                            width=0.005, head_length=0.1,
+                                                            color=colours[0])
+                        elif m==2 and b[-1]<-1.5:
+                            b[-1] = -1.5 + 0.01*random.randint(0,10)
+                            axes[m].arrow(a[-1],b[-1],0,-0.2, head_width=0.018,
+                                                            width=0.005, head_length=0.1,
+                                                            color=colours[0])
+                    elif i==2:
+                        b.append(np.log10(mergers[j].sfe_gal[2]))
+                        if m==0 and b[-1]<-11:
+                            b[-1] = -11 + 0.01*random.randint(0,10)
+                            axes[m].arrow(a[-1],b[-1],0,-0.2, head_width=0.018,
+                                                            width=0.005, head_length=0.1,
+                                                            color=colours[0])
+                        elif m==1 and b[-1]<-10.5:
+                            b[-1] = -10.5 + 0.01*random.randint(0,10)
+                            axes[m].arrow(a[-1],b[-1],0,-0.2, head_width=0.018,
+                                                            width=0.005, head_length=0.1,
+                                                            color=colours[0])
+                        elif m==2 and b[-1]<-10.2:
+                            b[-1] = -10.2 + 0.01*random.randint(0,10)
+                            axes[m].arrow(a[-1],b[-1],0,-0.2, head_width=0.018,
+                                                            width=0.005, head_length=0.1,
+                                                            color=colours[0])
+            x,y,ysig = myrunningmedian(np.asarray(a),np.asarray(b),10)
+            axes[m].scatter(np.asarray(a),np.asarray(b), color=colours[0], label=merger_labels[0],
+                                marker='.', s=10.0, alpha=0.7)
+            axes[m].plot(x, y, color = colour_lines[0], linewidth=2.5)
+            a = []
+            b = []
+            for n in range(0, len(sf_galaxies)):
+                if zlimits[m][0] <= sf_galaxies[n].z_gal < zlimits[m][1]:
+                    a.append(np.log10(sf_galaxies[n].m_gal))
+                    if i==0:
+                        b.append(np.log10(sf_galaxies[n].ssfr_gal))
+                    elif i==1:
+                        b.append(np.log10(sf_galaxies[n].fgas_gal))
+                    elif i==2:
+                        b.append(np.log10(sf_galaxies[n].sfe_gal))
+            x,y,ysig = myrunningmedian(np.asarray(a),np.asarray(b),20)
+            axes[m].plot(x, y, color = colours[2], label=merger_labels[2])
+            axes[m].fill_between(x, y-ysig, y+ysig, facecolor=colours[2], alpha=0.25)
+            axes[m].text(0.05, 0.05, titles[m], transform=axes[m].transAxes, fontsize=14,
+                            verticalalignment='bottom', bbox=props)
+            axes[m].margins(.2)
+            axes[m].set_xlim([9.3,11.9])
+
+        axes[len(titles)-1].set_xlabel(r'$\log(M_{*})$', fontsize=16)
+
+        axes[0].legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+               ncol=3, mode="expand", borderaxespad=0., prop={'size': 13})
+        fig.tight_layout()
+        fig.savefig(str(results_folder)+'merger_'+str(names[i])+'.png', format='png', dpi=200)
+
 def after_before_vs_msqPlots(mergers, sf_galaxies):
     ylabels = [r'$\log(sSFR)$',r'$\log(f_{H_2})$',r'$\log(SFE)$']
     names = ['burst_ssfr','gas_frac','sfe_gal']
@@ -466,7 +565,7 @@ print('---------------------------------')
 print(' ')
 print('The following functions are available:')
 print(' ')
-print('- Comparison plots showing the after and before of mergers with respect to MSQ. (Press 1)')
+print('- Comparison plots showing the mergers with respect to MSQ. (Press 1)')
 print(' ')
 print('- 2-sample Kolmogorov-Smirnov test comparing the difference of the after and before merger values with the MSQ. (Press 2)')
 print(' ')
@@ -476,7 +575,7 @@ print('- Deviation plot of running median with respect to MSQ. (Press 4)')
 print(' ')
 u_selec = input('Write the number of the function you would like to use: ')
 if u_selec==1:
-    after_before_vs_msqPlots(mergers, sf_galaxies)
+    merger_vs_msqPlots(mergers, sf_galaxies)
 elif u_selec==2:
     statsMergers(mergers, sf_galaxies, 5)
 elif u_selec==3:
