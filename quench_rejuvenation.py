@@ -16,7 +16,6 @@ import seaborn as sns
 sns.set(style="white")
 
 # Import other codes
-from import_progen import importApp
 from mergerFinder import myrunningmedian, merger_finder
 from quenchingFinder import GalaxyData, quenchingFinder2, rejuvenation_rate_calculator, quenching_histogram
 import sys
