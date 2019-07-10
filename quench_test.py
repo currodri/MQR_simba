@@ -159,8 +159,6 @@ for i in range(0, len(mergers_idx)):
     axes[1].plot(mergers[i].galaxy_t[2], np.log10(mergers[i].m_gal[2]), marker='o', alpha=0.5, color='r', markersize=10)
 for i in range(0, len(rejuvenations_idx)):
     axes[1].plot(reju_t[i], np.log10(galaxy_m[rejuvenations_idx[i]]), marker='o', alpha=0.5, color='g', markersize=10)
-axes[1].set_xlim([galaxy_t.min(),galaxy_t.max()])
-#ax1.set_ylim([-11.5,-8])
 axes[1].set_xlabel(r't (Gyr)', fontsize=16)
 axes[1].set_ylabel(r'$\log M_*$ ($M_'+u'\u2609'+'$)', fontsize=16)
 
@@ -175,4 +173,5 @@ axZ.set_xticks(topticks2)
 axZ.xaxis.set_ticks_position('top') # set the position of the second x-axis to top
 axZ.xaxis.set_label_position('top') # set the position of the second x-axis to top
 axZ.set_xlabel('z', fontsize=16)
+fig.subplots_adjust(hspace=0)
 fig.savefig('quench_finder_test.png', dpi=250)
