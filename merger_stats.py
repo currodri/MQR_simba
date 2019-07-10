@@ -267,7 +267,7 @@ def Merger_Fraction_Mass_Distribution(mergers, msq_galaxies, n_bins):
     titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
     markers = ['o','v', 's']
     mergers_m = np.asarray([np.log10(merg.m_gal[2]) for merg in mergers])
-    mass_bins = histedges_equalN(mergers_m, n_bins)#np.linspace(9.5, 12, n_bins)
+    mass_bins = np.linspace(9.5, 12, n_bins)#histedges_equalN(mergers_m, n_bins)#np.linspace(9.5, 12, n_bins)
     delta = mass_bins[1]-mass_bins[0]
     mass_cent = mass_bins - delta/2
     mass_cent = np.delete(mass_cent, 0)
