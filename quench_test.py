@@ -168,7 +168,7 @@ axes[1].set_ylabel(r'$\log M_*$ ($M_'+u'\u2609'+'$)', fontsize=16)
 cosmo = FlatLambdaCDM(H0=100*0.68, Om0=0.3, Ob0=0.04799952624117699,Tcmb0=2.73)  # set our cosmological parameters
 axZ = axes[0].twiny()
 axZ.set_xlim([galaxy_t.min(),galaxy_t.max()])
-topticks1 = np.array([2,1,0])  # desired redshift labels
+topticks1 = np.array([2,1,0.5,0.25,0])  # desired redshift labels
 topticks2 = cosmo.age(topticks1).value  # tick locations in time
 axZ.set_xticklabels(topticks1)
 axZ.set_xticks(topticks2)
