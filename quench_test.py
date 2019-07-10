@@ -11,6 +11,7 @@ import numpy as np
 import matplotlib
 import pickle
 from scipy import stats
+from astropy.cosmology import FlatLambdaCDM
 matplotlib.use('Agg') # Must be before importing matplotlib.pyplot or pylab!
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -121,31 +122,57 @@ print('Number of quenching events in second loop: '
 # Plot the results
 import seaborn as sns
 sns.set(style="white")
-fig = plt.figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
-ax1 = fig.add_subplot(1,1,1)
-ax1.plot(galaxy_t, np.log10(ssfr_gal), 'k-')
-ax1.plot(galaxy_t, above, 'b--', label=r'Star-forming threshold: sSFR $=1/t_{U}$')
-ax1.plot(galaxy_t, below, 'r--', label=r'Quench threshold: sSFR $=0.2/t_{U}$')
-ax1.plot(galaxies_interpolated[0].galaxy_t, np.log10(galaxies_interpolated[0].ssfr_gal), linestyle='--', color='grey', alpha=0.7)
+fig, axes = plt.subplots(2, 1, sharex='col', figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
+axes[0].plot(galaxy_t, np.log10(ssfr_gal), 'k-')
+axes[0].plot(galaxy_t, above, 'b--', label=r'Star-forming threshold: sSFR $=1/t_{U}$')
+axes[0].plot(galaxy_t, below, 'r--', label=r'Quench threshold: sSFR $=0.2/t_{U}$')
+axes[0].plot(galaxies_interpolated[0].galaxy_t, np.log10(galaxies_interpolated[0].ssfr_gal), linestyle='--', color='grey', alpha=0.7)
 mergers_idx = np.asarray([np.where(galaxy_t==merg.galaxy_t[1])[0][0] for merg in mergers])
 rejuvenations_idx = np.asarray([np.where(galaxy_t==rej)[0][0] for rej in reju_t])
 props = dict(boxstyle='round', facecolor='white', edgecolor='k', alpha=0.7)
 for i in range(0, len(thubble_start)):
-    ax1.plot([thubble_start[i],thubble_start[i]],[-12,-8], linestyle=':', color='b')
-    ax1.plot([thubble_end[i],thubble_end[i]],[-12,-8], linestyle=':', color='r')
+    axes[0].plot([thubble_start[i],thubble_start[i]],[-12,-8], linestyle=':', color='b')
+    axes[0].plot([thubble_end[i],thubble_end[i]],[-12,-8], linestyle=':', color='r')
     xpos = thubble_start[i]-0.6
-    ax1.text(xpos, -9, r'$t_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox=props)
+    axes[0].text(xpos, -9, r'$t_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox=props)
 for i in range(0, len(mergers_idx)):
-    ax1.plot(mergers[i].galaxy_t[1], np.log10(ssfr_gal[mergers_idx[i]]), marker='o', alpha=0.5, color='r', markersize=10)
+    axes[0].plot(mergers[i].galaxy_t[1], np.log10(ssfr_gal[mergers_idx[i]]), marker='o', alpha=0.5, color='r', markersize=10)
 for i in range(0, len(rejuvenations_idx)):
-    ax1.plot(reju_t[i], np.log10(ssfr_gal[rejuvenations_idx[i]]), marker='o', alpha=0.5, color='g', markersize=10)
-# ax1.plot(7.668095312278215, np.log10(1.9816408261273213e-10), marker='o', alpha=0.5, color='g', markersize=10)
-# ax1.text(2.0, -12.8, r'$t_{q} = $'+'{:.3}'.format(quenching_times[0])+r' Gyr')
-# ax1.text(6.0, -12.8, r'$t_{q} = $'+'{:.3}'.format(quenching_times[1])+r' Gyr')
-ax1.set_xlim([galaxy_t.min(),12])
-ax1.set_ylim([-11.5,-8])
-ax1.set_xlabel(r't (Gyr)', fontsize=16)
-ax1.set_ylabel(r'$\log$ sSFR ($M_'+u'\u2609'+r'$yr$^{-1}$)', fontsize=16)
-ax1.legend(loc=1)
-fig.tight_layout()
+    axes[0].plot(reju_t[i], np.log10(ssfr_gal[rejuvenations_idx[i]]), marker='o', alpha=0.5, color='g', markersize=10)
+axes[0].set_xlim([galaxy_t.min(),galaxy_t.max()])
+axes[0].set_ylim([-11.5,-8])
+axes[0].set_ylabel(r'$\log$ sSFR ($M_'+u'\u2609'+r'$yr$^{-1}$)', fontsize=16)
+axes[0].legend(loc=1)
+
+
+axes[1].plot(galaxy_t, np.log10(galaxy_m), 'k-')
+mergers_idx = np.asarray([np.where(galaxy_t==merg.galaxy_t[1])[0][0] for merg in mergers])
+rejuvenations_idx = np.asarray([np.where(galaxy_t==rej)[0][0] for rej in reju_t])
+props = dict(boxstyle='round', facecolor='white', edgecolor='k', alpha=0.7)
+for i in range(0, len(thubble_start)):
+    axes[1].plot([thubble_start[i],thubble_start[i]],[np.log10(galaxy_m).min(),np.log10(galaxy_m).max()], linestyle=':', color='b')
+    axes[1].plot([thubble_end[i],thubble_end[i]],[np.log10(galaxy_m).min(),np.log10(galaxy_m).max()], linestyle=':', color='r')
+    xpos = thubble_start[i]-0.6
+    axes[1].text(xpos, 10.5, r'$t_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox=props)
+for i in range(0, len(mergers_idx)):
+    print(mergers[i].galaxy_t[2],np.log10(mergers[i].m_gal[2]))
+    axes[1].plot(mergers[i].galaxy_t[2], np.log10(mergers[i].m_gal[2]), marker='o', alpha=0.5, color='r', markersize=10)
+for i in range(0, len(rejuvenations_idx)):
+    axes[1].plot(reju_t[i], np.log10(galaxy_m[rejuvenations_idx[i]]), marker='o', alpha=0.5, color='g', markersize=10)
+axes[1].set_xlim([galaxy_t.min(),galaxy_t.max()])
+#ax1.set_ylim([-11.5,-8])
+axes[1].set_xlabel(r't (Gyr)', fontsize=16)
+axes[1].set_ylabel(r'$\log M_*$ ($M_'+u'\u2609'+'$)', fontsize=16)
+
+
+cosmo = FlatLambdaCDM(H0=100*0.68, Om0=0.3, Ob0=0.04799952624117699,Tcmb0=2.73)  # set our cosmological parameters
+axZ = axes[0].twiny()
+axZ.set_xlim([galaxy_t.min(),galaxy_t.max()])
+topticks1 = np.array([2,1,0])  # desired redshift labels
+topticks2 = cosmo.age(topticks1).value  # tick locations in time
+axZ.set_xticklabels(topticks1)
+axZ.set_xticks(topticks2)
+axZ.xaxis.set_ticks_position('top') # set the position of the second x-axis to top
+axZ.xaxis.set_label_position('top') # set the position of the second x-axis to top
+axZ.set_xlabel('z', fontsize=16)
 fig.savefig('quench_finder_test.png', dpi=250)
