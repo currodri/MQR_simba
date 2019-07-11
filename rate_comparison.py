@@ -259,9 +259,12 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
     axR.xaxis.set_ticks_position('top') # set the position of the second x-axis to top
     axR.xaxis.set_label_position('top') # set the position of the second x-axis to top
     axR.set_xlabel('z', fontsize=16)
-    ax[0].legend(loc='best', prop={'size': 8}, fontsize=14)
-    ax[1].legend(loc='best', prop={'size': 8}, fontsize=14)
-    ax[2].legend(loc='best', prop={'size': 8}, fontsize=14)
+    axR.tick_params(labelsize=12)
+    ax[0].legend(loc='best', prop={'size': 12}, fontsize=14)
+    ax[1].legend(loc='best', prop={'size': 12}, fontsize=14)
+    ax[2].legend(loc='best', prop={'size': 12}, fontsize=14)
+    for i in range(0,3):
+        ax[i].tick_params(labelsize=12)
     fig.subplots_adjust(hspace=0)
     fig.savefig(str(results_folder)+'mqr_fractional_rate.png', format='png', dpi=200, bbox_inches='tight')
 
@@ -328,6 +331,9 @@ def Density_Rate(mergers,q_masses,q_reds,q_thubble,reju_z,reju_t,reju_m,n_bins,m
     axR.xaxis.set_ticks_position('top') # set the position of the second x-axis to top
     axR.xaxis.set_label_position('top') # set the position of the second x-axis to top
     axR.set_xlabel('z', fontsize=16)
+    axR.tick_params(labelsize=12)
+    for i in range(0,3):
+        ax[i].tick_params(labelsize=12)
     ax[0].legend(loc='best', prop={'size': 12}, fontsize=14)
     fig.subplots_adjust(hspace=0)
     fig.savefig(str(results_folder)+'mqr_density_rate.png', format='png', dpi=200, bbox_inches='tight')
