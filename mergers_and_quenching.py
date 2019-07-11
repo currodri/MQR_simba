@@ -237,7 +237,7 @@ def mqr_relation():
     hist, bin_edges = np.histogram(time_diff, bins=binis)
     bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
     hist = hist/np.sum(d['sf_galaxies_per_snap'])
-    ax.plot([median, median],[0, hist.max()], 'm--')
+    ax.plot([median, median],[0, hist.max()], 'm:')
     ax.plot(bin_cent, hist, 'm', label='Rejuvenations')
     ax.legend(loc='best', fontsize=16)
     ax.tick_params(labelsize=12)
