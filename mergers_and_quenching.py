@@ -185,7 +185,7 @@ def mqr_relation():
     ax = fig.add_subplot(1,1,1)
     ax.set_xlabel(r'$T - T_m$(Gyr)', fontsize=16)
     ax.set_ylabel(r'$N/N_{SF}(Total)$', fontsize=16)
-    binis = np.linspace(1e-6, np.log10(7), 10)
+    binis = np.linspace(np.log10(1e-1), np.log10(7), 10)
     binis = 10**binis
     hist, bin_edges = np.histogram(time_diff_s, bins=binis)
     bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
@@ -231,7 +231,7 @@ def mqr_relation():
     time_diff = np.asarray(time_diff)
     median = np.median(time_diff)
     merger_boost = np.asarray(merger_boost)
-    binis = np.linspace(1e-6, np.log10(7), 10)
+    binis = np.linspace(np.log10(1e-1), np.log10(7), 10)
     binis = 10**binis
     hist, bin_edges = np.histogram(time_diff, bins=binis)
     bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
