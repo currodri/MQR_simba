@@ -185,7 +185,7 @@ def mqr_relation():
     ax = fig.add_subplot(1,1,1)
     ax.set_xlabel(r'$T - T_m$(Gyr)', fontsize=16)
     ax.set_ylabel(r'$N/N_{SF}(Total)$', fontsize=16)
-    binis = np.linspace(0, np.log10(7), 12)
+    binis = np.linspace(1e-1, np.log10(7), 12)
     binis = 10**binis
     hist, bin_edges = np.histogram(time_diff_s, bins=binis)
     bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
@@ -231,7 +231,7 @@ def mqr_relation():
     time_diff = np.asarray(time_diff)
     median = np.median(time_diff)
     merger_boost = np.asarray(merger_boost)
-    binis = np.linspace(0, np.log10(7), 12)
+    binis = np.linspace(1e-1, np.log10(7), 12)
     binis = 10**binis
     hist, bin_edges = np.histogram(time_diff, bins=binis)
     bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
@@ -240,6 +240,7 @@ def mqr_relation():
     ax.plot(bin_cent, hist, 'm', label='Rejuvenations')
     ax.legend(loc='best', fontsize=16)
     ax.tick_params(labelsize=12)
+    ax.set_xlim([0.0,6.66])
     fig.tight_layout()
     fig.savefig(str(results_folder)+'mergertime_and_quench_reju.png',format='png', dpi=250, bbox_inches='tight')
 def quench_merger_scatter():
