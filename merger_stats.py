@@ -300,11 +300,11 @@ def Merger_Fraction_Mass_Distribution(mergers, msq_galaxies, n_bins):
         print(cent_msq)
         f_merger = c_m_ave/c_msq_ave
         f_error = f_merger*np.sqrt((c_m_error/c_m_ave)**2+(c_msq_error/c_msq_ave)**2)
-        ax.plot(cent_msq, f_merger, label=titles[zs], linestyle='-', color=colours[zs])
+        ax.plot(cent_msq, np.log10(f_merger), label=titles[zs], linestyle='-', color=colours[zs])
         ax.fill_between(cent_msq, f_merger-f_error, f_merger+f_error, facecolor=colours[zs], alpha=0.25)
     ax.set_xlabel(r'$\log(M_{*})$', fontsize=16)
     ax.legend(loc='best')
-    ax.set_ylabel('Merger fraction of star-forming galaxies')
+    ax.set_ylabel(r'$\log(N_{Mer}/N_{SF})$')
     fig.tight_layout()
     fig.savefig(str(results_folder)+'mfr_evolution_permass.png', dpi=250)
 def Merger_Contribution(mergers, msq_galaxies, n_bins):
