@@ -67,7 +67,7 @@ def merger_vs_msqPlots(mergers, sf_galaxies):
             a = []
             b = []
             for j in range(0, len(mergers)):
-                if zlimits[m][0] <= mergers[j].z_gal[1] < zlimits[m][1]:
+                if zlimits[m][0] <= mergers[j].z_gal[2] < zlimits[m][1]:
                     a.append(np.log10(mergers[j].m_gal[2]))
                     if i==0:
                         b.append(np.log10(mergers[j].ssfr_gal[2]))
