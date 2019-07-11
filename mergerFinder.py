@@ -79,7 +79,7 @@ def merger_finder(galaxies, merger_ratio, mass_limit, redshift_limit):
         pos = gal.gal_pos
         for i in range(1, len(mass)-3):
             if z[i]<=redshift_limit:
-                #print(time[i])
+                print(time[i])
                 delta_t = time[i+1]-time[i]
                 condition,ratio = merger_condition(sfr[i], delta_t, mass, i, merger_ratio, mass_limit)
                 sfcondition = sfr_condition_2('end', gal, i)
