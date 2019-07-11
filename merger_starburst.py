@@ -503,8 +503,10 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
     fig2, axes = plt.subplots(3, 1, sharex=True, num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
     fig2.subplots_adjust(hspace=0)
     axes[2].set_xlabel(r'$\log(M_{*})$', fontsize=16)
-    mergers_m = np.asarray([np.log10(merg.m_gal[2]) for merg in mergers])
-    bins = histedges_equalN(mergers_m, nbins)
+    #mergers_m = np.asarray([np.log10(merg.m_gal[2]) for merg in mergers])
+    #bins = histedges_equalN(mergers_m, nbins)
+    bins = np.linspace(9.5, 11.0, 8)
+    bins = np.concatenate((bins, np.array([12.0])))
     delta = bins[1] - bins[0]
     #bin_cent = bins - delta/2
     #bin_cent = np.delete(bin_cent, 0)
