@@ -143,7 +143,7 @@ def merger_vs_msqPlots(mergers, sf_galaxies):
             axes[m].text(0.05, 0.05, titles[m], transform=axes[m].transAxes, fontsize=14,
                             verticalalignment='bottom', bbox=props)
             axes[m].margins(.2)
-            axes[m].set_xlim([9.5,x.max()*1.03])
+            axes[m].set_xlim([9.5,12.1])
 
         axes[len(titles)-1].set_xlabel(r'$\log(M_{*})$', fontsize=16)
 
