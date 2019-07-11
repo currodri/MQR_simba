@@ -63,6 +63,7 @@ def merger_vs_msqPlots(mergers, sf_galaxies):
         fig, axes = plt.subplots(len(titles), 1, sharex='col', num=None, figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
         for m in range(0, len(titles)):
             axes[m].set_ylabel(ylabels[i], fontsize=16)
+            axes[m].tick_params(labelsize=12)
             a = []
             b = []
             for j in range(0, len(mergers)):
@@ -515,6 +516,7 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
     for i in range(0, len(ylabels)):
         axes[i].set_ylabel(ylabels[i], fontsize=16)
         axes[i].plot([9.5,12.0],[0.0,0.0], 'k--')
+        axes[i].tick_params(labelsize=12)
         for m in range(0, len(titles)):
             mer_m = []
             mer = []

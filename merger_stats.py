@@ -273,6 +273,7 @@ def Merger_Fraction_Mass_Distribution(mergers, msq_galaxies, n_bins):
     mass_cent = np.delete(mass_cent, 0)
     fig = plt.figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
     ax = fig.add_subplot(1,1,1)
+    ax.tick_params(labelsize=12)
     for zs in range(0, len(zlimits)):
         merg_m = []
         merg_pos = []
@@ -505,6 +506,9 @@ def SFR_Evolution_and_Contribution(mergers, msq_galaxies, n_bins):
     axZ.xaxis.set_ticks_position('top') # set the position of the second x-axis to top
     axZ.xaxis.set_label_position('top') # set the position of the second x-axis to top
     axZ.set_xlabel('z', fontsize=16)
+    axZ.tick_params(labelsize=12)
+    for i in range(0,2):
+        ax[i].tick_params(labelsize=12)
     fig.subplots_adjust(hspace=0)
     fig.savefig(str(results_folder)+'sfr_evo_and_contribution.png',format='png', dpi=250, bbox_inches='tight')
 

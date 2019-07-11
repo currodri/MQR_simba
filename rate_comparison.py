@@ -316,9 +316,9 @@ def Density_Rate(mergers,q_masses,q_reds,q_thubble,reju_z,reju_t,reju_m,n_bins,m
         ax[0].plot(x_dat, np.log10(r_merger['massbin'+str(i)]), linestyle='--', marker='d', label=mass_labels[i])
         ax[1].plot(x_dat, np.log10(r_quench['massbin'+str(i)]), linestyle='--', marker='d')
         ax[2].plot(x_dat, np.log10(r_reju['massbin'+str(i)]), linestyle='--', marker='d')
-    ax[0].set_ylabel(r'$\log(\Gamma_{Mer})$ [cMpc$^{-3}$Gyr$^{-1}$]', fontsize=16)
-    ax[1].set_ylabel(r'$\log(\Gamma_{Que})$ [cMpc$^{-3}$Gyr$^{-1}$]', fontsize=16)
-    ax[2].set_ylabel(r'$\log(\Gamma_{Rej})$ [cMpc$^{-3}$Gyr$^{-1}$]', fontsize=16)
+    ax[0].set_ylabel(r'$\log(\Gamma_{Mer})$', fontsize=16)
+    ax[1].set_ylabel(r'$\log(\Gamma_{Que})$', fontsize=16)
+    ax[2].set_ylabel(r'$\log(\Gamma_{Rej})$', fontsize=16)
     ax[2].set_xlabel(r'$\log(1+z)$', fontsize=16)
     axR = ax[0].twiny()
     maxlz = 0.56

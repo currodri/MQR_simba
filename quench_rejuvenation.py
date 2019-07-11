@@ -189,6 +189,7 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
         axR = figR.add_subplot(1,1,1)
         for j in range(0, len(y_labels)):
             ax[j].set_ylabel(y_labels[j], fontsize=16)
+            ax[j].tick_params(labelsize=12)
             if j!=2:
                 if i==0:
                     a = np.asarray(x_data[i][j][0])

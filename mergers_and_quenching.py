@@ -217,6 +217,7 @@ def mqr_relation():
     ax.plot([median, median],[0, hist.max()], 'r--')
     ax.plot(bin_cent, hist, 'r', label='Rejuvenations')
     ax.legend(loc='best', fontsize=16)
+    ax.tick_params(labelsize=12)
     fig.tight_layout()
     fig.savefig(str(results_folder)+'mergertime_and_quench_reju.png',format='png', dpi=250, bbox_inches='tight')
 def quench_merger_scatter():
@@ -259,6 +260,7 @@ def quench_merger_scatter():
     ax.set_ylabel(r'$T_m $(Gyr)', fontsize=16)
     cb = fig.colorbar(sc, ax=ax, orientation='horizontal')
     cb.set_label(label=r'$\log(T_q/t_H)$', fontsize=16)
+    ax.tick_params(labelsize=12)
     fig.tight_layout()
     fig.savefig(str(results_folder)+'merger_quench_scatter.png',format='png', dpi=250, bbox_inches='tight')
 
@@ -341,6 +343,7 @@ def merger_reju_scatter():
     ax.set_ylim([merger_t.min(), merger_t.max()])
     ax.set_xlabel(r'$T_r $(Gyr)', fontsize=16)
     ax.set_ylabel(r'$T_m $(Gyr)', fontsize=16)
+    ax.tick_params(labelsize=12)
     cb = fig.colorbar(sc, ax=ax, orientation='horizontal')
     cb.set_label(label=r'$\log(\Delta sSFR)$', fontsize=16)
     fig.tight_layout()
