@@ -257,7 +257,7 @@ def quench_merger_scatter():
     ax.set_ylim([merger_t.min()*0.9, merger_t.max()*1.1])
     ax.set_xlabel(r'$T_q $(Gyr)', fontsize=16)
     ax.set_ylabel(r'$T_m $(Gyr)', fontsize=16)
-    fig.colorbar(sc, ax=ax, label=r'$\log(T_q/t_H)$', orientation='horizontal')
+    fig.colorbar(sc, ax=ax, label=r'$\log(T_q/t_H)$', orientation='horizontal', fontsize=16)
     fig.tight_layout()
     fig.savefig(str(results_folder)+'merger_quench_scatter.png',format='png', dpi=250, bbox_inches='tight')
 
@@ -340,7 +340,7 @@ def merger_reju_scatter():
     ax.set_ylim([merger_t.min(), merger_t.max()])
     ax.set_xlabel(r'$T_r $(Gyr)', fontsize=16)
     ax.set_ylabel(r'$T_m $(Gyr)', fontsize=16)
-    fig.colorbar(sc, ax=ax, label=r'$\log(\Delta sSFR)$', orientation='horizontal')
+    fig.colorbar(sc, ax=ax, label=r'$\log(\Delta sSFR)$', orientation='horizontal', fontsize=16)
     fig.tight_layout()
     fig.savefig(str(results_folder)+'mergertime_and_rejuvenation_scatter.png',format='png', dpi=250, bbox_inches='tight')
 #time_diff, q_times, m_ratios = mergerquench_relation()

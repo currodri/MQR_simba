@@ -180,6 +180,7 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
     x_labels = [r'$\log(1+z)$', r'$\log(M_*)$']
     name_file = ['redshift', 'mass']
     colours = ['r','b']
+    linestyles = ['-','--']
     sf_x = [d['redshifts'],np.log10(d['sf_galaxies_mass'])]
     x_data = [redshifts, ste_mass]
     for i in range(0, len(x_labels)):
@@ -201,7 +202,7 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
                 ax[j].scatter(b, quenching_times[j][2], s=8, alpha=0.8, label='Final quenching with rejuvenation', facecolor='g')
                 ax[j].plot([a.min(),a.max()],[-1.5,-1.5], 'k--')
                 if j==0:
-                    ax[j].legend(loc='best', prop={'size': 10})
+                    ax[j].legend(loc='best', prop={'size': 12}, fontsize=14)
             else:
                 for k in range(0, 2):
                     x_datas = x_data[i][k][0] + x_data[i][k][2]
@@ -219,8 +220,8 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
                     fast, slow, cent = Fraction_Fast_vs_Slow(x_datas, quenchs, sf_data, bins)
                     fast_r, slow_r, cent_r = Fraction_Fast_vs_Slow(x_datas_r, quenchs_r, sf_data, bins)
                     if i==0:
-                        ax[j].plot(np.log10(1+cent), np.log10(fast), label = frac_labels[k]+'fast quenching', color=colours[k], ls='-')
-                        ax[j].plot(np.log10(1+cent), np.log10(slow), label = frac_labels[k]+'slow quenching', color=colours[k], ls='--')
+                        ax[j].plot(np.log10(1+cent), np.log10(fast), label = frac_labels[k]+'fast quenching', color=colours[0], ls=linestyles[k])
+                        ax[j].plot(np.log10(1+cent), np.log10(slow), label = frac_labels[k]+'slow quenching', color=colours[1], ls=linestyles[k])
                         axR.plot(np.log10(1+cent), np.log10(fast), color=colours[k], ls='-')
                         axR.plot(np.log10(1+cent), np.log10(slow), color=colours[k], ls='--')
                         axR.plot(np.log10(1+cent_r), np.log10(fast_r), label = frac_labels[k]+'fast quenching with rejuvenation', color=colours[k], ls=':')
@@ -233,7 +234,7 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
                         axR.plot(cent_r, np.log10(fast_r), label = frac_labels[k]+'fast quenching with rejuvenation', color=colours[k], ls=':')
                         axR.plot(cent_r, np.log10(slow_r), label = frac_labels[k]+'slow quenching with rejuvenation', color=colours[k], ls='-.')
 
-                ax[j].legend(loc='best', prop={'size': 8})
+                ax[j].legend(loc='best', prop={'size': 12}, fontsize=14)
         ax[2].set_xlabel(x_labels[i], fontsize=16)
         if i==0:
             axZ = ax[0].twiny()
