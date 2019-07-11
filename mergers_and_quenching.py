@@ -285,7 +285,7 @@ def quench_merger_scatter():
     ax.set_xlabel(r'$T_q $(Gyr)', fontsize=16)
     ax.set_ylabel(r'$T_m $(Gyr)', fontsize=16)
     cb = fig.colorbar(sc, ax=ax, orientation='horizontal')
-    cb.set_label(label=r'$\log(T_q/t_H)$', fontsize=16)
+    cb.set_label(label=r'$\log(t_q/t_H)$', fontsize=16)
     ax.tick_params(labelsize=12)
     fig.tight_layout()
     fig.savefig(str(results_folder)+'merger_quench_scatter.png',format='png', dpi=250, bbox_inches='tight')
