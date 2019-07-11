@@ -11,6 +11,7 @@ import matplotlib
 from scipy import stats
 matplotlib.use('Agg') # Must be before importing matplotlib.pyplot or pylab!
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mtick
 import seaborn as sns
 sns.set(style="white")
 

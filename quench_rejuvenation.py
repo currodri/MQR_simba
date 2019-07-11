@@ -147,6 +147,8 @@ def Fraction_Fast_vs_Slow(x, times, sf_d, bins):
     cent = np.asarray(cent)
     fast_bins = np.zeros(len(bins)-1)
     slow_bins = np.zeros(len(bins)-1)
+    fast_counter = 0
+    slow_counter = 0
     for i in range(0, len(times)):
         if times[i] < -1.5:
             fast.append(x[i])
@@ -169,8 +171,11 @@ def Fraction_Fast_vs_Slow(x, times, sf_d, bins):
         for j in range(0, len(fast)):
             if bins[i] <= fast[j] < bins[i+1]:
                 f = f + 1
+        fast_counter = fast_counter + f
+        slow_counter = slow_counter + s
         fast_bins[i] = float(f)/float(sf)
         slow_bins[i] = float(s)/float(sf)
+    print(fast_counter, slow_counter)
     return fast_bins,slow_bins,cent
 
 # Plot the results
