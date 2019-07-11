@@ -241,6 +241,7 @@ def mqr_relation():
     ax.plot(bin_cent, hist, 'm', label='Rejuvenations')
     ax.legend(loc='best', fontsize=16)
     ax.tick_params(labelsize=12)
+    ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%.1e'))
     ax.set_xlim([0.0,6.66])
     fig.tight_layout()
     fig.savefig(str(results_folder)+'mergertime_and_quench_reju.png',format='png', dpi=250, bbox_inches='tight')
