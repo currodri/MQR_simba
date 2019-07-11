@@ -173,12 +173,12 @@ def mqr_relation():
             if diff[np.argmin(diff)]>=0 and merg.merger_ratio<=0.6:
                 merger_ratios.append(merg.merger_ratio)
                 quenching_times.append(possible_q_time[np.argmin(diff)])
-                if possible_q_time[np.argmin(diff)]>=-1.5:
+                if np.log10(possible_q_time[np.argmin(diff)])>=-1.5:
                     time_diff_s.append(possible_q[np.argmin(diff)]-merg.galaxy_t[1])
                 else:
                     time_diff_f.append(possible_q[np.argmin(diff)]-merg.galaxy_t[1])
     time_diff_s = np.asarray(time_diff_s)
-
+    time_diff_f = np.asarray(time_diff_f)
     merger_ratios = np.asarray(merger_ratios)
     quenching_times = np.asarray(quenching_times)
     fig = plt.figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
