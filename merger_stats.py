@@ -306,7 +306,7 @@ def Merger_Fraction_Mass_Distribution(mergers, msq_galaxies, n_bins):
     ax.legend(loc='best')
     ax.set_ylabel(r'$\log(N_{Mer}/N_{SF})$')
     fig.tight_layout()
-    fig.savefig(str(results_folder)+'mfr_evolution_permass.png', dpi=250)
+    fig.savefig(str(results_folder)+'mfr_evolution_permass.png', dpi=250, bbox_inches='tight')
 def Merger_Contribution(mergers, msq_galaxies, n_bins):
     z_bins = np.linspace(0.0, 2.5, n_bins)
     f_merger = np.zeros(n_bins-1)
@@ -506,7 +506,7 @@ def SFR_Evolution_and_Contribution(mergers, msq_galaxies, n_bins):
     axZ.xaxis.set_label_position('top') # set the position of the second x-axis to top
     axZ.set_xlabel('z', fontsize=16)
     fig.subplots_adjust(hspace=0)
-    fig.savefig(str(results_folder)+'sfr_evo_and_contribution.png',format='png', dpi=250)
+    fig.savefig(str(results_folder)+'sfr_evo_and_contribution.png',format='png', dpi=250, bbox_inches='tight')
 
 #SFR_Evolution(mergers, sf_galaxies, 10)
 #Merger_Fraction(mergers, sf_galaxies, 10)

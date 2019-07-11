@@ -174,4 +174,4 @@ axZ.xaxis.set_ticks_position('top') # set the position of the second x-axis to t
 axZ.xaxis.set_label_position('top') # set the position of the second x-axis to top
 axZ.set_xlabel('z', fontsize=16)
 fig.subplots_adjust(hspace=0)
-fig.savefig('quench_finder_test.png', dpi=250)
+fig.savefig('quench_finder_test.png', dpi=250, bbox_inches='tight')

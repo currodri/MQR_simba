@@ -263,7 +263,7 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
     ax[1].legend(loc='best', prop={'size': 8})
     ax[2].legend(loc='best', prop={'size': 8})
     fig.subplots_adjust(hspace=0)
-    fig.savefig(str(results_folder)+'mqr_fractional_rate.png', format='png', dpi=200)
+    fig.savefig(str(results_folder)+'mqr_fractional_rate.png', format='png', dpi=200, bbox_inches='tight')
 
 def Density_Rate(mergers,q_masses,q_reds,q_thubble,reju_z,reju_t,reju_m,n_bins,max_redshift_mergers):
     mass_limits = [[9.5,10.3], [10.3,11.0],[11.0,18.0]]
@@ -330,7 +330,7 @@ def Density_Rate(mergers,q_masses,q_reds,q_thubble,reju_z,reju_t,reju_m,n_bins,m
     axR.set_xlabel('z', fontsize=16)
     ax[0].legend(loc='best', prop={'size': 12})
     fig.subplots_adjust(hspace=0)
-    fig.savefig(str(results_folder)+'mqr_density_rate.png', format='png', dpi=200)
+    fig.savefig(str(results_folder)+'mqr_density_rate.png', format='png', dpi=200, bbox_inches='tight')
 
 Fractional_Rate(mergers,sf_galaxies,ste_mass2_all,redshifts2_all,thubble2_all,reju_z,reju_t,reju_m,10,max_redshift_mergers)
 Density_Rate(mergers,ste_mass2_all,redshifts2_all,thubble2_all,reju_z,reju_t,reju_m,10,max_redshift_mergers)

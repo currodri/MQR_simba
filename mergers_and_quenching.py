@@ -218,7 +218,7 @@ def mqr_relation():
     ax.plot(bin_cent, hist, 'r', label='Rejuvenations')
     ax.legend(loc='best', fontsize=16)
     fig.tight_layout()
-    fig.savefig(str(results_folder)+'mergertime_and_quench_reju.png',format='png', dpi=250)
+    fig.savefig(str(results_folder)+'mergertime_and_quench_reju.png',format='png', dpi=250, bbox_inches='tight')
 def quench_merger_scatter():
     print('Start finding for connection between mergers, quenching and rejuvenations')
     quench_t = []
@@ -259,7 +259,7 @@ def quench_merger_scatter():
     ax.set_ylabel(r'$T_m $(Gyr)', fontsize=16)
     fig.colorbar(sc, ax=ax, label=r'$\log(T_q/t_H)$', orientation='horizontal')
     fig.tight_layout()
-    fig.savefig(str(results_folder)+'merger_quench_scatter.png',format='png', dpi=250)
+    fig.savefig(str(results_folder)+'merger_quench_scatter.png',format='png', dpi=250, bbox_inches='tight')
 
 def quench_delay(delay,quenching_times, merger_ratios):
     print('Making scatter plot of quenching times vs delay of the quenching process after a merger...')
@@ -305,7 +305,7 @@ def merger_reju_relation():
     ax.set_ylabel(r'$\log(N) $(Gyr)', fontsize=16)
     ax.hist(time_diff, bins=12, histtype='step', log=True, color='k')
     fig.tight_layout()
-    fig.savefig(str(results_folder)+'mergertime_and_rejuvenation.png',format='png', dpi=250)
+    fig.savefig(str(results_folder)+'mergertime_and_rejuvenation.png',format='png', dpi=250, bbox_inches='tight')
 def merger_reju_scatter():
     print('Start finding for connection between mergers and rejuvenations')
     merger_t = []
@@ -342,7 +342,7 @@ def merger_reju_scatter():
     ax.set_ylabel(r'$T_m $(Gyr)', fontsize=16)
     fig.colorbar(sc, ax=ax, label=r'$\log(\Delta sSFR)$', orientation='horizontal')
     fig.tight_layout()
-    fig.savefig(str(results_folder)+'mergertime_and_rejuvenation_scatter.png',format='png', dpi=250)
+    fig.savefig(str(results_folder)+'mergertime_and_rejuvenation_scatter.png',format='png', dpi=250, bbox_inches='tight')
 #time_diff, q_times, m_ratios = mergerquench_relation()
 #quench_delay(time_diff,q_times,m_ratios)
 #merger_reju_relation()

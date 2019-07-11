@@ -149,7 +149,7 @@ def merger_vs_msqPlots(mergers, sf_galaxies):
         axes[0].legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
                ncol=3, mode="expand", borderaxespad=0., prop={'size': 13})
         fig.tight_layout()
-        fig.savefig(str(results_folder)+'merger_'+str(names[i])+'.png', format='png', dpi=200)
+        fig.savefig(str(results_folder)+'merger_'+str(names[i])+'.png', format='png', dpi=200, bbox_inches='tight')
 
 def after_before_vs_msqPlots(mergers, sf_galaxies):
     ylabels = [r'$\log(sSFR)$',r'$\log(f_{H_2})$',r'$\log(SFE)$']
@@ -559,7 +559,8 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             axes[i].fill_between(mer_cen, distance-distance_std, distance+distance_std, facecolor=colours[m], alpha=0.25)
             axes[i].set_ylabel(ylabels[i], fontsize=16)
             axes[i].set_ylim([-0.3,0.85])
-    axes[0].legend(loc='best', prop={'size': 12})
+            axes[i].set_xlim([9.5,11.6])
+    axes[1].legend(loc='best', prop={'size': 12})
     fig2.savefig(str(results_folder)+'distance_msq.png', format='png', dpi=200, bbox_inches='tight')
     for i in range(0, len(fgas)):
         ax1.plot(mer_cen, fgas[i]*sfe[i], label=titles[i])

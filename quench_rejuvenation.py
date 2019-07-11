@@ -252,7 +252,7 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
         axR.set_xlabel(x_labels[i], fontsize=16)
         axR.set_ylabel(y_labels[2], fontsize=16)
         axR.legend(loc='best', prop={'size': 10})
-        figR.savefig(str(results_folder)+'quenching_rej_'+str(name_file[i])+'.png', format='png', dpi=250)
+        figR.savefig(str(results_folder)+'quenching_rej_'+str(name_file[i])+'.png', format='png', dpi=250, bbox_inches='tight')
 def Quenching_Scatter_Plot2(redshifts2, quenching_times2, ste_mass2):
     scatter_labels = [['Final quenching Sat', 'Non-final quenching Sat', 'Final quenching Sat with rejuvenation' ],['Final quenching Central', 'Non-final quenching Central', 'Final quenching Central with rejuvenation']]
     scatter_markers = ['.','*', '.']
