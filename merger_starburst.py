@@ -560,7 +560,7 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
             axes[i].set_ylabel(ylabels[i], fontsize=16)
             axes[i].set_ylim([-0.3,0.85])
     axes[0].legend(loc='best', prop={'size': 12})
-    fig2.savefig(str(results_folder)+'distance_msq.png', format='png', dpi=200)
+    fig2.savefig(str(results_folder)+'distance_msq.png', format='png', dpi=200, bbox_inches='tight')
     for i in range(0, len(fgas)):
         ax1.plot(mer_cen, fgas[i]*sfe[i], label=titles[i])
     ax1.legend(loc='best', prop={'size': 12})
