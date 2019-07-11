@@ -276,6 +276,7 @@ def quench_merger_scatter():
     quench_t = np.asarray(quench_t)
     quench_scale = np.asarray(quench_scale)
     merger_t = np.asarray(merger_t)
+    print('Galaxies with mergers and quenching: '+str(len(merger_t)))
     fig = plt.figure(num=None, figsize=(8, 8), dpi=80, facecolor='w', edgecolor='k')
     ax = fig.add_subplot(1,1,1)
     sc = ax.scatter(quench_t, merger_t, c = quench_scale, cmap='winter', s=10)
