@@ -45,10 +45,10 @@ def merger_condition(sfr, delta_t, mass_list, index, merger_ratio, mass_limit):
     diff3 = abs((mass_list[index+1]-mass_list[index-1])/mass_list[index-1])
     diff4 = abs((mass_list[index+3]-mass_list[index])/mass_list[index])
     #print(diff, diff2, diff-diff3, diff4)
-    print(diff>=merger_ratio,diff2>=merger_ratio,predicted <= 0.25*actual,diff-diff3 < 0.001,diff4>=merger_ratio,mass_list[index]>=mass_limit)
+    #print(diff>=merger_ratio,diff2>=merger_ratio,predicted <= 0.25*actual,diff-diff3 < 0.001,diff4>=merger_ratio,mass_list[index]>=mass_limit)
     if diff>=merger_ratio and diff2>=merger_ratio and predicted <= 0.25*actual and diff-diff3 < 0.001 and diff4>=merger_ratio and mass_list[index]>=mass_limit:
         condition = True
-        print('hey')
+        #print('hey')
     return (condition, diff)
 ###########################################################################################
 """
@@ -79,7 +79,7 @@ def merger_finder(galaxies, merger_ratio, mass_limit, redshift_limit):
         pos = gal.gal_pos
         for i in range(1, len(mass)-3):
             if z[i]<=redshift_limit:
-                print(time[i])
+                #print(time[i])
                 delta_t = time[i+1]-time[i]
                 condition,ratio = merger_condition(sfr[i], delta_t, mass, i, merger_ratio, mass_limit)
                 sfcondition = sfr_condition_2('end', gal, i)
