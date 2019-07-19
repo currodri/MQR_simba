@@ -263,7 +263,7 @@ def Merger_Fraction(mergers, msq_galaxies, n_bins):
     plt.savefig(str(results_folder)+'mfr_evolution.png', dpi=250)
 def Merger_Fraction_Mass_Distribution(mergers, msq_galaxies, n_bins):
     zlimits = [[0.0, 0.5], [1.0, 1.5], [2.0, 2.5]]
-    colours = ['b','r','m']
+    colours = ['b','r','tab:orange']
     titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
     markers = ['o','v', 's']
     mergers_m = np.asarray([np.log10(merg.m_gal[2]) for merg in mergers])
@@ -303,7 +303,7 @@ def Merger_Fraction_Mass_Distribution(mergers, msq_galaxies, n_bins):
         f_error = f_merger*np.sqrt((c_m_error/c_m_ave)**2+(c_msq_error/c_msq_ave)**2)
         ax.plot(cent_msq, np.log10(f_merger), label=titles[zs], linestyle='-', color=colours[zs])
         ax.fill_between(cent_msq, np.log10(f_merger-f_error), np.log10(f_merger+f_error), facecolor=colours[zs], alpha=0.25)
-    ax.set_xlabel(r'$\log(M_{*})$', fontsize=16)
+    ax.set_xlabel(r'$\log(M_{*}[M_{\odot}])$', fontsize=16)
     ax.legend(loc='best', fontsize=14)
     ax.set_ylabel(r'$\log(N_{Mer}/N_{SF})$', fontsize=16)
     ax.tick_params(labelsize=12)

@@ -134,14 +134,14 @@ for i in range(0, len(thubble_start)):
     axes[0].plot([thubble_start[i],thubble_start[i]],[-12,-8], linestyle=':', color='b')
     axes[0].plot([thubble_end[i],thubble_end[i]],[-12,-8], linestyle=':', color='r')
     xpos = thubble_start[i]-0.6
-    axes[0].text(xpos, -9, r'$t_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox=props)
+    axes[0].text(xpos, -9, r'$\tau_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox=props)
 for i in range(0, len(mergers_idx)):
     axes[0].plot(mergers[i].galaxy_t[1], np.log10(ssfr_gal[mergers_idx[i]]), marker='o', alpha=0.5, color='r', markersize=10)
 for i in range(0, len(rejuvenations_idx)):
     axes[0].plot(reju_t[i], np.log10(ssfr_gal[rejuvenations_idx[i]]), marker='o', alpha=0.5, color='g', markersize=10)
 axes[0].set_xlim([galaxy_t.min(),galaxy_t.max()])
 axes[0].set_ylim([-11.5,-8])
-axes[0].set_ylabel(r'$\log$ sSFR ($M_'+u'\u2609'+r'$yr$^{-1}$)', fontsize=16)
+axes[0].set_ylabel(r'$\log$(sSFR[yr$^{-1}$])', fontsize=16)
 axes[0].legend(loc=1)
 
 
@@ -153,14 +153,14 @@ for i in range(0, len(thubble_start)):
     axes[1].plot([thubble_start[i],thubble_start[i]],[np.log10(galaxy_m).min(),np.log10(galaxy_m).max()], linestyle=':', color='b')
     axes[1].plot([thubble_end[i],thubble_end[i]],[np.log10(galaxy_m).min(),np.log10(galaxy_m).max()], linestyle=':', color='r')
     xpos = thubble_start[i]-0.6
-    axes[1].text(xpos, 10.5, r'$t_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox=props)
+    axes[1].text(xpos, 10.5, r'$\tau_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox=props)
 for i in range(0, len(mergers_idx)):
     print(mergers[i].galaxy_t[2],np.log10(mergers[i].m_gal[2]))
     axes[1].plot(mergers[i].galaxy_t[2], np.log10(mergers[i].m_gal[2]), marker='o', alpha=0.5, color='r', markersize=10)
 for i in range(0, len(rejuvenations_idx)):
     axes[1].plot(reju_t[i], np.log10(galaxy_m[rejuvenations_idx[i]]), marker='o', alpha=0.5, color='g', markersize=10)
 axes[1].set_xlabel(r't (Gyr)', fontsize=16)
-axes[1].set_ylabel(r'$\log M_*$ ($M_'+u'\u2609'+'$)', fontsize=16)
+axes[1].set_ylabel(r'$\log(M_*[M_{\odot}]$)', fontsize=16)
 
 
 cosmo = FlatLambdaCDM(H0=100*0.68, Om0=0.3, Ob0=0.04799952624117699,Tcmb0=2.73)  # set our cosmological parameters

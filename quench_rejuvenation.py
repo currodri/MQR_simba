@@ -180,14 +180,16 @@ def Fraction_Fast_vs_Slow(x, times, sf_d, bins):
 
 # Plot the results
 def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
-    y_labels = [r'$\log(t_q(Central)/t_H)$',r'$\log(t_q(Satellite)/t_H)$',r'$\log(N/N_{SF})$']
+    y_labels = [r'$\log(\tau_q/t_H)$',r'$\log(\tau_q/t_H)$',r'$\log(N/N_{SF})$']
     frac_labels = ['Centrals with ','Satellites with ']
-    x_labels = [r'$\log(1+z)$', r'$\log(M_*)$']
+    text_labels = ['Central galaxies', 'Satellite galaxies']
+    x_labels = [r'$\log(1+z)$', r'$\log(M_*[M_{\odot}])$']
     name_file = ['redshift', 'mass']
     colours = ['r','b']
     linestyles = ['-','--']
     sf_x = [d['redshifts'],np.log10(d['sf_galaxies_mass'])]
     x_data = [redshifts, ste_mass]
+    props = dict(boxstyle='round', facecolor='white', edgecolor='k', alpha=0.7)
     for i in range(0, len(x_labels)):
         fig, ax = plt.subplots(3, 1, sharex=True, num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
         figR = plt.figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
@@ -205,7 +207,9 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
                     a = np.asarray(x_data[i][j][0])
                     b = np.asarray(x_data[i][j][2])
                 ax[j].hexbin(a, quenching_times[j][0], bins='log', cmap='Greys', gridsize=30)
-                ax[j].scatter(b, quenching_times[j][2], s=8, alpha=0.8, label='Final quenching with rejuvenation', facecolor='g')
+                ax[j].scatter(b, quenching_times[j][2], s=8, alpha=0.8, facecolor='g')
+                ax[j].text(0.75, 0.95, text_labels[j], transform=ax.transAxes, fontsize=14,
+                            verticalalignment='top', bbox=props)
                 ax[j].plot([a.min(),a.max()],[-1.5,-1.5], 'k--')
                 if j==0:
                     ax[j].legend(loc='best', prop={'size': 12}, fontsize=14)

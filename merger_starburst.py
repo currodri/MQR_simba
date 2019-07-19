@@ -51,7 +51,7 @@ print('Search of mergers finished!!')
 print('Number of mergers found: '+str(len(mergers)))
 
 def merger_vs_msqPlots(mergers, sf_galaxies):
-    ylabels = [r'$\log(sSFR)$',r'$\log(f_{H_2})$',r'$\log(SFE)$']
+    ylabels = [r'$\log$(sSFR[yr$^{-1}$])',r'$\log(f_{H_2})$',r'$\log$(SFE[yr$^{-1}$])']
     names = ['burst_ssfr','gas_frac','sfe_gal']
     merger_labels = ['Merger','MSQ non merger']
     titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
@@ -145,7 +145,7 @@ def merger_vs_msqPlots(mergers, sf_galaxies):
             axes[m].margins(.2)
             axes[m].set_xlim([9.5,12.0])
 
-        axes[len(titles)-1].set_xlabel(r'$\log(M_{*})$', fontsize=16)
+        axes[len(titles)-1].set_xlabel(r'$\log(M_{*}[M_{\odot}])$', fontsize=16)
 
         axes[0].legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
                ncol=3, mode="expand", borderaxespad=0., prop={'size': 13})
@@ -493,7 +493,7 @@ def distanceMSQ(mergers, sf_galaxies, nbins):
         fig.savefig(str(results_folder)+'distance_msq_'+str(names[i])+'.png', format='png', dpi=200)
 
 def distanceMSQ_2(mergers, sf_galaxies, nbins):
-    ylabels = [r'$\Delta_{MSQ}(sSFR)$',r'$\Delta_{MSQ}(f_{H_2})$',r'$\Delta_{MSQ}(SFE)$']
+    ylabels = [r'$\Delta_{MSQ}$(sSFR[yr$^{-1}$])',r'$\Delta_{MSQ}(f_{H_2})$',r'$\Delta_{MSQ}$(SFE[yr$^{-1}$])']
     names = ['burst_ssfr','gas_frac','sfe_gal']
     titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
     colours = ['b','r','m']
@@ -503,7 +503,7 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
     ax1 = fig1.add_subplot(1,1,1)
     fig2, axes = plt.subplots(3, 1, sharex=True, num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
     fig2.subplots_adjust(hspace=0)
-    axes[2].set_xlabel(r'$\log(M_{*})$', fontsize=16)
+    axes[2].set_xlabel(r'$\log(M_{*}[M_{\odot}])$', fontsize=16)
     #mergers_m = np.asarray([np.log10(merg.m_gal[2]) for merg in mergers])
     #bins = histedges_equalN(mergers_m, nbins)
     bins = np.linspace(9.5, 11.0, 8)
