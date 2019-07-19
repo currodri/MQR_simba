@@ -496,7 +496,7 @@ def distanceMSQ_2(mergers, sf_galaxies, nbins):
     ylabels = [r'$\Delta_{MSQ}$(sSFR[yr$^{-1}$])',r'$\Delta_{MSQ}(f_{H_2})$',r'$\Delta_{MSQ}$(SFE[yr$^{-1}$])']
     names = ['burst_ssfr','gas_frac','sfe_gal']
     titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
-    colours = ['b','r','m']
+    colours = ['b','r','tab:orange']
     zlimits = [[0.0, 0.5], [1.0, 1.5], [2.0, 2.5]]
     props = dict(boxstyle='round', facecolor='white', alpha=0.5, edgecolor='k')
     fig1 = plt.figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
