@@ -14,7 +14,7 @@ s1650043@ed.ac.uk
 import numpy as np
 import pylab as plt
 from scipy import stats
-import pickle
+import cPickle as pickle
 from quenchingFinder import sfr_condition_2, GalaxyData
 
 """Classes defined"""
@@ -107,7 +107,7 @@ def merger_finder(galaxies, merger_ratio, mass_limit, redshift_limit, out_file=F
         d['merger_ratio_min'] = merger_ratio
         d['mass_limit'] = mass_limit
         d['redshift_limit'] = redshift_limit
-        print('Saving merger data into pickle file with name ',)
+        print('Saving merger data into pickle file with name merger_results.pkl',)
         output = open('../mergers/m100n1024/merger_results.pkl','wb')
         pickle.dump(d, output)
         print('Data saved in pickle file.')

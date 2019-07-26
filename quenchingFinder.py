@@ -12,7 +12,7 @@ s1650043@ed.ac.uk
 """Import some necessary packages"""
 import numpy as np
 from scipy import interpolate
-import pickle
+import cPickle as pickle
 
 
 """Classes defined"""
@@ -120,6 +120,7 @@ def quenchingFinder2(galaxies,sfr_condition, mass_limit, interpolation=False, ou
     if out_file:
         d = {}
         d['quenched_galaxies'] = interpolation_list_of_list
+        print(len(d['quenched_galaxies']))
         d['mass_limit'] = mass_limit
         print('Saving quenching data into pickle file with name ',)
         output = open('../quench_analysis/m100n1024/quenching_results.pkl','wb')
