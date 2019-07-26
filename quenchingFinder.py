@@ -119,6 +119,8 @@ def quenchingFinder2(galaxies,sfr_condition, mass_limit, interpolation=False, ou
     print ('Total number of quenched galaxies at z=0 : '+str(total_quenched))
     if out_file:
         d = {}
+        if interpolation:
+            interpolation_list_of_list = galaxies
         d['quenched_galaxies'] = interpolation_list_of_list
         print(len(d['quenched_galaxies']))
         d['mass_limit'] = mass_limit
