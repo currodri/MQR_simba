@@ -14,6 +14,7 @@ s1650043@ed.ac.uk
 import numpy as np
 import pylab as plt
 from scipy import stats
+import pickle
 from quenchingFinder import sfr_condition_2, GalaxyData
 
 """Classes defined"""
@@ -61,9 +62,12 @@ galaxies ======= dictionary containing all the galaxies with their properties
 merger_ratio === the ratio above which the code looks for mergers, i.e. R=4:1 would be merger_ratio=0.2
 mass_limit ===== minimum mass of final galaxy at which the code looks for mergers
 redshift_limit = maximum redshift at which the code looks for mergers
+out_file ======= if set to True, the merger results are saved in a pickle file for future
+                    uses; if not, only the list of quenched galaxies is returned
+
 
 """
-def merger_finder(galaxies, merger_ratio, mass_limit, redshift_limit):
+def merger_finder(galaxies, merger_ratio, mass_limit, redshift_limit, out_file=False):
     mergers = []
     sf_galaxies = []
     for galaxy in range(0, len(galaxies)):
@@ -96,6 +100,18 @@ def merger_finder(galaxies, merger_ratio, mass_limit, redshift_limit):
                         # Add star forming galaxy to the list
                         sf_galaxies.append(sf_gal)
     print('Star-forming main sequence and mergers found up to z = '+str(redshift_limit))
+    if out_file:
+        d = {}
+        d['mergers'] = mergers
+        d['sf_galaxies'] = sf_galaxies
+        d['merger_ratio_min'] = merger_ratio
+        d['mass_limit'] = mass_limit
+        d['redshift_limit'] = redshift_limit
+        print('Saving merger data into pickle file with name ',)
+        output = open('../mergers/m100n1024/merger_results.pkl','wb')
+        pickle.dump(d, output)
+        print('Data saved in pickle file.')
+        output.close()
     return(mergers, sf_galaxies)
 
 

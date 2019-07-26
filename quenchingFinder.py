@@ -12,6 +12,7 @@ s1650043@ed.ac.uk
 """Import some necessary packages"""
 import numpy as np
 from scipy import interpolate
+import pickle
 
 
 """Classes defined"""
@@ -49,11 +50,13 @@ sfr_condition == method that will be used for the thresholds in star formation a
 mass_limit ===== minimum mass of final galaxy at which the code looks for quenching
 interpolation == if set to True, the interpolated data is used for the quenching analysis. If
                     set to nothing it is set to False
+out_file ======= if set to True, the quenching results are saved in a pickle file for future
+                    uses; if not, only the list of quenched galaxies is returned
 
 """
 
 
-def quenchingFinder2(galaxies,sfr_condition, mass_limit, interpolation=False):
+def quenchingFinder2(galaxies,sfr_condition, mass_limit, interpolation=False, out_file=False):
 
     sfr_conditions = [sfr_condition_1, sfr_condition_2]
     sfr_condition = sfr_conditions[int(sfr_condition)]
@@ -114,6 +117,15 @@ def quenchingFinder2(galaxies,sfr_condition, mass_limit, interpolation=False):
             if galaxy.quenching and galaxy.quenching[-1].below11 == None:
                 del galaxy.quenching[-1]
     print ('Total number of quenched galaxies at z=0 : '+str(total_quenched))
+    if out_file:
+        d = {}
+        d['quenched_galaxies'] = interpolation_list_of_list
+        d['mass_limit'] = mass_limit
+        print('Saving quenching data into pickle file with name ',)
+        output = open('../quench_analysis/m100n1024/quenching_results.pkl','wb')
+        pickle.dump(d, output)
+        print('Data saved in pickle file.')
+        output.close()
     return interpolation_list_of_list
 
 
