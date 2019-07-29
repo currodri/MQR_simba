@@ -48,6 +48,7 @@ for j in range(0, lengal):
     d['z_gal'+str(j)] = np.array([])
     d['sfe_gal'+str(j)] = np.array([])
     d['gal_type'+str(j)] = np.array([])
+    d['caesar_id'+str(j)] = np.array([])
 
 
 snaps = filter(lambda file:file[-5:]=='.hdf5' and file[0]=='m', os.listdir(caesarfile))
@@ -83,6 +84,7 @@ for s in range(0, len(progenref_data[0])+1):
     mH2 = np.asarray([i.masses['H2'] for i in sim.galaxies])   # read in molecular hydrogen
     sfr = np.asarray([i.sfr for i in sim.galaxies])   # read in instantaneous star formation rates
     galpos = np.array([g.pos.d for g in sim.galaxies]) # the .d removes the units
+    caesar_id = np.array([i.GroupID for i in sim.galaxies]) # getting the Caesar ID for each galaxy
 
     ssfr_gal = sfr/ms
     sfgals = 0
@@ -119,6 +121,7 @@ for s in range(0, len(progenref_data[0])+1):
             d['t_gal'+str(k)] = np.concatenate((d['t_gal'+str(k)], thubble), axis=None)
             d['z_gal'+str(k)] = np.concatenate((d['z_gal'+str(k)], redshift), axis=None)
             d['gal_type'+str(k)] = np.concatenate((d['gal_type'+str(k)],gals[k]), axis=None)
+            d['caesar_id'+str(k)] = np.concatenate((d['caesar_id'+str(k)],caesar_id[k]), axis=None)
             d['gal_pos'+str(k)] = np.array([galpos[k]])
 
         elif progenref_data[k][s-1] !=-1:
@@ -139,6 +142,7 @@ for s in range(0, len(progenref_data[0])+1):
             d['t_gal'+str(k)] = np.concatenate((d['t_gal'+str(k)], thubble), axis=None)
             d['z_gal'+str(k)] = np.concatenate((d['z_gal'+str(k)], redshift), axis=None)
             d['gal_type'+str(k)] = np.concatenate((d['gal_type'+str(k)],gals[index]), axis=None)
+            d['caesar_id'+str(k)] = np.concatenate((d['caesar_id'+str(k)],caesar_id[index]), axis=None)
             #print(d['gal_pos'+str(k)])
             #print([galpos[index]])
             d['gal_pos'+str(k)] = np.concatenate((d['gal_pos'+str(k)],np.asarray([galpos[index]])), axis=0)

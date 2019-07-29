@@ -122,9 +122,8 @@ def quenchingFinder2(galaxies,sfr_condition, mass_limit, interpolation=False, ou
         if interpolation:
             interpolation_list_of_list = galaxies
         d['quenched_galaxies'] = interpolation_list_of_list
-        print(len(d['quenched_galaxies']))
         d['mass_limit'] = mass_limit
-        print('Saving quenching data into pickle file with name ',)
+        print('Saving quenching data into pickle file with name quenching_results.pkl')
         output = open('../quench_analysis/m100n1024/quenching_results.pkl','wb')
         pickle.dump(d, output)
         print('Data saved in pickle file.')
