@@ -58,7 +58,6 @@ for j in range(0, lengal):
 
 snaps = filter(lambda file:file[-5:]=='.hdf5' and file[0]=='m', os.listdir(caesarfile))
 snaps_sorted = sorted(snaps,key=lambda file: int(file[-8:-5]), reverse=True)
-print(snaps_sorted)
 print('Progenitor indexes obtained from .dat file.')
 print('Saving data to dictionary...')
 d['sf_galaxies_per_snap'] = np.zeros(len(snaps_sorted))
@@ -76,6 +75,8 @@ def sfr_condition(type, time):
 
 for s in range(0, len(progenref_data[0])+1):
 
+    if str(caesarfile+snaps_sorted[s]) == 'm50n512_116.hdf5':
+        continue
     sim = caesar.load(caesarfile+snaps_sorted[s],LoadHalo=False) # load caesar file
 
     # initialize simulation parameters
