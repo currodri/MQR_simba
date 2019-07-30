@@ -15,7 +15,7 @@ MODEL = sys.argv[1]  # e.g. m50n512
 progen_file = '../progen_analysis/%s/progen_%s.pkl' % (MODEL, MODEL)
 
 # Extract progen data from txt files
-obj = open(pickle_file, 'rb')
+obj = open(progen_file, 'rb')
 d = pickle.load(obj)
 ngal = d['galaxies_per_snap'][0]
 print('Total number of galaxies at z = 0: '+str(ngal))
