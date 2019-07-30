@@ -10,6 +10,9 @@ import numpy as np
 import pickle
 import sys
 
+from mergerFinder import merger_finder
+from quenchingFinder import GalaxyData, quenchingFinder2
+
 MODEL = sys.argv[1]  # e.g. m50n512
 
 progen_file = '../progen_analysis/%s/progen_%s.pkl' % (MODEL, MODEL)
