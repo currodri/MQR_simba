@@ -58,6 +58,7 @@ for j in range(0, lengal):
 
 snaps = filter(lambda file:file[-5:]=='.hdf5' and file[0]=='m', os.listdir(caesarfile))
 snaps_sorted = sorted(snaps,key=lambda file: int(file[-8:-5]), reverse=True)
+print(snaps_sorted)
 print('Progenitor indexes obtained from .dat file.')
 print('Saving data to dictionary...')
 d['sf_galaxies_per_snap'] = np.zeros(len(snaps_sorted))
