@@ -19,7 +19,7 @@ from quenchingFinder import sfr_condition_2, GalaxyData
 
 """Classes defined"""
 class Merger:
-    def __init__(self,id, sfr_gal, sfe_gal, z_gal, galaxy_t, m_gal, fgas_gal, gal_type, gal_pos, merger_ratio, fgas_boost, caesar_id):
+    def __init__(self,id, sfr_gal, sfe_gal, z_gal, galaxy_t, m_gal, fgas_gal, gal_type, gal_pos, merger_ratio, fgas_boost, caesar_id, all_z):
         self.sfr_gal = sfr_gal
         self.ssfr_gal = (sfr_gal/m_gal)
         self.sfe_gal = sfe_gal
@@ -33,6 +33,7 @@ class Merger:
         self.merger_ratio = merger_ratio
         self.fgas_boost = fgas_boost
         self.caesar_id = caesar_id
+        self.all_z = all_z
 ###########################################################################################
 """
 FUNCTION THAT DEFINES THE CONDITIONS FOLLOWED TO DETECT A MERGER
@@ -94,7 +95,7 @@ def merger_finder(galaxies, merger_ratio, mass_limit, redshift_limit, out_file=F
                 if condition == True and ssfr[i+2]>=(10**sfcondition) and fgas[i+2]>0:
                     boost = (fgas[i+1]-fgas[i-1])/fgas[i-1]
                     # Save data at the merger, after and before
-                    merger = Merger(id,sfr[i-1:i+2],sfe[i-1:i+2],z[i-1:i+2],time[i-1:i+2],mass[i-1:i+2],fgas[i-1:i+2],type[i-1:i+2],pos[i-1:i+2],ratio,boost,c_id[i-1:i+2])
+                    merger = Merger(id,sfr[i-1:i+2],sfe[i-1:i+2],z[i-1:i+2],time[i-1:i+2],mass[i-1:i+2],fgas[i-1:i+2],type[i-1:i+2],pos[i-1:i+2],ratio,boost,c_id,z)
                     mergers.append(merger)
                 else:
                     if mass[i]>mass_limit and ssfr[i]>=(10**sfcondition) and fgas[i]>0:
