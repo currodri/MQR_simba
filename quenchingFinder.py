@@ -17,7 +17,7 @@ import cPickle as pickle
 
 """Classes defined"""
 class GalaxyData:
-    def __init__(self,id, sfr_gal, sfe_gal, z_gal, galaxy_t, m_gal, fgas_gal, gal_type, gal_pos):
+    def __init__(self,id, sfr_gal, sfe_gal, z_gal, galaxy_t, m_gal, fgas_gal, gal_type, gal_pos, caesar_id):
         self.sfr_gal = sfr_gal
         self.ssfr_gal = (sfr_gal/m_gal)+1e-14
         self.sfe_gal = sfe_gal
@@ -29,6 +29,7 @@ class GalaxyData:
         self.id = id
         self.type = gal_type
         self.gal_pos = gal_pos
+        self.caesar_id = caesar_id
         self.rate = []
 
 class Quench:
@@ -264,7 +265,7 @@ def ssfr_interpolation(galaxy):
 
         new_gal = GalaxyData(galaxy.id, sfr_new.tolist(), galaxy.sfe_gal[quench.below11],
                                 galaxy.z_gal[quench.below11],time_new.tolist(), galaxy.m_gal[quench.above9],
-                                galaxy.fgas_gal[quench.above9], quench.type, None)
+                                galaxy.fgas_gal[quench.above9], quench.type, None, galaxy.caesar_id)
         new_gal.rate = galaxy.rate
 
         new_galaxies.append(new_gal)

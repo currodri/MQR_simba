@@ -19,7 +19,7 @@ from quenchingFinder import sfr_condition_2, GalaxyData
 
 """Classes defined"""
 class Merger:
-    def __init__(self,id, sfr_gal, sfe_gal, z_gal, galaxy_t, m_gal, fgas_gal, gal_type, gal_pos, merger_ratio, fgas_boost):
+    def __init__(self,id, sfr_gal, sfe_gal, z_gal, galaxy_t, m_gal, fgas_gal, gal_type, gal_pos, merger_ratio, fgas_boost, caesar_id):
         self.sfr_gal = sfr_gal
         self.ssfr_gal = (sfr_gal/m_gal)
         self.sfe_gal = sfe_gal
@@ -32,6 +32,7 @@ class Merger:
         self.gal_pos = gal_pos
         self.merger_ratio = merger_ratio
         self.fgas_boost = fgas_boost
+        self.caesar_id = caesar_id
 ###########################################################################################
 """
 FUNCTION THAT DEFINES THE CONDITIONS FOLLOWED TO DETECT A MERGER
@@ -81,6 +82,7 @@ def merger_finder(galaxies, merger_ratio, mass_limit, redshift_limit, out_file=F
         type = gal.type
         time = gal.galaxy_t
         pos = gal.gal_pos
+        c_id = gal.caesar_id
         for i in range(1, len(mass)-3):
             if z[i]<=redshift_limit:
                 #print(time[i])
@@ -92,11 +94,11 @@ def merger_finder(galaxies, merger_ratio, mass_limit, redshift_limit, out_file=F
                 if condition == True and ssfr[i+2]>=(10**sfcondition) and fgas[i+2]>0:
                     boost = (fgas[i+1]-fgas[i-1])/fgas[i-1]
                     # Save data at the merger, after and before
-                    merger = Merger(id,sfr[i-1:i+2],sfe[i-1:i+2],z[i-1:i+2],time[i-1:i+2],mass[i-1:i+2],fgas[i-1:i+2],type[i-1:i+2],pos[i-1:i+2],ratio, boost)
+                    merger = Merger(id,sfr[i-1:i+2],sfe[i-1:i+2],z[i-1:i+2],time[i-1:i+2],mass[i-1:i+2],fgas[i-1:i+2],type[i-1:i+2],pos[i-1:i+2],ratio,boost,c_id[i-1:i+2])
                     mergers.append(merger)
                 else:
                     if mass[i]>mass_limit and ssfr[i]>=(10**sfcondition) and fgas[i]>0:
-                        sf_gal = GalaxyData(id,sfr[i],sfe[i],z[i],time[i],mass[i],fgas[i],type[i], pos[i])
+                        sf_gal = GalaxyData(id,sfr[i],sfe[i],z[i],time[i],mass[i],fgas[i],type[i], pos[i], c_id[i])
                         # Add star forming galaxy to the list
                         sf_galaxies.append(sf_gal)
     print('Star-forming main sequence and mergers found up to z = '+str(redshift_limit))
