@@ -12,7 +12,7 @@ import sys
 
 MODEL = sys.argv[1]  # e.g. m50n512
 
-progen_file = '../progen_analysis/%s/progen_%s.pkl'' % (MODEL, MODEL)
+progen_file = '../progen_analysis/%s/progen_%s.pkl' % (MODEL, MODEL)
 
 # Extract progen data from txt files
 obj = open(pickle_file, 'rb')
