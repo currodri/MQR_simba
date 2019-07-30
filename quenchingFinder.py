@@ -268,7 +268,7 @@ def ssfr_interpolation(galaxy):
                                 galaxy.z_gal[quench.below11],time_new.tolist(), galaxy.m_gal[quench.above9],
                                 galaxy.fgas_gal[quench.above9], quench.type, None, galaxy.caesar_id)
         new_gal.rate = galaxy.rate
-        new_gal.z_gal = galaxy.z_gal
+        new_gal.all_z = galaxy.z_gal
 
         new_galaxies.append(new_gal)
     return new_galaxies
