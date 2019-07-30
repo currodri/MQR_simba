@@ -13,10 +13,15 @@ from functools import reduce
 import os
 from astropy.cosmology import FlatLambdaCDM
 import pickle
-caesarfile = '/home/rad/data/m100n1024/s50/Groups/' #input('Final group file: ')
-progenref_file = '/disk01/rad/sim/m100n1024/s50/Groups/progen_m100n1024_151.dat'
+import sys
+
+MODEL = sys.argv[1]  # e.g. m50n512
+WIND = sys.argv[2]  # e.g. s50 for Simba
+
+caesarfile = '/home/rad/data/%s/%s/Groups/' % (MODEL,WIND)
+progenref_file = '/disk01/rad/sim/%s/%s/Groups/progen_%s_151.dat' % (MODEL,WIND,MODEL)
 simname = 'm100n1024'#input('SIMBA simulation version: ')
-results_folder = '../progen_analysis/'+str(simname)+'/'
+results_folder = '../progen_analysis/%s/' % (MODEL)
 
 
 progenref = open(progenref_file, 'r').readlines()
@@ -150,7 +155,7 @@ for s in range(0, len(progenref_data[0])+1):
             d['gal_pos'+str(k)] = np.concatenate((d['gal_pos'+str(k)],np.asarray([galpos[index]])), axis=0)
         #print(d['gal_pos'+str(k)])
 print('Data saved to dictionary.')
-output = open(results_folder+'progen_'+str(simname)+'.pkl','wb')
+output = open(results_folder+'progen_'+str(MODEL)+'.pkl','wb')
 pickle.dump(d, output)
 print('Data saved in pickle file.')
 output.close()

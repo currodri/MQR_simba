@@ -110,7 +110,7 @@ def merger_finder(galaxies, merger_ratio, mass_limit, redshift_limit, out_file=F
         d['merger_ratio_min'] = merger_ratio
         d['mass_limit'] = mass_limit
         d['redshift_limit'] = redshift_limit
-        print('Saving merger data into pickle file with name merger_results.pkl',)
+        print('Saving merger data into pickle file with name merger_results.pkl')
         output = open('../mergers/m100n1024/merger_results.pkl','wb')
         pickle.dump(d, output)
         print('Data saved in pickle file.')
