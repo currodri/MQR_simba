@@ -17,7 +17,7 @@ progen_file = '../progen_analysis/%s/progen_%s.pkl' % (MODEL, MODEL)
 # Extract progen data from txt files
 obj = open(progen_file, 'rb')
 d = pickle.load(obj)
-ngal = d['galaxies_per_snap'][0]
+ngal = int(d['galaxies_per_snap'][0])
 print('Total number of galaxies at z = 0: '+str(ngal))
 
 #Store the galaxies sorted in objects of type GalaxyData
