@@ -131,6 +131,7 @@ axes[0].plot(galaxies_interpolated[0].galaxy_t, np.log10(galaxies_interpolated[0
 mergers_idx = np.asarray([np.where(galaxy_t==merg.galaxy_t[1])[0][0] for merg in mergers])
 rejuvenations_idx = np.asarray([np.where(galaxy_t==rej)[0][0] for rej in reju_t])
 props = dict(boxstyle='round', facecolor='white', edgecolor='k', alpha=0.7)
+axes[0].plot([8.739101250191442,8.739101250191442],[-12,-8], linestyle='-', color='k')
 for i in range(0, len(thubble_start)):
     axes[0].plot([thubble_start[i],thubble_start[i]],[-12,-8], linestyle=':', color='b')
     axes[0].plot([thubble_end[i],thubble_end[i]],[-12,-8], linestyle=':', color='r')
