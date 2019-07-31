@@ -19,7 +19,7 @@ import pickle
 import sys
 
 from mergerFinder import merger_finder
-from quenchingFinder import GalaxyData, quenchingFinder2
+from quenchingFinder import GalaxyData, quenchingFinder
 
 MODEL = sys.argv[1]  # e.g. m50n512
 
@@ -58,8 +58,8 @@ mergers, sf_galaxies = merger_finder(galaxies, min_merger_ratio, 10**mass_limit,
 print('Merger analysis done.')
 
 # Perform the quenching and rejuvenation analysis
-galaxies_interpolated = quenchingFinder2(galaxies[0:max_ngal], 1, mass_limit)
+galaxies_interpolated = quenchingFinder(galaxies[0:max_ngal], 1, mass_limit)
 
-quenchingFinder2(galaxies_interpolated, 1, mass_limit, interpolation=True, out_file=True)
+quenchingFinder(galaxies_interpolated, 1, mass_limit, interpolation=True, out_file=True)
 
 print('Quenching analysis done.')
