@@ -3,90 +3,56 @@
 """
 Created on 20 June 2019
 
+This code is an example analysis of the results from the mergerFinder and quenchingFinder code. In this case, the 
+analysis performed is the evolution of fractional and volumetric rates for the three events studied:
+mergers, quenching and rejuvenations.
+
+The version here detailed provides the rate plots given in Rodriguez et al. (2019).
 @author: currorodriguez
 """
 # Import required libraries
 import numpy as np
 import matplotlib
-import pickle
+import cPickle as pickle
 from scipy import stats
 matplotlib.use('Agg') # Must be before importing matplotlib.pyplot or pylab!
 import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set(style="white")
 
+MODEL = sys.argv[1]  # e.g. m50n512
+WIND = sys.argv[2]  # e.g. s50 for Simba
+
 # Import other codes
-from import_progen import importApp
-from mergerFinder import myrunningmedian, merger_finder
-from quenchingFinder import GalaxyData, quenchingFinder2, rejuvenation_rate_calculator, quenching_histogram
-import sys
-simfolder = '../progen_analysis/m100n1024'#input('SIMBA simulation progen folder: ')
-sys.path.insert(0, str(simfolder))
-counterfile = '../progen_analysis/m100n1024/galaxy_count_m100n1024.txt'#input('Text file with total number of galaxies per snapshot: ')
-simname = 'm100n1024'#input('SIMBA simulation version: ')
-results_folder = '../rate_analysis/'+str(simname)+'/'
-timefile = '../quench_analysis'+str(simname)+'/times_m100n1024.txt'
-redshiftfile = '../quench_analysis'+str(simname)+'/redshifts_m100n1024.txt'
-pickle_file = '../progen_analysis/m100n1024/progen_'+str(simname)+'.pkl'
+from quenchingFinder import GalaxyData
+results_folder = '../rate_analysis/%s/' % (MODEL) # You can change this to the folder where you want your resulting plots
+merger_file = '../mergers/%s/merger_results.pkl' % (MODEL) # File holding the progen info of galaxies
+quench_file = '../quench_analysis/%s/quenching_results.pkl' % (MODEL) # File holding the progen info of galaxies
 
-# Extract progen data from txt files
-# d, ngal = importApp(str(simfolder))
-# print('Total number of galaxies at z = 0: '+str(ngal))
-obj = open(pickle_file, 'rb')
-d = pickle.load(obj)
-ngal = 49215
-print('Total number of galaxies at z = 0: '+str(ngal))
+# Extract data from mergers and quenching pickle files
+obj = open(merger_file, 'rb')
+merger_data = pickle.load(obj)
+obj.close()
+mergers, sf_galaxies, max_redshift_mergers = merger_data['mergers'], merger_data['sf_galaxies'], merger_data['redshift_limit']
 
-#Store the galaxies sorted in objects of type GalaxyData
-galaxies = []
-for i in range(ngal):
-    sfr_gal = d['sfr_gal' + str(i)][::-1]
-    sfe_gal = d['sfe_gal' + str(i)][::-1]
-    z_gal = d['z_gal' + str(i)][::-1]
-    galaxy_t = d['t_gal' + str(i)][::-1]
-    galaxy_m = d['m_gal'+str(i)][::-1]
-    fgas_gal = d['h2_gal'+str(i)][::-1]
-    gal_type = d['gal_type'+str(i)][::-1]
-    gal_pos = d['gal_pos'+str(i)][::-1]
-    galaxy = GalaxyData(i, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type, gal_pos)
-    galaxies.append(galaxy)
-
-max_ngal = len(galaxies)
-mass_limit = 9.5
-min_merger_ratio = 0.2
-max_redshift_mergers = 2.5
-
-# Perform the search for mergers
-mergers, sf_galaxies = merger_finder(galaxies, min_merger_ratio, 10**mass_limit, max_redshift_mergers)
-
-print('Merger analysis done.')
-
-# Perform the quenching and rejuvenation analysis
-galaxies_interpolated = quenchingFinder2(galaxies[0:max_ngal], 1, mass_limit)
-
+obj = open(quench_file, 'rb')
+quench_data = pickle.load(obj)
+obj.close()
+galaxies_interpolated = quench_data['quenched_galaxies']
 # Save results of rejuvenations coming from first loop
 reju_z = []
 reju_m = []
 reju_t = []
 
 
-for i in range(len(galaxies)):
-    galaxy = galaxies[i]
+for i in range(len(galaxies_interpolated)):
+    galaxy = galaxies_interpolated[i]
     for k in range(0, len(galaxy.rate), 3):
-        #if np.log10(galaxy.rate[k+1])>=mass_limit:
         reju_z.append(galaxy.rate[k])
         reju_t.append(galaxy.rate[k+1])
         reju_m.append(galaxy.rate[k+2])
 
-
-print('Total number of rejuvenations: '+str(len(reju_z)))
-print('Number of quenching events in first loop: '
-        +str(sum([1 for galaxy in galaxies[0:max_ngal] for quench in galaxy.quenching])))
-#Interpolation analysis
-print("Interpolating...")
-
-quenchingFinder2(galaxies_interpolated, 1, mass_limit, True)
-
+# Save quenching data classified in types of quenchings and types of galaxies
 redshifts2_all = []
 quenching_times2_all = []
 ste_mass2_all = []
@@ -107,9 +73,6 @@ for i in range(0, len(galaxies_interpolated)):
     galaxy = galaxies_interpolated[i]
     if len(galaxy.quenching)>0:
         lastquench = galaxy.quenching[-1]
-        # if len(galaxy.quenching)>1:
-        #     for caca in range(0, len(galaxy.quenching)):
-        #         print(galaxy.quenching[caca].quench_time)
     for quench in galaxy.quenching:
         start = quench.above9 + 1
         end = quench.below11
@@ -122,7 +85,6 @@ for i in range(0, len(galaxies_interpolated)):
         else:
             nofinalis = nofinalis + 1
             pos = 1
-        #print(len(galaxy.z_gal), start, end, galaxy.id)
         if np.log10(galaxy.m_gal)>=mass_limit:
             redshifts2[int(quench.type)][pos].append(galaxy.z_gal)
             ste_mass2[int(quench.type)][pos].append(np.log10(galaxy.m_gal))
@@ -135,12 +97,6 @@ for i in range(0, len(galaxies_interpolated)):
             quenching_times2_all.append(quench.quench_time)
             frac_gas2_all.append(galaxy.fgas_gal)
             thubble2_all.append(galaxy.galaxy_t[end])
-print(len(quenching_times2[0][0]), len(quenching_times2[0][1]), len(quenching_times2[0][2]), len(quenching_times2[0][0])+len(quenching_times2[0][1]))
-print(len(quenching_times2[1][0]), len(quenching_times2[1][1]), len(quenching_times2[1][2]), len(quenching_times2[1][0])+len(quenching_times2[1][1]))
-print('Number of quenching events in second loop: '
-        +str(sum([1 for galaxy in galaxies_interpolated for quench in galaxy.quenching])))
-print('Quenching and Rejuvenation analysis done.')
-print(' ')
 
 def Mass_Bin_Type(mass_bins, m_gal):
     mass_type = 3
@@ -209,8 +165,6 @@ def Fractional_Rate(mergers,sf_galaxies,q_masses,q_reds,q_thubble,reju_z,reju_t,
         c = 0
         sf = 0
         for ty in range(0, len(mass_limits)):
-            #print(counter)
-            #print(r_merger['massbin'+str(ty)][i], r_quench['massbin'+str(ty)][i], r_merger['massbin'+str(ty)][i])
             normalization = float(float(r_merger['massbin'+str(ty)][i]+sf_counter['massbin'+str(ty)])*delta_t)
             a = a + r_merger['massbin'+str(ty)][i]
             b = b + r_quench['massbin'+str(ty)][i]

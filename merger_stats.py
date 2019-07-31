@@ -3,6 +3,10 @@
 """
 Created on 24 December 2018
 
+This code is an example analysis of the results from the mergerFinder and quenchingFinder code. In this case, the 
+analysis performed is the study of the relation between the ocurrence of mergers, quenchings and rejuvenations.
+
+The version here detailed provides the merger statistics plots given in Rodriguez et al. (2019).
 @author: currorodriguez
 """
 
@@ -16,34 +20,23 @@ from scipy import stats
 from scipy.optimize import curve_fit
 import seaborn as sns
 sns.set(style="ticks")
+import cPickle as pickle
+
+MODEL = sys.argv[1]  # e.g. m50n512
+WIND = sys.argv[2]  # e.g. s50 for Simba
+
+# Import other codes
 from quenchingFinder import GalaxyData
-from mergerFinder import merger_finder, myrunningmedian, plotmedian, plotmedian2, histedges_equalN
-import sys
-import pickle
-simfolder = '../progen_analysis/m100n1024'#input('SIMBA simulation progen folder: ')
-sys.path.insert(0, str(simfolder))
-simname = 'm100n1024'#input('SIMBA simulation version: ')
-results_folder = '../mergers/'+str(simname)+'/'
-pickle_file = '../progen_analysis/m100n1024/progen_'+str(simname)+'.pkl'
+from mergerFinder import plotmedian, plotmedian2, histedges_equalN
+results_folder = '../mergers/%s/' % (MODEL) # You can change this to the folder where you want your resulting plots
+merger_file = '../mergers/%s/merger_results.pkl' % (MODEL) # File holding the progen info of galaxies
 
-#d, ngal = importApp(str(simfolder))
-obj = open(pickle_file, 'rb')
-d = pickle.load(obj)
-ngal = 49215
-galaxies = []
-for i in range(ngal):
-    sfr_gal = d['sfr_gal' + str(i)][::-1]
-    sfe_gal = d['sfe_gal' + str(i)][::-1]
-    z_gal = d['z_gal' + str(i)][::-1]
-    galaxy_t = d['t_gal' + str(i)][::-1]
-    galaxy_m = d['m_gal'+str(i)][::-1]
-    fgas_gal = d['h2_gal'+str(i)][::-1]#+0.00000001
-    gal_type = d['gal_type'+str(i)][::-1]
-    gal_pos = d['gal_pos'+str(i)][::-1]
-    galaxy = GalaxyData(i, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type,gal_pos)
-    galaxies.append(galaxy)
+# Extract data from mergers and quenching pickle files
+obj = open(merger_file, 'rb')
+merger_data = pickle.load(obj)
+obj.close()
+mergers, sf_galaxies, max_redshift_mergers = merger_data['mergers'], merger_data['sf_galaxies'], merger_data['redshift_limit']
 
-mergers, sf_galaxies = merger_finder(galaxies, 0.2, 10**9.5, 2.5)
 
 def SF_Budget(mergers, msq_galaxies, n_bins):
     z_bins = np.linspace(0.0, 3.5, n_bins)
@@ -410,18 +403,10 @@ def Frac_Merger_rate(mergers, msq_galaxies, n_bins):
     y = np.log10(f_merger)
     def func(x, a, b):
         return a*x + b
-    # popt, pcov = curve_fit(func, x, y)
-    # perr = np.sqrt(np.diag(pcov))
-    # print(popt)
-    # print(perr)
     slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
     print("slope: %f    intercept: %f    r_value: %f    p_value: %f    std_error: %f" % (slope, intercept,r_value, p_value, std_err))
     fig = plt.figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
     ax = fig.add_subplot(1,1,1)
-    #ax.set_xscale("log")
-    #ax.set_xticks([0.0, 0.5, 1.0, 2.5])
-    #ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
-    #ax.set_yscale("log")
     plt.plot(np.log10(1+z_cent), np.log10(f_merger), linestyle='--', marker='d', label=r'Mergers in the $100h^{-1}$ Mpc box')
     plt.plot(np.log10(1+z_cent),np.log10((10**intercept)*(1+z_cent)**(slope)), 'k-', label='The best fit power law to this data')
     ax.set_xlabel(r'$\log(1+z)$', fontsize=16)
@@ -487,7 +472,6 @@ def SFR_Evolution_and_Contribution(mergers, msq_galaxies, n_bins):
     print(ssfr_m_ave,ssfr_m_error)
     fig, axes = plt.subplots(2, 1, sharex='col', figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
     axes[0].errorbar(np.log10(1+z_cent), np.log10(ssfr_m_ave[0]), yerr=(ssfr_m_error[0]/(ssfr_m_ave[0]*np.log(10))), linestyle='--', marker='o', label='Mergers star-forming', capsize=2, capthick=2)
-    #axes[0].errorbar(np.log10(1+z_cent), np.log10(ssfr_m_ave[1]), yerr=(ssfr_m_error[1]/(ssfr_m_ave[1]*np.log(10))), linestyle='--', marker='o', label='Before mergers star-forming', capsize=2, capthick=2)
     axes[0].errorbar(np.log10(1+z_cent), np.log10(ssfr_nm_ave), yerr=(ssfr_nm_error/(ssfr_nm_ave*np.log(10))), linestyle='--', marker='s', label='Mass-matched sample of non-merger star-forming', capsize=2, capthick=2)
     axes[0].set_ylabel(r'$\log(\langle$ sSFR (yr$^{-1})\rangle$', fontsize=16)
     axes[0].legend(loc='best')
@@ -513,9 +497,6 @@ def SFR_Evolution_and_Contribution(mergers, msq_galaxies, n_bins):
     fig.subplots_adjust(hspace=0)
     fig.savefig(str(results_folder)+'sfr_evo_and_contribution.png',format='png', dpi=250, bbox_inches='tight')
 
-#SFR_Evolution(mergers, sf_galaxies, 10)
-#Merger_Fraction(mergers, sf_galaxies, 10)
-#Fgas_mean(mergers, sf_galaxies, 10)
 print(' ')
 print(' ')
 print('MERGER STATISTICAL ANALYSIS')

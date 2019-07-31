@@ -58,7 +58,7 @@ out_file ======= if set to True, the quenching results are saved in a pickle fil
 """
 
 
-def quenchingFinder2(galaxies,sfr_condition, mass_limit, interpolation=False, out_file=False):
+def quenchingFinder(galaxies,sfr_condition, mass_limit, interpolation=False, out_file=False):
 
     sfr_conditions = [sfr_condition_1, sfr_condition_2]
     sfr_condition = sfr_conditions[int(sfr_condition)]

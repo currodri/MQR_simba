@@ -19,7 +19,7 @@ sns.set(style="white")
 
 # Import other codes
 from mergerFinder import myrunningmedian, merger_finder
-from quenchingFinder import GalaxyData, quenchingFinder2, rejuvenation_rate_calculator, quenching_histogram
+from quenchingFinder import GalaxyData, quenchingFinder, rejuvenation_rate_calculator, quenching_histogram
 import sys
 simfolder = '../progen_analysis/m100n1024'#input('SIMBA simulation progen folder: ')
 sys.path.insert(0, str(simfolder))
@@ -70,7 +70,7 @@ mergers, sf_galaxies = merger_finder(galaxies, min_merger_ratio, 10**mass_limit,
 print('Merger analysis done.')
 
 # Perform the quenching and rejuvenation analysis
-galaxies_interpolated = quenchingFinder2(galaxies[0:max_ngal], 1, mass_limit)
+galaxies_interpolated = quenchingFinder(galaxies[0:max_ngal], 1, mass_limit)
 
 # Save results of rejuvenations coming from first loop
 reju_z = []
@@ -93,7 +93,7 @@ print('Number of quenching events in first loop: '
 #Interpolation analysis
 print("Interpolating...")
 
-quenchingFinder2(galaxies_interpolated, 1, mass_limit, True)
+quenchingFinder(galaxies_interpolated, 1, mass_limit, True)
 
 redshifts = []
 ste_mass = []

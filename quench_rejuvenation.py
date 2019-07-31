@@ -3,58 +3,35 @@
 """
 Created on Mon Dec 24 18:56:07 2018
 
+This code is an example analysis of the results from the mergerFinder and quenchingFinder code. In this case, the 
+analysis performed is classification of quenching events and the analysis of their population distribution.
+
+The version here detailed provides the rate plots given in Rodriguez et al. (2019).
 @author: currorodriguez
 """
 
 # Import required libraries
 import numpy as np
-import pickle
+import cPickle as pickle
 import matplotlib
 matplotlib.use('Agg') # Must be before importing matplotlib.pyplot or pylab!
 import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set(style="white")
 
+MODEL = sys.argv[1]  # e.g. m50n512
+WIND = sys.argv[2]  # e.g. s50 for Simba
+
 # Import other codes
-from mergerFinder import myrunningmedian, merger_finder
-from quenchingFinder import GalaxyData, quenchingFinder2, rejuvenation_rate_calculator, quenching_histogram
-import sys
-simfolder = '../progen_analysis/m100n1024'#input('SIMBA simulation progen folder: ')
-sys.path.insert(0, str(simfolder))
-counterfile = '../progen_analysis/m100n1024/galaxy_count_m100n1024.txt'#input('Text file with total number of galaxies per snapshot: ')
-simname = 'm100n1024'#input('SIMBA simulation version: ')
-results_folder = '../quench_analysis/'+str(simname)+'/'
-timefile = '../quench_analysis'+str(simname)+'/times_m100n1024.txt'
-redshiftfile = '../quench_analysis'+str(simname)+'/redshifts_m100n1024.txt'
-pickle_file = '../progen_analysis/m100n1024/progen_'+str(simname)+'.pkl'
+from quenchingFinder import GalaxyData
+results_folder = '../quench_analysis/%s/' % (MODEL) # You can change this to the folder where you want your resulting plots
+quench_file = '../quench_analysis/%s/quenching_results.pkl' % (MODEL) # File holding the progen info of galaxies
 
-# Extract progen data from txt files
-#d, ngal = importApp(str(simfolder))
-obj = open(pickle_file, 'rb')
-d = pickle.load(obj)
-ngal = 49215
-print('Total number of galaxies at z = 0: '+str(ngal))
-
-#Store the galaxies sorted in objects of type GalaxyData
-galaxies = []
-for i in range(ngal):
-    sfr_gal = d['sfr_gal' + str(i)][::-1]
-    sfe_gal = d['sfe_gal' + str(i)][::-1]
-    z_gal = d['z_gal' + str(i)][::-1]
-    galaxy_t = d['t_gal' + str(i)][::-1]
-    galaxy_m = d['m_gal'+str(i)][::-1]
-    fgas_gal = d['h2_gal'+str(i)][::-1]
-    gal_type = d['gal_type'+str(i)][::-1]
-    #gal_pos = d['gal_pos'+str(i)][::-1]
-    gal_pos = None
-    galaxy = GalaxyData(i, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type, gal_pos)
-    galaxies.append(galaxy)
-
-max_ngal = len(galaxies)
-mass_limit = 9.5
-
-# Perform the quenching and rejuvenation analysis
-galaxies_interpolated = quenchingFinder2(galaxies[0:max_ngal], 1, mass_limit)
+# Extract data from quenching pickle file
+obj = open(merger_file, 'rb')
+quench_data = pickle.load(obj)
+obj.close()
+galaxies_interpolated = quench_data['quenched_galaxies']
 
 # Save results of rejuvenations coming from first loop
 reju_z = []
@@ -62,23 +39,15 @@ reju_m = []
 reju_t = []
 
 
-for i in range(len(galaxies)):
-    galaxy = galaxies[i]
+for i in range(len(galaxies_interpolated)):
+    galaxy = galaxies_interpolated[i]
     for k in range(0, len(galaxy.rate), 3):
         #if np.log10(galaxy.rate[k+1])>=mass_limit:
         reju_z.append(galaxy.rate[k])
         reju_t.append(galaxy.rate[k+1])
-        reju_m.append(galaxy.rate[k+2])
+        reju_m.append(np.log10(galaxy.rate[k+2]))
 
-
-print('Total number of rejuvenations: '+str(len(reju_z)))
-print('Number of quenching events in first loop: '
-        +str(sum([1 for galaxy in galaxies[0:max_ngal] for quench in galaxy.quenching])))
-#Interpolation analysis
-print("Interpolating...")
-
-quenchingFinder2(galaxies_interpolated, 1, mass_limit, True)
-
+# Save quenchings in the classification schemed chosen
 redshifts2_all = []
 quenching_times2_all = []
 ste_mass2_all = []

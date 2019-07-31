@@ -3,52 +3,39 @@
 """
 Created on 24 December 2018
 
+This code is an example analysis of the results from the mergerFinder and quenchingFinder code. In this case, the 
+analysis performed is the study of the merger population with respect to the star-forming population.
+
+The version here detailed provides the merger statistics plots given in Rodriguez et al. (2019).
 @author: currorodriguez
 """
 
 # Import required libraries
 import numpy as np
-import random
+from decimal import Decimal
 import matplotlib
-import pickle
 matplotlib.use('Agg') # Must be before importing matplotlib.pyplot or pylab!
 import matplotlib.pyplot as plt
 from scipy import stats
 from scipy.optimize import curve_fit
 import seaborn as sns
-sns.set(style="white")
-from import_progen import importApp
+sns.set(style="ticks")
+import cPickle as pickle
+
+MODEL = sys.argv[1]  # e.g. m50n512
+WIND = sys.argv[2]  # e.g. s50 for Simba
+
+# Import other codes
 from quenchingFinder import GalaxyData
-from mergerFinder import merger_finder, myrunningmedian, plotmedian, plotmedian2, histedges_equalN
-import sys
-simfolder = '../progen_analysis/m100n1024'#input('SIMBA simulation progen folder: ')
-sys.path.insert(0, str(simfolder))
-simname = 'm100n1024'#input('SIMBA simulation version: ')
-results_folder = '../mergers/'+str(simname)+'/'
-pickle_file = '../progen_analysis/m100n1024/progen_'+str(simname)+'.pkl'
+from mergerFinder import plotmedian, plotmedian2, histedges_equalN
+results_folder = '../mergers/%s/' % (MODEL) # You can change this to the folder where you want your resulting plots
+merger_file = '../mergers/%s/merger_results.pkl' % (MODEL) # File holding the progen info of galaxies
 
-#d, ngal = importApp(str(simfolder))
-obj = open(pickle_file, 'rb')
-d = pickle.load(obj)
-ngal = 49215
-galaxies = []
-for i in range(ngal):
-    sfr_gal = d['sfr_gal' + str(i)][::-1]
-    sfe_gal = d['sfe_gal' + str(i)][::-1]
-    z_gal = d['z_gal' + str(i)][::-1]
-    galaxy_t = d['t_gal' + str(i)][::-1]
-    galaxy_m = d['m_gal'+str(i)][::-1]
-    fgas_gal = d['h2_gal'+str(i)][::-1]#+0.00000001
-    gal_type = d['gal_type'+str(i)][::-1]
-    gal_pos = d['gal_pos'+str(i)][::-1]
-    galaxy = GalaxyData(i, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type,gal_pos)
-    galaxies.append(galaxy)
-
-print('Data extracted from PROGEN files.')
-print('Performing search of mergers...')
-mergers, sf_galaxies = merger_finder(galaxies, 0.2, 10**9.5, 2.5)
-print('Search of mergers finished!!')
-print('Number of mergers found: '+str(len(mergers)))
+# Extract data from mergers and quenching pickle files
+obj = open(merger_file, 'rb')
+merger_data = pickle.load(obj)
+obj.close()
+mergers, sf_galaxies, max_redshift_mergers = merger_data['mergers'], merger_data['sf_galaxies'], merger_data['redshift_limit']
 
 def merger_vs_msqPlots(mergers, sf_galaxies):
     ylabels = [r'$\log$(sSFR[yr$^{-1}$])',r'$\log(f_{H_2})$',r'$\log$(SFE[yr$^{-1}$])']

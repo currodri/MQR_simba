@@ -3,6 +3,11 @@
 """
 Created on 24 December 2018
 
+This code is the basis of the evolution analysis of major quantities in the SIMBA simulation. Given the relation of galaxies
+at z = 0 with their progenitors in previous snapshots, the information coming from the Caesar files can be linked together.
+
+All this information is saved in a dictionary that is dumped into a pickle file.
+
 @author: currorodriguez
 """
 
@@ -12,7 +17,7 @@ import numpy as np
 from functools import reduce
 import os
 from astropy.cosmology import FlatLambdaCDM
-import pickle
+import cPickle as pickle
 import sys
 
 MODEL = sys.argv[1]  # e.g. m50n512
@@ -75,7 +80,7 @@ def sfr_condition(type, time):
 
 for s in range(0, len(progenref_data[0])+1):
 
-    if caesarfile+snaps_sorted[s] != 'm50n512_116.hdf5':
+    if caesarfile+snaps_sorted[s] != 'm50n512_116.hdf5' and WIND == 's50': # This condition is just to solve an issue with that snapshot
         sim = caesar.load(caesarfile+snaps_sorted[s],LoadHalo=False) # load caesar file
 
         # initialize simulation parameters

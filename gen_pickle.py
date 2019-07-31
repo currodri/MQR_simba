@@ -1,9 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Jul 30 11:14:07 2019
+Created on 24 December 2018
 
-@author: currorodriguez
+@author: Curro Rodriguez Montero, School of Physics and Astronomy,
+            University of Edinburgh, JCMB, King's Buildings
+
+This code uses the mergerFinder and quenchingFinder algorithms to create dictionaries of GalaxyData holding 
+the details of mergers and quenching galaxies found. This dictionaries are saved in pickle file such that they
+can be used afterwards mutiple times.
+
+For questions about the code:
+s1650043@ed.ac.uk
 """
 # Import required libraries
 import numpy as np
@@ -15,7 +23,7 @@ from quenchingFinder import GalaxyData, quenchingFinder2
 
 MODEL = sys.argv[1]  # e.g. m50n512
 
-progen_file = '../progen_analysis/%s/progen_%s.pkl' % (MODEL, MODEL)
+progen_file = '../progen_analysis/%s/progen_%s.pkl' % (MODEL, MODEL) # File holding the progen info of galaxies
 
 # Extract progen data from txt files
 obj = open(progen_file, 'rb')
@@ -38,6 +46,7 @@ for i in range(ngal):
     galaxy = GalaxyData(i, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type, gal_pos, caesar_id)
     galaxies.append(galaxy)
 
+# Setting the limiting conditions of the survey
 max_ngal = len(galaxies)
 mass_limit = 9.5
 min_merger_ratio = 0.2
