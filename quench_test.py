@@ -50,7 +50,7 @@ galaxy_m = d['m_gal'+str(ourgalaxy_n)][::-1]
 fgas_gal = d['h2_gal'+str(ourgalaxy_n)][::-1]
 gal_type = d['gal_type'+str(ourgalaxy_n)][::-1]
 gal_pos = d['gal_pos'+str(ourgalaxy_n)][::-1]
-galaxy = GalaxyData(ourgalaxy_n, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type, gal_pos)
+galaxy = GalaxyData(ourgalaxy_n, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type, gal_pos, 0)
 galaxies.append(galaxy)
 
 above = []
