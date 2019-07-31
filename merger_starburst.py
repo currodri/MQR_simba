@@ -21,6 +21,7 @@ from scipy.optimize import curve_fit
 import seaborn as sns
 sns.set(style="ticks")
 import cPickle as pickle
+import sys
 
 MODEL = sys.argv[1]  # e.g. m50n512
 WIND = sys.argv[2]  # e.g. s50 for Simba

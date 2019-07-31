@@ -19,6 +19,7 @@ matplotlib.use('Agg') # Must be before importing matplotlib.pyplot or pylab!
 import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set(style="white")
+import sys
 
 MODEL = sys.argv[1]  # e.g. m50n512
 WIND = sys.argv[2]  # e.g. s50 for Simba
