@@ -85,6 +85,7 @@ def merger_finder(galaxies, merger_ratio, mass_limit, redshift_limit, out_file=F
     #     print('Data saved in pickle file.')
     #     output.close()
     # return(mergers, sf_galaxies)
+    return galaxies
 
 
 ##########################################################################################

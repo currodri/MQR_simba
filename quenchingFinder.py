@@ -72,9 +72,8 @@ def quenchingFinder(galaxies,sfr_condition, mass_limit, interpolation=False, out
 
                 # galaxy_interpolated = ssfr_interpolation(galaxy)
                 if galaxy.quenching:
-                    ssfr_interpolation(galaxy)
+                    galaxy = ssfr_interpolation(galaxy)
         elif interpolation and not isinstance(galaxy.t[d_indx], int):
-            print('hey')
             galaxy.interpolation = True
             galaxy.get_ssfr()
             total_quenched = total_quenched + 1
@@ -109,6 +108,7 @@ def quenchingFinder(galaxies,sfr_condition, mass_limit, interpolation=False, out
     #     print('Data saved in pickle file.')
     #     output.close()
     # return interpolation_list_of_list
+    return galaxies
 
 
 ###########################################################################################
@@ -264,6 +264,7 @@ def ssfr_interpolation(galaxy):
         #new_gal.all_z = galaxy.z_gal
 
         #new_galaxies.append(new_gal)
+    return galaxy
 
 
 ##########################################################################################

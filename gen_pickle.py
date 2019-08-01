@@ -60,16 +60,16 @@ max_redshift_mergers = 2.5
 d_results['mass_limit'], d_results['min_merger_ratio'], d_results['max_redshift_mergers'] = mass_limit,min_merger_ratio,max_redshift_mergers
 
 # Perform the search for mergers
-merger_finder(d_results['galaxies'][0:max_ngal], min_merger_ratio, 10**mass_limit, max_redshift_mergers)
+d_results['galaxies'] = merger_finder(d_results['galaxies'][0:max_ngal], min_merger_ratio, 10**mass_limit, max_redshift_mergers)
 
 print('Merger analysis done.')
 
 # Perform the quenching and rejuvenation analysis
-quenchingFinder(d_results['galaxies'][0:max_ngal], 1, mass_limit)
+d_results['galaxies'] = quenchingFinder(d_results['galaxies'][0:max_ngal], 1, mass_limit)
 
 print('Performing interpolation of quenching data...')
 
-quenchingFinder(d_results['galaxies'][0:max_ngal], 1, mass_limit, interpolation=True)
+d_results['galaxies'] = quenchingFinder(d_results['galaxies'][0:max_ngal], 1, mass_limit, interpolation=True)
 
 print('Quenching analysis done.')
 
