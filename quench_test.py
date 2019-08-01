@@ -85,7 +85,7 @@ quenchingFinder(galaxies_interpolated, 1, mass_limit, True)
 reju_z = []
 reju_m = []
 reju_t = []
-reju_ind = []
+reju_id = []
 
 for i in range(len(galaxies_interpolated)):
     galaxy = galaxies_interpolated[i]
@@ -93,7 +93,7 @@ for i in range(len(galaxies_interpolated)):
         reju_z.append(galaxy.rate[k])
         reju_t.append(galaxy.rate[k+1])
         reju_m.append(galaxy.rate[k+2])
-		reju_ind.append(galaxy.rate[k+3])
+		reju_id.append(galaxy.rate[k+3])
 
 print(reju_z, reju_t, reju_m)
 print('Total number of rejuvenations: '+str(len(reju_z)))
@@ -141,7 +141,7 @@ for i in range(0, len(thubble_start)):
 for i in range(0, len(mergers_idx)):
     axes[0].plot(mergers[i].galaxy_t[1], np.log10(ssfr_gal[mergers_idx[i]]), marker='o', alpha=0.5, color='r', markersize=10)
 for i in range(0, len(rejuvenations_idx)):
-    axes[0].plot(reju_t[i], np.log10(galaxies_interpolated[0].ssfr_gal[reju_ind[i]]), marker='o', alpha=0.5, color='g', markersize=10)
+    axes[0].plot(reju_t[i], np.log10(galaxies_interpolated[0].ssfr_gal[reju_id[i]]), marker='o', alpha=0.5, color='g', markersize=10)
 axes[0].set_xlim([galaxy_t.min(),galaxy_t.max()])
 axes[0].set_ylim([-11.5,-8])
 axes[0].set_ylabel(r'$\log$(sSFR[yr$^{-1}$])', fontsize=16)
