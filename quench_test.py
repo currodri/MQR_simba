@@ -93,6 +93,7 @@ for i in range(len(galaxies_interpolated)):
         reju_z.append(galaxy.rate[k])
         reju_t.append(galaxy.rate[k+1])
         reju_m.append(galaxy.rate[k+2])
+		reju_ind.append(galaxy.rate[k+3])
 
 print(reju_z, reju_t, reju_m)
 print('Total number of rejuvenations: '+str(len(reju_z)))
