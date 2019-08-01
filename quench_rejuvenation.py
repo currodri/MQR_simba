@@ -90,17 +90,18 @@ for i in range(0, len(galaxies_interpolated)):
             nofinalis = nofinalis + 1
             pos = 1
         #print(len(galaxy.z_gal), start, end, galaxy.id)
-        if np.log10(galaxy.m[1][end])>=mass_limit:
-            q_indx = int(quench.indx)
-            q_type = 1 - int(galaxy.g_type[q_indx])
-            redshifts2[q_type][pos].append(galaxy.z[q_indx])
-            ste_mass2[q_type][pos].append(np.log10(galaxy.m[1][end]))
-            quenching_times2[q_type][pos].append(np.log10(quench.quench_time/galaxy.t[1][end]))
-            thubble2[q_type][pos].append(np.log10(galaxy.t[1][end]))
-            redshifts2_all.append(galaxy.z[q_indx])
-            ste_mass2_all.append(galaxy.m[1][end])
-            quenching_times2_all.append(quench.quench_time)
-            thubble2_all.append(galaxy.t[1][end])
+        if not isinstance(galaxy.m[1], int):
+            if np.log10(galaxy.m[1][end])>=mass_limit:
+                q_indx = int(quench.indx)
+                q_type = 1 - int(galaxy.g_type[q_indx])
+                redshifts2[q_type][pos].append(galaxy.z[q_indx])
+                ste_mass2[q_type][pos].append(np.log10(galaxy.m[1][end]))
+                quenching_times2[q_type][pos].append(np.log10(quench.quench_time/galaxy.t[1][end]))
+                thubble2[q_type][pos].append(np.log10(galaxy.t[1][end]))
+                redshifts2_all.append(galaxy.z[q_indx])
+                ste_mass2_all.append(galaxy.m[1][end])
+                quenching_times2_all.append(quench.quench_time)
+                thubble2_all.append(galaxy.t[1][end])
 print(len(quenching_times2[0][0]), len(quenching_times2[0][1]), len(quenching_times2[0][2]), len(quenching_times2[0][0])+len(quenching_times2[0][1]))
 print(len(quenching_times2[1][0]), len(quenching_times2[1][1]), len(quenching_times2[1][2]), len(quenching_times2[1][0])+len(quenching_times2[1][1]))
 print('Number of quenching events in second loop: '
