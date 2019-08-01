@@ -19,6 +19,7 @@ class GalaxyData:
         self.interpolation = False
         self.progen_id = int(progen_id)
         self.sfr = np.array([sfr,0])
+        self.ssfr = np.array([0,0])
         self.m = np.array([m,0])
         self.z = np.array([z,0])
         self.t = np.array([t,0])
@@ -35,9 +36,9 @@ class GalaxyData:
         self.mags = []
     def get_ssfr(self):
         if self.interpolation:
-            self.ssfr = self.sfr[1]/self.m[1]
+            self.ssfr[1] = self.sfr[1]/self.m[1]
         else:
-            self.ssfr = self.sfr[0]/self.m[0]
+            self.ssfr[0] = self.sfr[0]/self.m[0]
     def get_fgas(self):
         self.fgas = self.h2_gas/self.m
     def get_sfe(self):

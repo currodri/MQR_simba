@@ -76,7 +76,6 @@ def quenchingFinder(galaxies,sfr_condition, mass_limit, interpolation=False, out
         elif interpolation and not isinstance(galaxy.t[d_indx], int):
             galaxy.interpolation = True
             galaxy.get_ssfr()
-            print(galaxy.ssfr)
             total_quenched = total_quenched + 1
             #State of the search
             state = (0, galaxy.t[d_indx][0], None)
