@@ -73,20 +73,6 @@ print('Merger analysis done.')
 # Perform the quenching and rejuvenation analysis
 galaxies_interpolated = quenchingFinder(galaxies[0:max_ngal], 1, mass_limit)
 
-# Save results of rejuvenations coming from first loop
-reju_z = []
-reju_m = []
-reju_t = []
-
-
-for i in range(len(galaxies)):
-    galaxy = galaxies[i]
-    for k in range(0, len(galaxy.rate), 3):
-        #if np.log10(galaxy.rate[k+1])>=mass_limit:
-        reju_z.append(galaxy.rate[k])
-        reju_t.append(galaxy.rate[k+1])
-        reju_m.append(galaxy.rate[k+2])
-
 
 print('Total number of rejuvenations: '+str(len(reju_z)))
 print('Number of quenching events in first loop: '
@@ -95,6 +81,20 @@ print('Number of quenching events in first loop: '
 print("Interpolating...")
 
 quenchingFinder(galaxies_interpolated, 1, mass_limit, True)
+
+# Save results of rejuvenations coming from first loop
+reju_z = []
+reju_m = []
+reju_t = []
+
+
+for i in range(len(galaxies_interpolated)):
+    galaxy = galaxies_interpolated[i]
+    for k in range(0, len(galaxy.rate), 3):
+        #if np.log10(galaxy.rate[k+1])>=mass_limit:
+        reju_z.append(galaxy.rate[k])
+        reju_t.append(galaxy.rate[k+1])
+        reju_m.append(galaxy.rate[k+2])
 
 redshifts = []
 ste_mass = []
@@ -109,7 +109,7 @@ for i in range(0, len(galaxies_interpolated)):
         start = quench.above9 + 1
         end = quench.below11
         redshifts.append(galaxy.z_gal)
-        ste_mass.append(galaxy.m_gal)
+        ste_mass.append(galaxy.m_gal[end])
         quenching_times.append(quench.quench_time)
         frac_gas.append(galaxy.fgas_gal)
         thubble_start.append(galaxy.galaxy_t[start])

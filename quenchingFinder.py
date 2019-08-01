@@ -259,14 +259,18 @@ def ssfr_interpolation(galaxy):
         #If there are at least three points in the quench, then:
         sfr_gal_non = [galaxy.sfr_gal[j] for j in range(above-limit, below+limit,1)]
         galaxy_t_non = [galaxy.galaxy_t[j] for j in range(above-limit, below+limit,1)]
+        m_gal_non = [galaxy.m_gal[j] for j in range(above-limit, below+limit,1)]
 
         time_new = np.arange(np.amin(galaxy_t_non), np.amax(galaxy_t_non), 0.001)
 
         tck = interpolate.splrep(galaxy_t_non,sfr_gal_non, k=3)
         sfr_new = interpolate.splev(time_new, tck, der=0)
 
+        tck = interpolate.splrep(galaxy_t_non,m_gal_non, k=3)
+        m_new = interpolate.splev(time_new, tck, der=0)
+
         new_gal = GalaxyData(galaxy.id, sfr_new.tolist(), galaxy.sfe_gal[quench.below11],
-                                galaxy.z_gal[quench.below11],time_new.tolist(), galaxy.m_gal[quench.above9],
+                                galaxy.z_gal[quench.below11],time_new.tolist(), m_new.tolist(),
                                 galaxy.fgas_gal[quench.above9], quench.type, None, galaxy.caesar_id)
         #new_gal.rate = galaxy.rate
         new_gal.all_z = galaxy.z_gal
