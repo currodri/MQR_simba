@@ -27,7 +27,7 @@ WIND = sys.argv[2]  # e.g. s50 for Simba
 from quenchingFinder import GalaxyData
 results_folder = '../quench_analysis/%s/' % (MODEL) # You can change this to the folder where you want your resulting plots
 #quench_file = '../quench_analysis/%s/quenching_results.pkl' % (MODEL) # File holding the progen info of galaxies
-data_file = '/home/curro/quenchingSIMBA/code/SH_Project/mandq_results_%s.pkl'
+data_file = '/home/curro/quenchingSIMBA/code/SH_Project/mandq_results_%s.pkl' % (MODEL)
 
 # Extract data from quenching pickle file
 # obj = open(quench_file, 'rb')
