@@ -19,7 +19,7 @@ import cPickle as pickle
 class GalaxyData:
     def __init__(self,id, sfr_gal, sfe_gal, z_gal, galaxy_t, m_gal, fgas_gal, gal_type, gal_pos, caesar_id):
         self.sfr_gal = sfr_gal
-        self.ssfr_gal = (sfr_gal/m_gal)+1e-14
+        self.ssfr_gal = (sfr_gal/np.asarray(m_gal))+1e-14
         self.sfe_gal = sfe_gal
         self.z_gal = z_gal
         self.galaxy_t = galaxy_t
