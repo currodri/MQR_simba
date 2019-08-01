@@ -34,10 +34,12 @@ data_file = '/home/curro/quenchingSIMBA/code/SH_Project/mandq_results_%s.pkl' % 
 # quench_data = pickle.load(obj)
 # obj.close()
 # galaxies_interpolated = quench_data['quenched_galaxies']
+print('Loading pickle file with data...')
 obj = open(data_file, 'rb')
 quench_data = pickle.load(obj)
-ob.close()
+obj.close()
 galaxies_interpolated = quench_data['galaxies']
+print('Data extracted from pickle file!')
 
 # Save results of rejuvenations coming from first loop
 reju_z = []
