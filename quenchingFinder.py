@@ -39,15 +39,14 @@ def quenchingFinder(galaxies,sfr_condition, mass_limit, interpolation=False, out
     sfr_condition = sfr_conditions[int(sfr_condition)]
     interpolation_list_of_list = []
     total_quenched = 0
-
-    for i in range(0, len(galaxies)):
-        #Galaxy we are considering
-        galaxy = galaxies[i]
-        lookup_condition = sfr_condition('end', galaxy, -1)
-        if interpolation:
+    if interpolation:
             d_indx = 1
         else:
             d_indx = 0
+    for i in range(0, len(galaxies)):
+        #Galaxy we are considering
+        galaxy = galaxies[i]
+        lookup_condition = sfr_condition('end', galaxy, -1, d_indx)
         m = np.log10(galaxy.m[d_indx][-1])
         ssfr = np.log10(galaxy.sfr[d_indx][-1]/galaxy.m[d_indx][-1])
         if ssfr<(10**lookup_condition) and m>=mass_limit and not interpolation:
@@ -122,7 +121,7 @@ def initial(galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False):
 
     ssfr_gal, t = galaxy.ssfr_gal[d_indx][j], galaxy.t[d_indx][j]
 
-    current_lssfr = sfr_condition('start', galaxy, j)
+    current_lssfr = sfr_condition('start', galaxy, j, d_indx)
 
     if ssfr_gal > 10**current_lssfr:
         new_state = (1, t, None)
@@ -135,7 +134,7 @@ def readyToLook (galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False
     """We are ready to check if ssfr is below threshold"""
     ssfr_gal = galaxy.ssfr_gal[d_indx][j]
 
-    current_lssfr = sfr_condition('start', galaxy, j)
+    current_lssfr = sfr_condition('start', galaxy, j, d_indx)
 
     if ssfr_gal <= 10**current_lssfr:
         quench = Quench(j-1)
@@ -155,7 +154,7 @@ def pre_quench (galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False)
     """There has been a lssfr <= threshold, now let's check for a quench """
     ssfr_gal = galaxy.ssfr_gal[d_indx][j]
 
-    current_lssfr = sfr_condition('end', galaxy, j)
+    current_lssfr = sfr_condition('end', galaxy, j, d_indx)
 
     if ssfr_gal < 10**current_lssfr:
         #Retrieve the current quench
@@ -170,7 +169,7 @@ def pre_quench (galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False)
             quench.indx = j
         #Now we look for rejuvenations
         new_state = (3, curr_state[1], None)
-    elif ssfr_gal >= 10**sfr_condition('start', galaxy, j):
+    elif ssfr_gal >= 10**sfr_condition('start', galaxy, j, d_indx):
         del galaxy.quenching[-1]
         #Go back to state readyToLook.
         new_state = (1, galaxy.t[d_indx][j], None)
@@ -184,7 +183,7 @@ def quench (galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False):
     """We have detected a quench and now we are looking for rejuvenations """
     ssfr_gal, t = galaxy.ssfr_gal[d_indx][j], galaxy.t[d_indx][j]
 
-    current_lssfr = sfr_condition('start', galaxy, j)
+    current_lssfr = sfr_condition('start', galaxy, j, d_indx)
     time_min = max(curr_state[1], 0.5)
 
     if t > 1.2*time_min:
