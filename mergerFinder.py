@@ -51,7 +51,7 @@ out_file ======= if set to True, the merger results are saved in a pickle file f
 def merger_finder(galaxies, merger_ratio, mass_limit, redshift_limit, out_file=False):
     for gal in galaxies:
         mass = gal.m[0]
-        z = gal.z[0]
+        z = gal.z
         t = gal.t[0]
         sfr = gal.sfr[0]
         fgas = gal.h2_gas[0]/gal.m[0]
