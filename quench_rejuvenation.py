@@ -91,8 +91,8 @@ for i in range(0, len(galaxies_interpolated)):
             pos = 1
         #print(len(galaxy.z_gal), start, end, galaxy.id)
         if np.log10(galaxy.m[1][end])>=mass_limit:
-            q_indx = quench.indx
-            q_type = 1 - galaxy.g_type[q_indx]
+            q_indx = int(quench.indx)
+            q_type = 1 - int(galaxy.g_type[q_indx])
             redshifts2[q_type][pos].append(galaxy.z[q_indx])
             ste_mass2[q_type][pos].append(np.log10(galaxy.m[1][end]))
             quenching_times2[q_type][pos].append(np.log10(quench.quench_time/galaxy.t[1][end]))
