@@ -34,7 +34,7 @@ class GalaxyData:
         self.rejuvenations = []
         self.mags = []
     def get_ssfr(self):
-        if interpolation:
+        if self.interpolation:
             self.ssfr = self.sfr[1]/self.m[1]
         else:
             self.ssfr = self.sfr[0]/self.m[0]
