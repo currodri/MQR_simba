@@ -210,6 +210,7 @@ def quench (galaxy,j,curr_state, sfr_condition, interpolation=False):
 
         if ssfr_gal > 10**current_lssfr:
             #We have found a sign change
+            print('Rejuvenation at: '+str(galaxy_t))
             if not interpolation and reju_condition(galaxy, j):
                 galaxy.rate.append(galaxy.z_gal[j])
                 galaxy.rate.append(galaxy_t)
@@ -304,6 +305,7 @@ def reju_condition(galaxy, j):
     diff = (mass_list[j+1]-mass_list[j])/mass_list[j]
     diff2 = abs((mass_list[j+2]-mass_list[j])/mass_list[j])
     diff3 = abs((mass_list[j+1]-mass_list[j-1])/mass_list[j-1])
+    print(diff, diff2, diff3)
     if abs(diff-diff2) < 0.25 and abs(diff-diff3) < 0.25:
         condition = True
     return condition
