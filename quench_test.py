@@ -85,14 +85,15 @@ quenchingFinder(galaxies_interpolated, 1, mass_limit, True)
 reju_z = []
 reju_m = []
 reju_t = []
-
+reju_ind = []
 
 for i in range(len(galaxies_interpolated)):
     galaxy = galaxies_interpolated[i]
-    for k in range(0, len(galaxy.rate), 3):
+    for k in range(0, len(galaxy.rate), 4):
         reju_z.append(galaxy.rate[k])
         reju_t.append(galaxy.rate[k+1])
         reju_m.append(galaxy.rate[k+2])
+		reju_ind.append(galaxy.rate[k+3])
 
 print(reju_z, reju_t, reju_m)
 print('Total number of rejuvenations: '+str(len(reju_z)))
@@ -129,10 +130,6 @@ axes[0].plot(galaxy_t, above, 'b--', label=r'Star-forming threshold: sSFR $=1/t_
 axes[0].plot(galaxy_t, below, 'r--', label=r'Quench threshold: sSFR $=0.2/t_{U}$')
 axes[0].plot(galaxies_interpolated[0].galaxy_t, np.log10(galaxies_interpolated[0].ssfr_gal), linestyle='--', color='grey', alpha=0.7)
 mergers_idx = np.asarray([np.where(galaxy_t==merg.galaxy_t[1])[0][0] for merg in mergers])
-for rej in reju_t:
-	print(galaxies_interpolated[0].galaxy_t)
-	print(rej, np.where(galaxies_interpolated[0].galaxy_t==rej))
-rejuvenations_idx = np.asarray([np.where(galaxies_interpolated[0].galaxy_t==rej)[0][0] for rej in reju_t])
 props = dict(boxstyle='round', facecolor='white', edgecolor='k', alpha=0.7)
 axes[0].plot([8.739101250191442,8.739101250191442],[-12,-8], linestyle='-', color='k')
 axes[0].plot([8.421918404720678,8.421918404720678],[-12,-8], linestyle='-.', color='k')
@@ -144,7 +141,7 @@ for i in range(0, len(thubble_start)):
 for i in range(0, len(mergers_idx)):
     axes[0].plot(mergers[i].galaxy_t[1], np.log10(ssfr_gal[mergers_idx[i]]), marker='o', alpha=0.5, color='r', markersize=10)
 for i in range(0, len(rejuvenations_idx)):
-    axes[0].plot(reju_t[i], np.log10(galaxies_interpolated[0].ssfr_gal[rejuvenations_idx[i]]), marker='o', alpha=0.5, color='g', markersize=10)
+    axes[0].plot(reju_t[i], np.log10(galaxies_interpolated[0].ssfr_gal[reju_ind[i]]), marker='o', alpha=0.5, color='g', markersize=10)
 axes[0].set_xlim([galaxy_t.min(),galaxy_t.max()])
 axes[0].set_ylim([-11.5,-8])
 axes[0].set_ylabel(r'$\log$(sSFR[yr$^{-1}$])', fontsize=16)

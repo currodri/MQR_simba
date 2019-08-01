@@ -215,6 +215,7 @@ def quench (galaxy,j,curr_state, sfr_condition, interpolation=False):
                     galaxy.rate.append(galaxy.z_gal)
                 galaxy.rate.append(galaxy_t)
                 galaxy.rate.append(galaxy.m_gal[j])
+                galaxy.rate.append(j)
             new_state = (1, galaxy_t, None)
         else:
             new_state = curr_state
