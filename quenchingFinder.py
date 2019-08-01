@@ -119,7 +119,7 @@ def initial(galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False):
     """We check if the ssfr is higher than threshold... if that's the case, then we are
     ready to look for a quench. """
 
-    ssfr_gal, t = galaxy.ssfr_gal[d_indx][j], galaxy.t[d_indx][j]
+    ssfr_gal, t = galaxy.ssfr[d_indx][j], galaxy.t[d_indx][j]
 
     current_lssfr = sfr_condition('start', galaxy, j, d_indx)
 
@@ -132,7 +132,7 @@ def initial(galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False):
 
 def readyToLook (galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False):
     """We are ready to check if ssfr is below threshold"""
-    ssfr_gal = galaxy.ssfr_gal[d_indx][j]
+    ssfr_gal = galaxy.ssfr[d_indx][j]
 
     current_lssfr = sfr_condition('start', galaxy, j, d_indx)
 
@@ -152,7 +152,7 @@ def readyToLook (galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False
 
 def pre_quench (galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False):
     """There has been a lssfr <= threshold, now let's check for a quench """
-    ssfr_gal = galaxy.ssfr_gal[d_indx][j]
+    ssfr_gal = galaxy.ssfr[d_indx][j]
 
     current_lssfr = sfr_condition('end', galaxy, j, d_indx)
 
@@ -181,7 +181,7 @@ def pre_quench (galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False)
 
 def quench (galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False):
     """We have detected a quench and now we are looking for rejuvenations """
-    ssfr_gal, t = galaxy.ssfr_gal[d_indx][j], galaxy.t[d_indx][j]
+    ssfr_gal, t = galaxy.ssfr[d_indx][j], galaxy.t[d_indx][j]
 
     current_lssfr = sfr_condition('start', galaxy, j, d_indx)
     time_min = max(curr_state[1], 0.5)
@@ -238,7 +238,7 @@ def ssfr_interpolation(galaxy):
     below = belows.max()
     if len(range(above, below+limit,1))>3:
         #If there are at least three points in the quench, then:
-        sfr_gal_non = [galaxy.sfr_gal[j] for j in range(above-limit, below+limit,1)]
+        sfr_gal_non = [galaxy.sfr[j] for j in range(above-limit, below+limit,1)]
         t_non = [galaxy.t[j] for j in range(above-limit, below+limit,1)]
         m_non = [galaxy.m[j] for j in range(above-limit, below+limit,1)]
         z_non = [galaxy.z[j] for j in range(above-limit, below+limit,1)]
