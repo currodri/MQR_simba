@@ -67,6 +67,8 @@ print('Merger analysis done.')
 # Perform the quenching and rejuvenation analysis
 quenchingFinder(d_results['galaxies'][0:max_ngal], 1, mass_limit)
 
+print('Performing interpolation of quenching data...')
+
 quenchingFinder(d_results['galaxies'][0:max_ngal], 1, mass_limit, interpolation=True)
 
 print('Quenching analysis done.')
