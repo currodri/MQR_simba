@@ -140,7 +140,7 @@ for i in range(0, len(thubble_start)):
 	axes[0].text(xpos, -9, r'$\tau_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox=props)
 for i in range(0, len(mergers_idx)):
 	axes[0].plot(mergers[i].galaxy_t[1], np.log10(ssfr_gal[mergers_idx[i]]), marker='o', alpha=0.5, color='r', markersize=10)
-for i in range(0, len(rejuvenations_idx)):
+for i in range(0, len(reju_id)):
 	axes[0].plot(reju_t[i], np.log10(galaxies_interpolated[0].ssfr_gal[reju_id[i]]), marker='o', alpha=0.5, color='g', markersize=10)
 axes[0].set_xlim([galaxy_t.min(),galaxy_t.max()])
 axes[0].set_ylim([-11.5,-8])
