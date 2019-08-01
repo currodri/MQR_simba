@@ -18,11 +18,11 @@ class GalaxyData:
     def __init__(self,progen_id,sfr,m,z,t,h1_gas,h2_gas,bh_m,bhar,g_type,pos,caesar_id):
         self.interpolation = False
         self.progen_id = int(progen_id)
-        self.sfr = np.array([sfr,0])
-        self.ssfr = np.array([0,0])
-        self.m = np.array([m,0])
-        self.z = np.array([z,0])
-        self.t = np.array([t,0])
+        self.sfr = [sfr,0]
+        self.ssfr = [0,0]
+        self.m = [m,0]
+        self.z = [z,0]
+        self.t = [t,0]
         self.h1_gas = h1_gas
         self.h2_gas = h2_gas
         self.bh_m = bh_m
