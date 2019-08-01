@@ -70,11 +70,8 @@ def quenchingFinder(galaxies,sfr_condition, mass_limit, interpolation=False, out
         #Galaxy we are considering
         galaxy = galaxies[i]
         lookup_condition = sfr_condition('end', galaxy, -1)
-        if not interpolation:
-            m = np.log10(galaxy.m_gal[-1])
-        else:
-            m = np.log10(galaxy.m_gal)
-        if galaxy.ssfr_gal[-1]<(10**lookup_condition) and m[-1]>=mass_limit and not interpolation:
+        m = np.log10(galaxy.m_gal[-1])
+        if galaxy.ssfr_gal[-1]<(10**lookup_condition) and m>=mass_limit and not interpolation:
             total_quenched = total_quenched + 1
             #State of the search
             state = (0, galaxy.galaxy_t[0], None)
