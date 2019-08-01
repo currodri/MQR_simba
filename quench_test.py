@@ -150,7 +150,6 @@ axes[0].legend(loc=1)
 
 axes[1].plot(galaxy_t, np.log10(galaxy_m), 'k-')
 mergers_idx = np.asarray([np.where(galaxy_t==merg.galaxy_t[1])[0][0] for merg in mergers])
-rejuvenations_idx = np.asarray([np.where(galaxy_t==rej)[0][0] for rej in reju_t])
 props = dict(boxstyle='round', facecolor='white', edgecolor='k', alpha=0.7)
 for i in range(0, len(thubble_start)):
 	axes[1].plot([thubble_start[i],thubble_start[i]],[np.log10(galaxy_m).min(),np.log10(galaxy_m).max()], linestyle=':', color='b')
@@ -160,8 +159,8 @@ for i in range(0, len(thubble_start)):
 for i in range(0, len(mergers_idx)):
 	print(mergers[i].galaxy_t[2],np.log10(mergers[i].m_gal[2]))
 	axes[1].plot(mergers[i].galaxy_t[2], np.log10(mergers[i].m_gal[2]), marker='o', alpha=0.5, color='r', markersize=10)
-for i in range(0, len(rejuvenations_idx)):
-	axes[1].plot(reju_t[i], np.log10(galaxy_m[rejuvenations_idx[i]]), marker='o', alpha=0.5, color='g', markersize=10)
+for i in range(0, len(reju_id)):
+	axes[0].plot(reju_t[i], np.log10(galaxies_interpolated[0].m_gal[reju_id[i]]), marker='o', alpha=0.5, color='g', markersize=10)
 axes[1].set_xlabel(r't (Gyr)', fontsize=16)
 axes[1].set_ylabel(r'$\log(M_*[M_{\odot}]$)', fontsize=16)
 
