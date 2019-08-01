@@ -90,10 +90,11 @@ reju_t = []
 for i in range(len(galaxies_interpolated)):
     galaxy = galaxies_interpolated[i]
     for k in range(0, len(galaxy.rate), 3):
-        #if np.log10(galaxy.rate[k+1])>=mass_limit:
         reju_z.append(galaxy.rate[k])
         reju_t.append(galaxy.rate[k+1])
         reju_m.append(galaxy.rate[k+2])
+
+print(reju_z, reju_t, reju_m)
 print('Total number of rejuvenations: '+str(len(reju_z)))
 redshifts = []
 ste_mass = []
