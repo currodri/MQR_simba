@@ -72,25 +72,25 @@ finalis = 0
 nofinalis = 0
 for i in range(0, len(galaxies_interpolated)):
     galaxy = galaxies_interpolated[i]
-    if len(galaxy.quenching)>0:
-        lastquench = galaxy.quenching[-1]
-        # if len(galaxy.quenching)>1:
-        #     for caca in range(0, len(galaxy.quenching)):
-        #         print(galaxy.quenching[caca].quench_time)
-    for quench in galaxy.quenching:
-        start = quench.above9 + 1
-        end = quench.below11
-        if quench is lastquench:
-            pos = 0
-            finalis = finalis + 1
-            for index in galaxy.rejuvenations:
-                if 0.2*galaxy.t[1][start]> (galaxy.t[1][start] - galaxy.t[0][index]) >=0:
-                    pos = 2
-        else:
-            nofinalis = nofinalis + 1
-            pos = 1
-        #print(len(galaxy.z_gal), start, end, galaxy.id)
-        if not isinstance(galaxy.m[1], int):
+    if not isinstance(galaxy.m[1], int):
+        if len(galaxy.quenching)>0:
+            lastquench = galaxy.quenching[-1]
+            # if len(galaxy.quenching)>1:
+            #     for caca in range(0, len(galaxy.quenching)):
+            #         print(galaxy.quenching[caca].quench_time)
+        for quench in galaxy.quenching:
+            start = quench.above9 + 1
+            end = quench.below11
+            if quench is lastquench:
+                pos = 0
+                finalis = finalis + 1
+                for index in galaxy.rejuvenations:
+                    if 0.2*galaxy.t[1][start]> (galaxy.t[1][start] - galaxy.t[0][index]) >=0:
+                        pos = 2
+            else:
+                nofinalis = nofinalis + 1
+                pos = 1
+            #print(len(galaxy.z_gal), start, end, galaxy.id)
             if np.log10(galaxy.m[1][end])>=mass_limit:
                 q_indx = int(quench.indx)
                 q_type = 1 - int(galaxy.g_type[q_indx])
