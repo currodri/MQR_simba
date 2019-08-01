@@ -49,7 +49,7 @@ def quenchingFinder(galaxies,sfr_condition, mass_limit, interpolation=False, out
         if not interpolation:
             lookup_condition = sfr_condition('end', galaxy, -1, d_indx)
             m = np.log10(galaxy.m[d_indx][-1])
-            ssfr = np.log10(galaxy.sfr[d_indx][-1]/galaxy.m[d_indx][-1])
+            ssfr = galaxy.sfr[d_indx][-1]/galaxy.m[d_indx][-1]
             if ssfr<(10**lookup_condition) and m>=mass_limit:
                 galaxy.get_ssfr()
                 total_quenched = total_quenched + 1
