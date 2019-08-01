@@ -129,9 +129,9 @@ axes[0].plot(galaxy_t, above, 'b--', label=r'Star-forming threshold: sSFR $=1/t_
 axes[0].plot(galaxy_t, below, 'r--', label=r'Quench threshold: sSFR $=0.2/t_{U}$')
 axes[0].plot(galaxies_interpolated[0].galaxy_t, np.log10(galaxies_interpolated[0].ssfr_gal), linestyle='--', color='grey', alpha=0.7)
 mergers_idx = np.asarray([np.where(galaxy_t==merg.galaxy_t[1])[0][0] for merg in mergers])
-rejuvenations_idx = np.asarray([np.where(galaxy_t==rej)[0][0] for rej in reju_t])
 for rej in reju_t:
 	print(rej, np.where(galaxy_t==rej))
+rejuvenations_idx = np.asarray([np.where(galaxy_t==rej)[0][0] for rej in reju_t])
 props = dict(boxstyle='round', facecolor='white', edgecolor='k', alpha=0.7)
 axes[0].plot([8.739101250191442,8.739101250191442],[-12,-8], linestyle='-', color='k')
 axes[0].plot([8.421918404720678,8.421918404720678],[-12,-8], linestyle='-.', color='k')
