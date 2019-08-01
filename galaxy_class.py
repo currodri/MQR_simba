@@ -21,7 +21,7 @@ class GalaxyData:
         self.sfr = [sfr,0]
         self.ssfr = [0,0]
         self.m = [m,0]
-        self.z = [z,0]
+        self.z = z
         self.t = [t,0]
         self.h1_gas = h1_gas
         self.h2_gas = h2_gas
@@ -43,11 +43,10 @@ class GalaxyData:
         self.fgas = self.h2_gas/self.m
     def get_sfe(self):
         self.sfe = self.sfr/self.h2_gas
-    def interpolated_data(self,sfr_new,m_new,t_new,z_new):
+    def interpolated_data(self,sfr_new,m_new,t_new):
         self.sfr[1] = np.asarray(sfr_new)
         self.m[1] = np.asarray(m_new)
         self.t[1] = np.asarray(t_new)
-        self.z[1] = np.asarray(z_new)
 
 class Quench:
     def __init__(self, above9):

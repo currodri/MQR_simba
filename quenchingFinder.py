@@ -166,6 +166,8 @@ def pre_quench (galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False)
         if interpolation:
             diff = abs(galaxy.t[0] - galaxy.t[1][j])
             quench.indx = np.argmin(diff)
+            if galaxy.ssfr[0][quench.indx] >= 10**current_lssfr:
+                quench.indx = quench.indx + 1
         else:
             quench.indx = j
         #Now we look for rejuvenations
@@ -196,6 +198,8 @@ def quench (galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False):
                 if interpolation:
                     diff = abs(galaxy.t[0] - t)
                     galaxy.rejuvenations.append(np.argmin(diff))
+                    if galaxy.ssfr[0][np.argmin(diff)] <= 10**current_lssfr:
+                        galaxy.rejuvenations[-1] = galaxy.rejuvenations[-1] + 1
                 else:
                     galaxy.rejuvenations.append(j)
             new_state = (1, t, None)
@@ -242,7 +246,6 @@ def ssfr_interpolation(galaxy):
         sfr_gal_non = [galaxy.sfr[0][j] for j in range(above-limit, below+limit,1)]
         t_non = [galaxy.t[0][j] for j in range(above-limit, below+limit,1)]
         m_non = [galaxy.m[0][j] for j in range(above-limit, below+limit,1)]
-        z_non = [galaxy.z[0][j] for j in range(above-limit, below+limit,1)]
 
         time_new = np.arange(np.amin(t_non), np.amax(t_non), 0.001)
 
@@ -252,10 +255,7 @@ def ssfr_interpolation(galaxy):
         tck = interpolate.splrep(t_non,m_non, k=3)
         m_new = interpolate.splev(time_new, tck, der=0)
 
-        tck = interpolate.splrep(t_non,z_non, k=3)
-        z_new = interpolate.splev(time_new, tck, der=0)
-
-        galaxy.interpolated_data(sfr_new,m_new,time_new,z_new)
+        galaxy.interpolated_data(sfr_new,m_new,time_new)
 
         # new_gal = GalaxyData(galaxy.id, sfr_new.tolist(), galaxy.sfe_gal[quench.below11],
         #                         galaxy.z_gal[quench.below11],time_new.tolist(), m_new.tolist(),

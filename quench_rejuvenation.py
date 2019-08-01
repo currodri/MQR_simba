@@ -26,13 +26,18 @@ WIND = sys.argv[2]  # e.g. s50 for Simba
 # Import other codes
 from quenchingFinder import GalaxyData
 results_folder = '../quench_analysis/%s/' % (MODEL) # You can change this to the folder where you want your resulting plots
-quench_file = '../quench_analysis/%s/quenching_results.pkl' % (MODEL) # File holding the progen info of galaxies
+#quench_file = '../quench_analysis/%s/quenching_results.pkl' % (MODEL) # File holding the progen info of galaxies
+data_file = '/home/curro/quenchingSIMBA/code/SH_Project/mandq_results_%s.pkl'
 
 # Extract data from quenching pickle file
-obj = open(merger_file, 'rb')
+# obj = open(quench_file, 'rb')
+# quench_data = pickle.load(obj)
+# obj.close()
+# galaxies_interpolated = quench_data['quenched_galaxies']
+obj = open(data_file, 'rb')
 quench_data = pickle.load(obj)
-obj.close()
-galaxies_interpolated = quench_data['quenched_galaxies']
+ob.close()
+galaxies_interpolated = quench_data['galaxies']
 
 # Save results of rejuvenations coming from first loop
 reju_z = []
@@ -42,25 +47,21 @@ reju_t = []
 
 for i in range(len(galaxies_interpolated)):
     galaxy = galaxies_interpolated[i]
-    for k in range(0, len(galaxy.rate), 3):
-        #if np.log10(galaxy.rate[k+1])>=mass_limit:
-        reju_z.append(galaxy.rate[k])
-        reju_t.append(galaxy.rate[k+1])
-        reju_m.append(np.log10(galaxy.rate[k+2]))
+    for index in galaxy.rejuvenations:
+        reju_z.append(galaxy.z[0][index])
+        reju_t.append(galaxy.t[0][index])
+        reju_m.append(np.log10(galaxy.m[0][index]))
 
 # Save quenchings in the classification schemed chosen
 redshifts2_all = []
 quenching_times2_all = []
 ste_mass2_all = []
-frac_gas2_all = []
 thubble2_all = []
 
 redshifts2 = [[[],[],[]],[[],[],[]]]
 quenching_times2 = [[[],[],[]],[[],[],[]]]
 ste_mass2 = [[[],[],[]],[[],[],[]]]
-frac_gas2 = [[[],[],[]],[[],[],[]]]
 thubble2 = [[[],[],[]],[[],[],[]]]
-sfr_2 = [[[],[],[]],[[],[],[]]]
 
 
 finalis = 0
@@ -78,29 +79,24 @@ for i in range(0, len(galaxies_interpolated)):
         if quench is lastquench:
             pos = 0
             finalis = finalis + 1
-            for k in range(0, len(galaxy.rate), 3):
-                if 0.2*galaxy.galaxy_t[start]> (galaxy.galaxy_t[start] - galaxy.rate[k+1]) >=0:
+            for index in galaxy.rejuvenations:
+                if 0.2*galaxy.t[1][start]> (galaxy.t[1][start] - galaxy.t[0][index]) >=0:
                     pos = 2
         else:
             nofinalis = nofinalis + 1
             pos = 1
         #print(len(galaxy.z_gal), start, end, galaxy.id)
-        if np.log10(galaxy.m_gal)>=mass_limit:
-            if int(quench.type)==0:
-                q_type = 1
-            elif int(quench.type)==1:
-                q_type = 0
-            redshifts2[q_type][pos].append(galaxy.z_gal)
-            ste_mass2[q_type][pos].append(np.log10(galaxy.m_gal))
-            quenching_times2[q_type][pos].append(np.log10(quench.quench_time/galaxy.galaxy_t[end]))
-            frac_gas2[q_type][pos].append(np.log10(galaxy.fgas_gal))
-            thubble2[q_type][pos].append(np.log10(galaxy.galaxy_t[end]))
-            sfr_2[q_type][pos].append(np.log10(galaxy.ssfr_gal[start-1]*galaxy.m_gal))
-            redshifts2_all.append(galaxy.z_gal)
-            ste_mass2_all.append(galaxy.m_gal)
+        if np.log10(galaxy.m[2][end])>=mass_limit:
+            q_indx = quench.indx
+            q_type = 1 - galaxy.g_type[q_indx]
+            redshifts2[q_type][pos].append(galaxy.z[0][q_indx])
+            ste_mass2[q_type][pos].append(np.log10(galaxy.m[1][end]))
+            quenching_times2[q_type][pos].append(np.log10(quench.quench_time/galaxy.t[1][end]))
+            thubble2[q_type][pos].append(np.log10(galaxy.t[1][end]))
+            redshifts2_all.append(galaxy.z[0][q_indx])
+            ste_mass2_all.append(galaxy.m[1][end])
             quenching_times2_all.append(quench.quench_time)
-            frac_gas2_all.append(galaxy.fgas_gal)
-            thubble2_all.append(galaxy.galaxy_t[end])
+            thubble2_all.append(galaxy.t[1][end])
 print(len(quenching_times2[0][0]), len(quenching_times2[0][1]), len(quenching_times2[0][2]), len(quenching_times2[0][0])+len(quenching_times2[0][1]))
 print(len(quenching_times2[1][0]), len(quenching_times2[1][1]), len(quenching_times2[1][2]), len(quenching_times2[1][0])+len(quenching_times2[1][1]))
 print('Number of quenching events in second loop: '
@@ -232,7 +228,7 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
         axR.set_xlabel(x_labels[i], fontsize=16)
         axR.set_ylabel(y_labels[2], fontsize=16)
         axR.legend(loc='best', prop={'size': 10})
-        figR.savefig(str(results_folder)+'quenching_rej_'+str(name_file[i])+'.png', format='png', dpi=250, bbox_inches='tight')
+        figR.savefig(str(results_folder)+'quenching2_rej_'+str(name_file[i])+'.png', format='png', dpi=250, bbox_inches='tight')
 def Quenching_Scatter_Plot2(redshifts2, quenching_times2, ste_mass2):
     scatter_labels = [['Final quenching Sat', 'Non-final quenching Sat', 'Final quenching Sat with rejuvenation' ],['Final quenching Central', 'Non-final quenching Central', 'Final quenching Central with rejuvenation']]
     scatter_markers = ['.','*', '.']
