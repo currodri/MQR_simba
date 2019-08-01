@@ -74,7 +74,6 @@ print('Merger analysis done.')
 galaxies_interpolated = quenchingFinder(galaxies[0:max_ngal], 1, mass_limit)
 
 
-print('Total number of rejuvenations: '+str(len(reju_z)))
 print('Number of quenching events in first loop: '
         +str(sum([1 for galaxy in galaxies[0:max_ngal] for quench in galaxy.quenching])))
 #Interpolation analysis
@@ -95,7 +94,7 @@ for i in range(len(galaxies_interpolated)):
         reju_z.append(galaxy.rate[k])
         reju_t.append(galaxy.rate[k+1])
         reju_m.append(galaxy.rate[k+2])
-
+print('Total number of rejuvenations: '+str(len(reju_z)))
 redshifts = []
 ste_mass = []
 quenching_times = []
