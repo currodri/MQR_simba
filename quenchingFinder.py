@@ -302,9 +302,9 @@ def sfr_condition_2(type, galaxy, j):
 def reju_condition(galaxy, j):
     mass_list = galaxy.m_gal
     condition = False
-    diff = (mass_list[j+1]-mass_list[j])/mass_list[j]
-    diff2 = abs((mass_list[j+2]-mass_list[j])/mass_list[j])
-    diff3 = abs((mass_list[j+1]-mass_list[j-1])/mass_list[j-1])
+    diff = (mass_list[j]-mass_list[j-1])/mass_list[j-1]
+    diff2 = abs((mass_list[j+1]-mass_list[j-1])/mass_list[j-1])
+    diff3 = abs((mass_list[j+1]-mass_list[j-2])/mass_list[j-2])
     print(diff, diff2, diff3)
     if abs(diff-diff2) < 0.25 and abs(diff-diff3) < 0.25:
         condition = True
