@@ -57,8 +57,8 @@ galaxies.append(galaxy)
 above = []
 below = []
 for i in range(0, len(galaxy_t)):
-    above.append(np.log10(1/galaxy_t[i])-9)
-    below.append(np.log10(0.2/galaxy_t[i])-9)
+	above.append(np.log10(1/galaxy_t[i])-9)
+	below.append(np.log10(0.2/galaxy_t[i])-9)
 
 max_ngal = len(galaxies)
 mass_limit = 9.5
@@ -75,7 +75,7 @@ galaxies_interpolated = quenchingFinder(galaxies[0:max_ngal], 1, mass_limit)
 
 
 print('Number of quenching events in first loop: '
-        +str(sum([1 for galaxy in galaxies[0:max_ngal] for quench in galaxy.quenching])))
+		+str(sum([1 for galaxy in galaxies[0:max_ngal] for quench in galaxy.quenching])))
 #Interpolation analysis
 print("Interpolating...")
 
@@ -88,11 +88,11 @@ reju_t = []
 reju_id = []
 
 for i in range(len(galaxies_interpolated)):
-    galaxy = galaxies_interpolated[i]
-    for k in range(0, len(galaxy.rate), 4):
-        reju_z.append(galaxy.rate[k])
-        reju_t.append(galaxy.rate[k+1])
-        reju_m.append(galaxy.rate[k+2])
+	galaxy = galaxies_interpolated[i]
+	for k in range(0, len(galaxy.rate), 4):
+		reju_z.append(galaxy.rate[k])
+		reju_t.append(galaxy.rate[k+1])
+		reju_m.append(galaxy.rate[k+2])
 		reju_id.append(galaxy.rate[k+3])
 
 print(reju_z, reju_t, reju_m)
@@ -105,22 +105,22 @@ thubble_start = []
 thubble_end = []
 
 for i in range(0, len(galaxies_interpolated)):
-    galaxy = galaxies_interpolated[i]
-    for quench in galaxy.quenching:
-        start = quench.above9 + 1
-        end = quench.below11
-        redshifts.append(galaxy.z_gal)
-        ste_mass.append(galaxy.m_gal[end])
-        quenching_times.append(quench.quench_time)
-        frac_gas.append(galaxy.fgas_gal)
-        thubble_start.append(galaxy.galaxy_t[start])
-        thubble_end.append(galaxy.galaxy_t[end])
+	galaxy = galaxies_interpolated[i]
+	for quench in galaxy.quenching:
+		start = quench.above9 + 1
+		end = quench.below11
+		redshifts.append(galaxy.z_gal)
+		ste_mass.append(galaxy.m_gal[end])
+		quenching_times.append(quench.quench_time)
+		frac_gas.append(galaxy.fgas_gal)
+		thubble_start.append(galaxy.galaxy_t[start])
+		thubble_end.append(galaxy.galaxy_t[end])
 
 print(redshifts, quenching_times, thubble_start, thubble_end)
 print([merg.galaxy_t[1] for merg in mergers])
 print(reju_t)
 print('Number of quenching events in second loop: '
-        +str(sum([1 for galaxy in galaxies_interpolated for quench in galaxy.quenching])))
+		+str(sum([1 for galaxy in galaxies_interpolated for quench in galaxy.quenching])))
 # Plot the results
 import seaborn as sns
 sns.set(style="white")
@@ -134,14 +134,14 @@ props = dict(boxstyle='round', facecolor='white', edgecolor='k', alpha=0.7)
 axes[0].plot([8.739101250191442,8.739101250191442],[-12,-8], linestyle='-', color='k')
 axes[0].plot([8.421918404720678,8.421918404720678],[-12,-8], linestyle='-.', color='k')
 for i in range(0, len(thubble_start)):
-    axes[0].plot([thubble_start[i],thubble_start[i]],[-12,-8], linestyle=':', color='b')
-    axes[0].plot([thubble_end[i],thubble_end[i]],[-12,-8], linestyle=':', color='r')
-    xpos = thubble_start[i]-0.6
-    axes[0].text(xpos, -9, r'$\tau_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox=props)
+	axes[0].plot([thubble_start[i],thubble_start[i]],[-12,-8], linestyle=':', color='b')
+	axes[0].plot([thubble_end[i],thubble_end[i]],[-12,-8], linestyle=':', color='r')
+	xpos = thubble_start[i]-0.6
+	axes[0].text(xpos, -9, r'$\tau_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox=props)
 for i in range(0, len(mergers_idx)):
-    axes[0].plot(mergers[i].galaxy_t[1], np.log10(ssfr_gal[mergers_idx[i]]), marker='o', alpha=0.5, color='r', markersize=10)
+	axes[0].plot(mergers[i].galaxy_t[1], np.log10(ssfr_gal[mergers_idx[i]]), marker='o', alpha=0.5, color='r', markersize=10)
 for i in range(0, len(rejuvenations_idx)):
-    axes[0].plot(reju_t[i], np.log10(galaxies_interpolated[0].ssfr_gal[reju_id[i]]), marker='o', alpha=0.5, color='g', markersize=10)
+	axes[0].plot(reju_t[i], np.log10(galaxies_interpolated[0].ssfr_gal[reju_id[i]]), marker='o', alpha=0.5, color='g', markersize=10)
 axes[0].set_xlim([galaxy_t.min(),galaxy_t.max()])
 axes[0].set_ylim([-11.5,-8])
 axes[0].set_ylabel(r'$\log$(sSFR[yr$^{-1}$])', fontsize=16)
@@ -153,15 +153,15 @@ mergers_idx = np.asarray([np.where(galaxy_t==merg.galaxy_t[1])[0][0] for merg in
 rejuvenations_idx = np.asarray([np.where(galaxy_t==rej)[0][0] for rej in reju_t])
 props = dict(boxstyle='round', facecolor='white', edgecolor='k', alpha=0.7)
 for i in range(0, len(thubble_start)):
-    axes[1].plot([thubble_start[i],thubble_start[i]],[np.log10(galaxy_m).min(),np.log10(galaxy_m).max()], linestyle=':', color='b')
-    axes[1].plot([thubble_end[i],thubble_end[i]],[np.log10(galaxy_m).min(),np.log10(galaxy_m).max()], linestyle=':', color='r')
-    xpos = thubble_start[i]-0.6
-    axes[1].text(xpos, 10.5, r'$\tau_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox=props)
+	axes[1].plot([thubble_start[i],thubble_start[i]],[np.log10(galaxy_m).min(),np.log10(galaxy_m).max()], linestyle=':', color='b')
+	axes[1].plot([thubble_end[i],thubble_end[i]],[np.log10(galaxy_m).min(),np.log10(galaxy_m).max()], linestyle=':', color='r')
+	xpos = thubble_start[i]-0.6
+	axes[1].text(xpos, 10.5, r'$\tau_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox=props)
 for i in range(0, len(mergers_idx)):
-    print(mergers[i].galaxy_t[2],np.log10(mergers[i].m_gal[2]))
-    axes[1].plot(mergers[i].galaxy_t[2], np.log10(mergers[i].m_gal[2]), marker='o', alpha=0.5, color='r', markersize=10)
+	print(mergers[i].galaxy_t[2],np.log10(mergers[i].m_gal[2]))
+	axes[1].plot(mergers[i].galaxy_t[2], np.log10(mergers[i].m_gal[2]), marker='o', alpha=0.5, color='r', markersize=10)
 for i in range(0, len(rejuvenations_idx)):
-    axes[1].plot(reju_t[i], np.log10(galaxy_m[rejuvenations_idx[i]]), marker='o', alpha=0.5, color='g', markersize=10)
+	axes[1].plot(reju_t[i], np.log10(galaxy_m[rejuvenations_idx[i]]), marker='o', alpha=0.5, color='g', markersize=10)
 axes[1].set_xlabel(r't (Gyr)', fontsize=16)
 axes[1].set_ylabel(r'$\log(M_*[M_{\odot}]$)', fontsize=16)
 
@@ -178,6 +178,6 @@ axZ.xaxis.set_label_position('top') # set the position of the second x-axis to t
 axZ.set_xlabel('z', fontsize=16)
 axZ.tick_params(labelsize=12)
 for i in range(0, 2):
-    axes[i].tick_params(labelsize=12)
+	axes[i].tick_params(labelsize=12)
 fig.subplots_adjust(hspace=0)
 fig.savefig('quench_finder_test.png', dpi=250, bbox_inches='tight')
