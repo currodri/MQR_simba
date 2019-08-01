@@ -209,7 +209,10 @@ def quench (galaxy,j,curr_state, sfr_condition, interpolation=False):
             #We have found a sign change
             print('Rejuvenation at: '+str(galaxy_t))
             if reju_condition(galaxy, j):
-                galaxy.rate.append(galaxy.z_gal[j])
+                if not interpolation:
+                    galaxy.rate.append(galaxy.z_gal[j])
+                else:
+                    galaxy.rate.append(galaxy.z_gal)
                 galaxy.rate.append(galaxy_t)
                 galaxy.rate.append(galaxy.m_gal[j])
             new_state = (1, galaxy_t, None)
