@@ -48,6 +48,8 @@ class GalaxyData:
         self.m[1] = np.asarray(m_new)
         self.t[1] = np.asarray(t_new)
         self.z[1] = np.asarray(z_new)
+        if not isinstance(self.sfr[1],int):
+            print('Data updated')
 
 class Quench:
     def __init__(self, above9):
