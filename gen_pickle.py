@@ -52,7 +52,7 @@ for i in range(0,ngal):
     d_results['galaxies'].append(galaxy)
 
 # Setting the limiting conditions of the survey
-max_ngal = len(galaxies)
+max_ngal = len(d_results['galaxies'])
 mass_limit = 9.5
 min_merger_ratio = 0.2
 max_redshift_mergers = 2.5
@@ -60,14 +60,14 @@ max_redshift_mergers = 2.5
 d_results['mass_limit'], d_results['min_merger_ratio'], d_results['max_redshift_mergers'] = mass_limit,min_merger_ratio,max_redshift_mergers
 
 # Perform the search for mergers
-merger_finder(galaxies[0:max_ngal], min_merger_ratio, 10**mass_limit, max_redshift_mergers)
+merger_finder(d_results['galaxies'][0:max_ngal], min_merger_ratio, 10**mass_limit, max_redshift_mergers)
 
 print('Merger analysis done.')
 
 # Perform the quenching and rejuvenation analysis
-quenchingFinder(galaxies[0:max_ngal], 1, mass_limit)
+quenchingFinder(d_results['galaxies'][0:max_ngal], 1, mass_limit)
 
-quenchingFinder(galaxies_interpolated[0:max_ngal], 1, mass_limit, interpolation=True)
+quenchingFinder(d_results['galaxies'][0:max_ngal], 1, mass_limit, interpolation=True)
 
 print('Quenching analysis done.')
 
