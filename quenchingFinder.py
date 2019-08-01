@@ -72,7 +72,6 @@ def quenchingFinder(galaxies,sfr_condition, mass_limit, interpolation=False, out
 
                 # galaxy_interpolated = ssfr_interpolation(galaxy)
                 if galaxy.quenching:
-                    print('hey')
                     galaxy = ssfr_interpolation(galaxy)
         elif interpolation and not isinstance(galaxy.t[d_indx], int):
             galaxy.interpolation = True
@@ -230,8 +229,8 @@ def ssfr_interpolation(galaxy):
         #For each quenching, interpolate the new values creating a new galaxy
         above, below = quench.above9, (quench.below11 + 1)
         limit = 0
-        if above - limit < 0 or below + limit >= len(galaxy.t):
-            limit = min(len(galaxy.t) - below, above)
+        if above - limit < 0 or below + limit >= len(galaxy.t[0]):
+            limit = min(len(galaxy.t[0]) - below, above)
         aboves.append(above-limit)
         belows.append(below+limit)
     aboves = np.asarray(aboves)
@@ -240,10 +239,10 @@ def ssfr_interpolation(galaxy):
     below = belows.max()
     if len(range(above, below+limit,1))>3:
         #If there are at least three points in the quench, then:
-        sfr_gal_non = [galaxy.sfr[j] for j in range(above-limit, below+limit,1)]
-        t_non = [galaxy.t[j] for j in range(above-limit, below+limit,1)]
-        m_non = [galaxy.m[j] for j in range(above-limit, below+limit,1)]
-        z_non = [galaxy.z[j] for j in range(above-limit, below+limit,1)]
+        sfr_gal_non = [galaxy.sfr[0][j] for j in range(above-limit, below+limit,1)]
+        t_non = [galaxy.t[0][j] for j in range(above-limit, below+limit,1)]
+        m_non = [galaxy.m[0][j] for j in range(above-limit, below+limit,1)]
+        z_non = [galaxy.z[0][j] for j in range(above-limit, below+limit,1)]
 
         time_new = np.arange(np.amin(t_non), np.amax(t_non), 0.001)
 
