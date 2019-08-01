@@ -50,7 +50,7 @@ reju_t = []
 for i in range(len(galaxies_interpolated)):
     galaxy = galaxies_interpolated[i]
     for index in galaxy.rejuvenations:
-        reju_z.append(galaxy.z[0][index])
+        reju_z.append(galaxy.z[index])
         reju_t.append(galaxy.t[0][index])
         reju_m.append(np.log10(galaxy.m[0][index]))
 
@@ -91,11 +91,11 @@ for i in range(0, len(galaxies_interpolated)):
         if np.log10(galaxy.m[2][end])>=mass_limit:
             q_indx = quench.indx
             q_type = 1 - galaxy.g_type[q_indx]
-            redshifts2[q_type][pos].append(galaxy.z[0][q_indx])
+            redshifts2[q_type][pos].append(galaxy.z[q_indx])
             ste_mass2[q_type][pos].append(np.log10(galaxy.m[1][end]))
             quenching_times2[q_type][pos].append(np.log10(quench.quench_time/galaxy.t[1][end]))
             thubble2[q_type][pos].append(np.log10(galaxy.t[1][end]))
-            redshifts2_all.append(galaxy.z[0][q_indx])
+            redshifts2_all.append(galaxy.z[q_indx])
             ste_mass2_all.append(galaxy.m[1][end])
             quenching_times2_all.append(quench.quench_time)
             thubble2_all.append(galaxy.t[1][end])
@@ -155,7 +155,7 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
     name_file = ['redshift', 'mass']
     colours = ['r','b']
     linestyles = ['-','--']
-    sf_x = [d['redshifts'],np.log10(d['sf_galaxies_mass'])]
+    sf_x = [quench_data['redshifts'],np.log10(quench_data['sf_galaxies_mass'])]
     x_data = [redshifts, ste_mass]
     props = dict(boxstyle='round', facecolor='white', edgecolor='k', alpha=0.7)
     for i in range(0, len(x_labels)):
@@ -188,7 +188,7 @@ def Quenching_Scatter_Plot(redshifts, quenching_times, ste_mass):
                     quenchs = np.asarray(quenchs)
                     quenchs_r = np.asarray(quenching_times[k][2])
                     if i==0:
-                        sf_data = [d['sf_galaxies_per_snap'],sf_x[i]]
+                        sf_data = [quench_data['sf_galaxies_per_snap'],sf_x[i]]
                         pre_bins = np.linspace(0.001,0.7,12)
                         bins = 10**pre_bins - 1
                     else:

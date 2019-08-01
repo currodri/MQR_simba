@@ -34,6 +34,9 @@ print('Total number of galaxies at z = 0: '+str(ngal))
 
 #Store the galaxies sorted in objects of type GalaxyData
 d_results = {}
+d_results['redshifts'] = d['redshifts']
+d_results['sf_galaxies_mass'] = d['sf_galaxies_mass']
+d_results['sf_galaxies_per_snap'] = d['sf_galaxies_per_snap']
 d_results['galaxies'] = []
 for i in range(0,ngal):
     sfr_gal = d['sfr_gal' + str(i)][::-1]
