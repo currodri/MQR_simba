@@ -18,8 +18,9 @@ import numpy as np
 import pickle
 import sys
 
+from galaxy_class import GalaxyData
 from mergerFinder import merger_finder
-from quenchingFinder import GalaxyData, quenchingFinder
+from quenchingFinder import quenchingFinder
 
 MODEL = sys.argv[1]  # e.g. m50n512
 
@@ -32,10 +33,10 @@ ngal = int(d['galaxies_per_snap'][0])
 print('Total number of galaxies at z = 0: '+str(ngal))
 
 #Store the galaxies sorted in objects of type GalaxyData
-galaxies = []
-for i in range(ngal):
+d_results = {}
+d_results['galaxies'] = np.zeros(ngal)
+for i in range(0,ngal):
     sfr_gal = d['sfr_gal' + str(i)][::-1]
-    sfe_gal = d['sfe_gal' + str(i)][::-1]
     z_gal = d['z_gal' + str(i)][::-1]
     galaxy_t = d['t_gal' + str(i)][::-1]
     galaxy_m = d['m_gal'+str(i)][::-1]
@@ -43,8 +44,12 @@ for i in range(ngal):
     gal_type = d['gal_type'+str(i)][::-1]
     gal_pos = d['gal_pos'+str(i)][::-1]
     caesar_id = d['caesar_id'+str(i)][::-1]
-    galaxy = GalaxyData(i, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type, gal_pos, caesar_id)
-    galaxies.append(galaxy)
+    h1_gas = 0
+    h2_gas = d['h2_gal'+str(i)][::-1] * d['m_gal'+str(i)][::-1]
+    bh_m = 0
+    bhar = 0
+    galaxy = GalaxyData(i, sfr_gal, galaxy_m, z_gal, galaxy_t, h1_gas, h2_gas, bh_m, bhar, gal_type, gal_pos, caesar_id)
+    d_results['galaxies'][i] = galaxy
 
 # Setting the limiting conditions of the survey
 max_ngal = len(galaxies)
@@ -52,14 +57,25 @@ mass_limit = 9.5
 min_merger_ratio = 0.2
 max_redshift_mergers = 2.5
 
+d_results['mass_limit'], d_results['min_merger_ratio'], d_results['max_redshift_mergers'] = mass_limit,min_merger_ratio,max_redshift_mergers
+
 # Perform the search for mergers
-mergers, sf_galaxies = merger_finder(galaxies, min_merger_ratio, 10**mass_limit, max_redshift_mergers, out_file=True)
+merger_finder(galaxies[0:max_ngal], min_merger_ratio, 10**mass_limit, max_redshift_mergers)
 
 print('Merger analysis done.')
 
 # Perform the quenching and rejuvenation analysis
-galaxies_interpolated = quenchingFinder(galaxies[0:max_ngal], 1, mass_limit)
+quenchingFinder(galaxies[0:max_ngal], 1, mass_limit)
 
-quenchingFinder(galaxies_interpolated, 1, mass_limit, interpolation=True, out_file=True)
+quenchingFinder(galaxies_interpolated[0:max_ngal], 1, mass_limit, interpolation=True)
 
 print('Quenching analysis done.')
+
+print('Now, saving data to pickle file...')
+
+import cPickle as pickle
+
+output = open('./mandq_results_'+str(MODEL)+'.pkl','wb')
+pickle.dump(d_results, output)
+print('Data saved in pickle file.')
+output.close()

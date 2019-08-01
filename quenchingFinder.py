@@ -13,32 +13,7 @@ s1650043@ed.ac.uk
 import numpy as np
 from scipy import interpolate
 import cPickle as pickle
-
-
-"""Classes defined"""
-class GalaxyData:
-    def __init__(self,id, sfr_gal, sfe_gal, z_gal, galaxy_t, m_gal, fgas_gal, gal_type, gal_pos, caesar_id):
-        self.sfr_gal = sfr_gal
-        self.ssfr_gal = (sfr_gal/np.asarray(m_gal))+1e-14
-        self.sfe_gal = sfe_gal
-        self.z_gal = z_gal
-        self.galaxy_t = galaxy_t
-        self.m_gal = m_gal
-        self.fgas_gal = fgas_gal
-        self.quenching = []
-        self.id = id
-        self.type = gal_type
-        self.gal_pos = gal_pos
-        self.caesar_id = caesar_id
-        self.rate = []
-        self.all_z = []
-
-class Quench:
-    def __init__(self, above9, type):
-        self.above9 = above9
-        self.type = type
-        self.below11 = None
-        self.quench_time = None
+from galaxy_class import GalaxyData, Quench
 
 
 ###########################################################################################
@@ -66,15 +41,20 @@ def quenchingFinder(galaxies,sfr_condition, mass_limit, interpolation=False, out
     total_quenched = 0
 
     for i in range(0, len(galaxies)):
-
         #Galaxy we are considering
         galaxy = galaxies[i]
         lookup_condition = sfr_condition('end', galaxy, -1)
-        m = np.log10(galaxy.m_gal[-1])
-        if galaxy.ssfr_gal[-1]<(10**lookup_condition) and m>=mass_limit and not interpolation:
+        if interpolation:
+            d_indx = 1
+        else:
+            d_indx = 0
+        m = np.log10(galaxy.m[d_indx][-1])
+        ssfr = np.log10(galaxy.sfr[d_indx][-1]/galaxy.m[d_indx][-1])
+        if ssfr<(10**lookup_condition) and m>=mass_limit and not interpolation:
+            galaxy.get_ssfr()
             total_quenched = total_quenched + 1
             #State of the search
-            state = (0, galaxy.galaxy_t[0], None)
+            state = (0, galaxy.t[d_indx][0], None)
             #The state has 3 elements.
             #The first one indicates the stage we are in (initial, pre_quench or quench)
             #The second one has the inital time of the period we are considering
@@ -82,23 +62,24 @@ def quenchingFinder(galaxies,sfr_condition, mass_limit, interpolation=False, out
 
 
             #Set the number of snapshots to be observed
-            last_snapshot = len(galaxy.galaxy_t)
+            last_snapshot = len(galaxy.t[d_indx])
 
             #Go over each snapshot and save the new data of the galaxy
             for j in range(0, last_snapshot-3):
-                state = analyseState[state[0]](galaxy,j, state, sfr_condition)
+                state = analyseState[state[0]](galaxy,j, state, sfr_condition, d_indx)
             #Check if the last quenching is a valid one:
             if galaxy.quenching and galaxy.quenching[-1].below11 == None:
                 del galaxy.quenching[-1]
 
             # galaxy_interpolated = ssfr_interpolation(galaxy)
             if galaxy.quenching:
-                galaxies_interpolated = ssfr_interpolation(galaxy)
-                interpolation_list_of_list.extend(galaxies_interpolated)
+                ssfr_interpolation(galaxy)
         elif interpolation:
+            galaxy.interpolation = True
+            galaxy.get_ssfr()
             total_quenched = total_quenched + 1
             #State of the search
-            state = (0, galaxy.galaxy_t[0], None)
+            state = (0, galaxy.t[d_indx][0], None)
             #The state has 3 elements.
             #The first one indicates the stage we are in (initial, pre_quench or quench)
             #The second one has the inital time of the period we are considering
@@ -106,28 +87,28 @@ def quenchingFinder(galaxies,sfr_condition, mass_limit, interpolation=False, out
 
 
             #Set the number of snapshots to be observed
-            last_snapshot = len(galaxy.galaxy_t)
+            last_snapshot = len(galaxy.t[d_indx])
 
             #Go over each snapshot and save the new data of the galaxy
             for j in range(0, last_snapshot):
-                state = analyseState[state[0]](galaxy,j, state, sfr_condition, interpolation=True)
+                state = analyseState[state[0]](galaxy,j, state, sfr_condition, d_indx, interpolation=True)
 
             #Check if the last quenching is a valid one:
             if galaxy.quenching and galaxy.quenching[-1].below11 == None:
                 del galaxy.quenching[-1]
     print ('Total number of quenched galaxies at z=0 : '+str(total_quenched))
-    if out_file:
-        d = {}
-        if interpolation:
-            interpolation_list_of_list = galaxies
-        d['quenched_galaxies'] = interpolation_list_of_list
-        d['mass_limit'] = mass_limit
-        print('Saving quenching data into pickle file with name quenching_results.pkl')
-        output = open('../quench_analysis/m100n1024/quenching_results.pkl','wb')
-        pickle.dump(d, output)
-        print('Data saved in pickle file.')
-        output.close()
-    return interpolation_list_of_list
+    # if out_file:
+    #     d = {}
+    #     if interpolation:
+    #         interpolation_list_of_list = galaxies
+    #     d['quenched_galaxies'] = interpolation_list_of_list
+    #     d['mass_limit'] = mass_limit
+    #     print('Saving quenching data into pickle file with name quenching_results.pkl')
+    #     output = open('../quench_analysis/m100n1024/quenching_results.pkl','wb')
+    #     pickle.dump(d, output)
+    #     print('Data saved in pickle file.')
+    #     output.close()
+    # return interpolation_list_of_list
 
 
 ###########################################################################################
@@ -135,44 +116,44 @@ def quenchingFinder(galaxies,sfr_condition, mass_limit, interpolation=False, out
 FUNCTIONS THAT DEFINE THE DIFFERENT STAGES FOR QUENCHING AND REJUVENATION
 """
 
-def initial(galaxy,j,curr_state, sfr_condition, interpolation=False):
+def initial(galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False):
     """We check if the ssfr is higher than threshold... if that's the case, then we are
     ready to look for a quench. """
 
-    ssfr_gal, galaxy_t = galaxy.ssfr_gal[j], galaxy.galaxy_t[j]
+    ssfr_gal, t = galaxy.ssfr_gal[d_indx][j], galaxy.t[d_indx][j]
 
     current_lssfr = sfr_condition('start', galaxy, j)
 
     if ssfr_gal > 10**current_lssfr:
-        new_state = (1, galaxy_t, None)
+        new_state = (1, t, None)
     else:
         new_state = (0, None, None)
 
     return new_state
 
-def readyToLook (galaxy,j,curr_state, sfr_condition, interpolation=False):
+def readyToLook (galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False):
     """We are ready to check if ssfr is below threshold"""
-    ssfr_gal = galaxy.ssfr_gal[j]
+    ssfr_gal = galaxy.ssfr_gal[d_indx][j]
 
     current_lssfr = sfr_condition('start', galaxy, j)
 
     if ssfr_gal <= 10**current_lssfr:
-        if not interpolation:
-            quench = Quench(j-1, galaxy.type[j-1])
-        else:
-            quench = Quench(j-1, galaxy.type)
+        quench = Quench(j-1)
+        # if not interpolation:
+        #     quench = Quench(j-1)
+        # else:
+        #     quench = Quench(j-1, galaxy.type)
         galaxy.quenching.append(quench)
-
-        new_state = (2, curr_state[1], galaxy.galaxy_t[j])
+        new_state = (2, curr_state[1], galaxy.t[d_indx][j])
     else:
         new_state = curr_state
 
     return new_state
 
 
-def pre_quench (galaxy,j,curr_state, sfr_condition, interpolation=False):
+def pre_quench (galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False):
     """There has been a lssfr <= threshold, now let's check for a quench """
-    ssfr_gal = galaxy.ssfr_gal[j]
+    ssfr_gal = galaxy.ssfr_gal[d_indx][j]
 
     current_lssfr = sfr_condition('end', galaxy, j)
 
@@ -181,41 +162,43 @@ def pre_quench (galaxy,j,curr_state, sfr_condition, interpolation=False):
         quench = galaxy.quenching[-1]
         #Add the point below11 and the length time of the quench
         quench.below11 = j
-        quench.quench_time =abs(curr_state[2] - galaxy.galaxy_t[j])
-
+        quench.quench_time =abs(curr_state[2] - galaxy.t[d_indx][j])
+        if interpolation:
+            diff = abs(galaxy.t[0] - galaxy.t[1][j])
+            quench.indx = np.argmin(diff)
+        else:
+            quench.indx = j
         #Now we look for rejuvenations
         new_state = (3, curr_state[1], None)
     elif ssfr_gal >= 10**sfr_condition('start', galaxy, j):
         del galaxy.quenching[-1]
         #Go back to state readyToLook.
-        new_state = (1, galaxy.galaxy_t[j], None)
+        new_state = (1, galaxy.t[d_indx][j], None)
     else:
         new_state = curr_state
 
     return new_state
 
 
-def quench (galaxy,j,curr_state, sfr_condition, interpolation=False):
+def quench (galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False):
     """We have detected a quench and now we are looking for rejuvenations """
-    ssfr_gal, galaxy_t = galaxy.ssfr_gal[j], galaxy.galaxy_t[j]
+    ssfr_gal, t = galaxy.ssfr_gal[d_indx][j], galaxy.t[d_indx][j]
 
     current_lssfr = sfr_condition('start', galaxy, j)
     time_min = max(curr_state[1], 0.5)
 
-    if galaxy_t > 1.2*time_min:
+    if t > 1.2*time_min:
         #It has passed enough time since the quench was detected, we can have rejuvenations
 
         if ssfr_gal > 10**current_lssfr:
             #We have found a sign change
-            if reju_condition(galaxy, j):
-                if not interpolation:
-                    galaxy.rate.append(galaxy.z_gal[j])
+            if reju_condition(galaxy, j, d_indx):
+                if interpolation:
+                    diff = abs(galaxy.t[0] - t)
+                    galaxy.rejuvenations.append(np.argmin(diff))
                 else:
-                    galaxy.rate.append(galaxy.z_gal)
-                galaxy.rate.append(galaxy_t)
-                galaxy.rate.append(galaxy.m_gal[j])
-                galaxy.rate.append(j)
-            new_state = (1, galaxy_t, None)
+                    galaxy.rejuvenations.append(j)
+            new_state = (1, t, None)
         else:
             new_state = curr_state
     else:
@@ -225,7 +208,7 @@ def quench (galaxy,j,curr_state, sfr_condition, interpolation=False):
             del galaxy.quenching[-1]
 
             #Go back to state readyToLook.
-            new_state = (1, galaxy_t, None)
+            new_state = (1, t, None)
         else:
             #Explore the next snapshot
             new_state = curr_state
@@ -234,21 +217,20 @@ def quench (galaxy,j,curr_state, sfr_condition, interpolation=False):
 
 ##########################################################################################
 """
-FUNCTIONS THAT DEFINE THE DIFFERENT INTERPOLATION METHODS THAT CAN BE USE
+FUNCTIONS THAT DEFINE THE INTERPOLATION METHOD
 """
 
 
 def ssfr_interpolation(galaxy):
 
-    new_galaxies = []
     aboves = []
     belows = []
     for quench in galaxy.quenching:
         #For each quenching, interpolate the new values creating a new galaxy
         above, below = quench.above9, (quench.below11 + 1)
         limit = 0
-        if above - limit < 0 or below + limit >= len(galaxy.galaxy_t):
-            limit = min(len(galaxy.galaxy_t) - below, above)
+        if above - limit < 0 or below + limit >= len(galaxy.t):
+            limit = min(len(galaxy.t) - below, above)
         aboves.append(above-limit)
         belows.append(below+limit)
     aboves = np.asarray(aboves)
@@ -258,25 +240,30 @@ def ssfr_interpolation(galaxy):
     if len(range(above, below+limit,1))>3:
         #If there are at least three points in the quench, then:
         sfr_gal_non = [galaxy.sfr_gal[j] for j in range(above-limit, below+limit,1)]
-        galaxy_t_non = [galaxy.galaxy_t[j] for j in range(above-limit, below+limit,1)]
-        m_gal_non = [galaxy.m_gal[j] for j in range(above-limit, below+limit,1)]
+        t_non = [galaxy.t[j] for j in range(above-limit, below+limit,1)]
+        m_non = [galaxy.m[j] for j in range(above-limit, below+limit,1)]
+        z_non = [galaxy.z[j] for j in range(above-limit, below+limit,1)]
 
-        time_new = np.arange(np.amin(galaxy_t_non), np.amax(galaxy_t_non), 0.001)
+        time_new = np.arange(np.amin(t_non), np.amax(t_non), 0.001)
 
-        tck = interpolate.splrep(galaxy_t_non,sfr_gal_non, k=3)
+        tck = interpolate.splrep(t_non,sfr_gal_non, k=3)
         sfr_new = interpolate.splev(time_new, tck, der=0)
 
-        tck = interpolate.splrep(galaxy_t_non,m_gal_non, k=3)
+        tck = interpolate.splrep(t_non,m_non, k=3)
         m_new = interpolate.splev(time_new, tck, der=0)
 
-        new_gal = GalaxyData(galaxy.id, sfr_new.tolist(), galaxy.sfe_gal[quench.below11],
-                                galaxy.z_gal[quench.below11],time_new.tolist(), m_new.tolist(),
-                                galaxy.fgas_gal[quench.above9], quench.type, None, galaxy.caesar_id)
-        #new_gal.rate = galaxy.rate
-        new_gal.all_z = galaxy.z_gal
+        tck = interpolate.splrep(t_non,z_non, k=3)
+        z_new = interpolate.splev(time_new, tck, der=0)
 
-        new_galaxies.append(new_gal)
-    return new_galaxies
+        galaxy.interpolated_data(sfr_new,m_new,t_new,z_new)
+
+        # new_gal = GalaxyData(galaxy.id, sfr_new.tolist(), galaxy.sfe_gal[quench.below11],
+        #                         galaxy.z_gal[quench.below11],time_new.tolist(), m_new.tolist(),
+        #                         galaxy.fgas_gal[quench.above9], quench.type, None, galaxy.caesar_id)
+        #new_gal.rate = galaxy.rate
+        #new_gal.all_z = galaxy.z_gal
+
+        #new_galaxies.append(new_gal)
 
 
 ##########################################################################################
@@ -285,26 +272,26 @@ FUNCTIONS THAT DEFINE THE DIFFERENT THRESHOLDS FOR STAR FORMING AND QUENCHED GAL
 AND THE CONDITION FOR REJUVENATION
 """
 
-def sfr_condition_1(type, galaxy, j):
-    if galaxy.z_gal[j]<=2.0:
+def sfr_condition_1(type, galaxy, j, d_indx):
+    if galaxy.z[d_indx][j]<=2.0:
         a = 0.3
     else:
         a = 0.0
     if type == 'start':
-        lsfr = -9.5 + a*galaxy.z_gal[j]
+        lsfr = -9.5 + a*galaxy.z[d_indx][j]
     elif type == 'end':
-        lsfr = -11 + a*galaxy.z_gal[j]
+        lsfr = -11 + a*galaxy.z[d_indx][j]
     return lsfr
 
-def sfr_condition_2(type, galaxy, j):
+def sfr_condition_2(type, galaxy, j, d_indx):
     if type == 'start':
-        lsfr = np.log10(1/(galaxy.galaxy_t[j]))-9
+        lsfr = np.log10(1/(galaxy.t[d_indx][j]))-9
     elif type == 'end':
-        lsfr  = np.log10(0.2/(galaxy.galaxy_t[j]))-9
+        lsfr  = np.log10(0.2/(galaxy.t[d_indx][j]))-9
     return lsfr
 
-def reju_condition(galaxy, j):
-    mass_list = galaxy.m_gal
+def reju_condition(galaxy, j, d_indx):
+    mass_list = galaxy.m[d_indx]
     condition = False
     diff = (mass_list[j]-mass_list[j-1])/mass_list[j-1]
     diff2 = abs((mass_list[j+1]-mass_list[j-1])/mass_list[j-1])

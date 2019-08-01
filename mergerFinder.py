@@ -16,24 +16,7 @@ import pylab as plt
 from scipy import stats
 import cPickle as pickle
 from quenchingFinder import sfr_condition_2, GalaxyData
-
-"""Classes defined"""
-class Merger:
-    def __init__(self,id, sfr_gal, sfe_gal, z_gal, galaxy_t, m_gal, fgas_gal, gal_type, gal_pos, merger_ratio, fgas_boost, caesar_id, all_z):
-        self.sfr_gal = sfr_gal
-        self.ssfr_gal = (sfr_gal/m_gal)
-        self.sfe_gal = sfe_gal
-        self.z_gal = z_gal
-        self.galaxy_t = galaxy_t
-        self.m_gal = m_gal
-        self.fgas_gal = fgas_gal
-        self.id = id
-        self.type = gal_type
-        self.gal_pos = gal_pos
-        self.merger_ratio = merger_ratio
-        self.fgas_boost = fgas_boost
-        self.caesar_id = caesar_id
-        self.all_z = all_z
+from galaxy_class import GalaxyData, Merger
 ###########################################################################################
 """
 FUNCTION THAT DEFINES THE CONDITIONS FOLLOWED TO DETECT A MERGER
@@ -42,16 +25,12 @@ def merger_condition(sfr, delta_t, mass_list, index, merger_ratio, mass_limit):
     condition = False
     predicted = sfr*delta_t*(10**9)
     actual = mass_list[index+1] - mass_list[index]
-    #print(predicted, actual)
     diff = (mass_list[index+1]-mass_list[index])/mass_list[index]
     diff2 = abs((mass_list[index+2]-mass_list[index])/mass_list[index])
     diff3 = abs((mass_list[index+1]-mass_list[index-1])/mass_list[index-1])
     diff4 = abs((mass_list[index+3]-mass_list[index])/mass_list[index])
-    #print(diff, diff2, diff-diff3, diff4)
-    #print(diff>=merger_ratio,diff2>=merger_ratio,predicted <= 0.25*actual,diff-diff3 < 0.001,diff4>=merger_ratio,mass_list[index]>=mass_limit)
     if diff>=merger_ratio and diff2>=merger_ratio and predicted <= 0.25*actual and diff-diff3 < 0.001 and diff4>=merger_ratio and mass_list[index]>=mass_limit:
         condition = True
-        #print('hey')
     return (condition, diff)
 ###########################################################################################
 """
@@ -70,52 +49,41 @@ out_file ======= if set to True, the merger results are saved in a pickle file f
 
 """
 def merger_finder(galaxies, merger_ratio, mass_limit, redshift_limit, out_file=False):
-    mergers = []
-    sf_galaxies = []
-    for galaxy in range(0, len(galaxies)):
-        gal = galaxies[galaxy]
-        mass = gal.m_gal
-        sfr = gal.sfr_gal
-        fgas = gal.fgas_gal
-        z = gal.z_gal
-        sfe = gal.sfe_gal
-        id = gal.id
-        type = gal.type
-        time = gal.galaxy_t
-        pos = gal.gal_pos
-        c_id = gal.caesar_id
+    for gal in galaxies:
+        mass = gal.m[0]
+        z = gal.z[0]
+        t = gal.t[0]
+        sfr = gal.sfr[0]
         for i in range(1, len(mass)-3):
             if z[i]<=redshift_limit:
-                #print(time[i])
                 delta_t = time[i+1]-time[i]
                 condition,ratio = merger_condition(sfr[i], delta_t, mass, i, merger_ratio, mass_limit)
                 sfcondition = sfr_condition_2('end', gal, i)
                 ssfr = sfr/mass
-                #print(10**sfcondition, ssfr)
-                if condition == True and ssfr[i+2]>=(10**sfcondition) and fgas[i+2]>0:
+                if condition == True and ssfr[i+2]>=(10**sfcondition):
                     boost = (fgas[i+1]-fgas[i-1])/fgas[i-1]
                     # Save data at the merger, after and before
-                    merger = Merger(id,sfr[i-1:i+2],sfe[i-1:i+2],z[i-1:i+2],time[i-1:i+2],mass[i-1:i+2],fgas[i-1:i+2],type[i-1:i+2],pos[i-1:i+2],ratio,boost,c_id,z)
-                    mergers.append(merger)
-                else:
-                    if mass[i]>mass_limit and ssfr[i]>=(10**sfcondition) and fgas[i]>0:
-                        sf_gal = GalaxyData(id,sfr[i],sfe[i],z[i],time[i],mass[i],fgas[i],type[i], pos[i], c_id[i])
-                        # Add star forming galaxy to the list
-                        sf_galaxies.append(sf_gal)
+                    merger = Merger(i,ratio,boost)
+                    gal.mergers.append(merger)
+                # else:
+                #     if mass[i]>mass_limit and ssfr[i]>=(10**sfcondition) and fgas[i]>0:
+                #         sf_gal = GalaxyData(id,sfr[i],sfe[i],z[i],time[i],mass[i],fgas[i],type[i], pos[i], c_id[i])
+                #         # Add star forming galaxy to the list
+                #         sf_galaxies.append(sf_gal)
     print('Star-forming main sequence and mergers found up to z = '+str(redshift_limit))
-    if out_file:
-        d = {}
-        d['mergers'] = mergers
-        d['sf_galaxies'] = sf_galaxies
-        d['merger_ratio_min'] = merger_ratio
-        d['mass_limit'] = mass_limit
-        d['redshift_limit'] = redshift_limit
-        print('Saving merger data into pickle file with name merger_results.pkl')
-        output = open('../mergers/m100n1024/merger_results.pkl','wb')
-        pickle.dump(d, output)
-        print('Data saved in pickle file.')
-        output.close()
-    return(mergers, sf_galaxies)
+    # if out_file:
+    #     d = {}
+    #     d['mergers'] = mergers
+    #     d['sf_galaxies'] = sf_galaxies
+    #     d['merger_ratio_min'] = merger_ratio
+    #     d['mass_limit'] = mass_limit
+    #     d['redshift_limit'] = redshift_limit
+    #     print('Saving merger data into pickle file with name merger_results.pkl')
+    #     output = open('../mergers/m100n1024/merger_results.pkl','wb')
+    #     pickle.dump(d, output)
+    #     print('Data saved in pickle file.')
+    #     output.close()
+    # return(mergers, sf_galaxies)
 
 
 ##########################################################################################

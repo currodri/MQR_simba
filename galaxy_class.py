@@ -10,3 +10,53 @@ For questions about the code:
 s1650043@ed.ac.uk
 """
 """Import some necessary packages"""
+import numpy as np
+
+""" Define classes """
+
+class GalaxyData:
+    def __init__(self,progen_id,sfr,m,z,t,h1_gas,h2_gas,bh_m,bhar,g_type,pos,caesar_id):
+        self.interpolation = False
+        self.progen_id = int(progen_id)
+        self.sfr = np.array([sfr,0])
+        self.m = np.array([m,0])
+        self.z = np.array([z,0])
+        self.t = np.array([t,0])
+        self.h1_gas = h1_gas
+        self.h2_gas = h2_gas
+        self.bh_m = bh_m
+        self.bhar = bhar
+        self.g_type = g_type
+        self.pos = pos
+        self.caesar_id = caesar_id
+        self.mergers = []
+        self.quenching = []
+        self.rejuvenations = []
+        self.mags = []
+    def get_ssfr(self):
+        if interpolation:
+            self.ssfr = self.sfr[1]/self.m[1]
+        else:
+            self.ssfr = self.sfr[0]/self.m[0]
+    def get_fgas(self):
+        self.fgas = self.h2_gas/self.m
+    def get_sfe(self):
+        self.sfe = self.sfr/self.h2_gas
+    def interpolated_data(self,sfr_new,m_new,t_new,z_new):
+        self.sfr[1] = np.asarray(sfr_new)
+        self.m[1] = np.asarray(m_new)
+        self.t[1] = np.asarray(t_new)
+        self.z[1] = np.asarray(z_new)
+
+class Quench:
+    def __init__(self, above9):
+        self.above9 = above9
+        self.below11 = None
+        self.quench_time = None
+        self.indx = None
+
+class Merger:
+    def __init__(self,indx,merger_ratio,fgas_boost):
+        self.indx = indx
+        self.merger_ratio = merger_ratio
+        self.fgas_boost = fgas_boost
