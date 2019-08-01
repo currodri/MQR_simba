@@ -40,9 +40,9 @@ def quenchingFinder(galaxies,sfr_condition, mass_limit, interpolation=False, out
     interpolation_list_of_list = []
     total_quenched = 0
     if interpolation:
-            d_indx = 1
-        else:
-            d_indx = 0
+        d_indx = 1
+    else:
+        d_indx = 0
     for i in range(0, len(galaxies)):
         #Galaxy we are considering
         galaxy = galaxies[i]
