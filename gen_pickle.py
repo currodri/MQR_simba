@@ -34,7 +34,7 @@ print('Total number of galaxies at z = 0: '+str(ngal))
 
 #Store the galaxies sorted in objects of type GalaxyData
 d_results = {}
-d_results['galaxies'] = np.zeros(ngal)
+d_results['galaxies'] = []
 for i in range(0,ngal):
     sfr_gal = d['sfr_gal' + str(i)][::-1]
     z_gal = d['z_gal' + str(i)][::-1]
@@ -49,7 +49,7 @@ for i in range(0,ngal):
     bh_m = 0
     bhar = 0
     galaxy = GalaxyData(i, sfr_gal, galaxy_m, z_gal, galaxy_t, h1_gas, h2_gas, bh_m, bhar, gal_type, gal_pos, caesar_id)
-    d_results['galaxies'][i] = galaxy
+    d_results['galaxies'].append(galaxy)
 
 # Setting the limiting conditions of the survey
 max_ngal = len(galaxies)
