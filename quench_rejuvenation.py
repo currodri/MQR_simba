@@ -41,6 +41,8 @@ obj.close()
 galaxies_interpolated = quench_data['galaxies']
 print('Data extracted from pickle file!')
 
+mass_limit = quench_data['mass_limit']
+
 # Save results of rejuvenations coming from first loop
 reju_z = []
 reju_m = []
