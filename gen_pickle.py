@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on 24 December 2018
+Created on 24 July 2019
 
 @author: Curro Rodriguez Montero, School of Physics and Astronomy,
             University of Edinburgh, JCMB, King's Buildings
@@ -39,18 +39,17 @@ d_results['sf_galaxies_mass'] = d['sf_galaxies_mass']
 d_results['sf_galaxies_per_snap'] = d['sf_galaxies_per_snap']
 d_results['galaxies'] = []
 for i in range(0,ngal):
-    sfr_gal = d['sfr_gal' + str(i)][::-1]
-    z_gal = d['z_gal' + str(i)][::-1]
-    galaxy_t = d['t_gal' + str(i)][::-1]
-    galaxy_m = d['m_gal'+str(i)][::-1]
-    fgas_gal = d['h2_gal'+str(i)][::-1]
-    gal_type = d['gal_type'+str(i)][::-1]
-    gal_pos = d['gal_pos'+str(i)][::-1]
+    sfr_gal = d['sfr' + str(i)][::-1]
+    z_gal = d['z' + str(i)][::-1]
+    galaxy_t = d['t' + str(i)][::-1]
+    galaxy_m = d['m'+str(i)][::-1]
+    gal_type = d['g_type'+str(i)][::-1]
+    gal_pos = d['pos'+str(i)][::-1]
     caesar_id = d['caesar_id'+str(i)][::-1]
-    h1_gas = 0
-    h2_gas = d['h2_gal'+str(i)][::-1] * d['m_gal'+str(i)][::-1]
-    bh_m = 0
-    bhar = 0
+    h1_gas = d['h1_gal'+str(i)][::-1]
+    h2_gas = d['h2_gal'+str(i)][::-1]
+    bh_m = d['bhm'+str(i)][::-1]
+    bhar = d['bhar'+str(i)][::-1]
     galaxy = GalaxyData(i, sfr_gal, galaxy_m, z_gal, galaxy_t, h1_gas, h2_gas, bh_m, bhar, gal_type, gal_pos, caesar_id)
     d_results['galaxies'].append(galaxy)
 

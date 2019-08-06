@@ -49,16 +49,16 @@ for galaxy in range(0, lengal):
 
 d = {}
 for j in range(0, lengal):
-    d['m_gal'+str(j)] = np.array([])
-    d['sfr_gal'+str(j)] = np.array([])
-    d['fgas_gal'+str(j)] = np.array([])
-    d['h1_gal'+str(j)] = np.array([])
-    d['h2_gal'+str(j)] = np.array([])
-    d['t_gal'+str(j)] = np.array([])
-    d['z_gal'+str(j)] = np.array([])
-    d['sfe_gal'+str(j)] = np.array([])
-    d['gal_type'+str(j)] = np.array([])
+    d['m'+str(j)] = np.array([])
+    d['sfr'+str(j)] = np.array([])
+    d['h1_gas'+str(j)] = np.array([])
+    d['h2_gas'+str(j)] = np.array([])
+    d['g_type'+str(j)] = np.array([])
     d['caesar_id'+str(j)] = np.array([])
+    d['bhm'+str(j)] = np.array([])
+    d['bhar'+str(j)] = np.array([])
+    d['z'+str(j)] = np.array([])
+    d['t'+str(j)] = np.array([])
 
 
 snaps = filter(lambda file:file[-5:]=='.hdf5' and file[0]=='m', os.listdir(caesarfile))
@@ -97,6 +97,8 @@ for s in range(0, len(progenref_data[0])+1):
         sfr = np.asarray([i.sfr for i in sim.galaxies])   # read in instantaneous star formation rates
         galpos = np.array([g.pos.d for g in sim.galaxies]) # the .d removes the units
         caesar_id = np.array([i.GroupID for i in sim.galaxies]) # getting the Caesar ID for each galaxy
+        bh_dot = np.array([float(i.bhmdot.d) for i in sim.galaxies]) # getting the BH accretion rate for the most massive BH particle
+        bh_mass = np.array([float(i.masses['bh'].d) for i in sim.galaxies]) # getting mass of most massive BH particle in galaxy
 
         ssfr_gal = sfr/ms
         sfgals = 0
@@ -118,48 +120,31 @@ for s in range(0, len(progenref_data[0])+1):
             d['boxsize_in_kpccm'] = sim.simulation.boxsize.to('kpccm')
         for k in range(0, lengal):
             if s==0:
-                d['m_gal'+str(k)] = np.concatenate((d['m_gal'+str(k)], ms[k]), axis=None)
-                d['sfr_gal'+str(k)] = np.concatenate((d['sfr_gal'+str(k)],sfr[k]), axis=None)
-                frac = (mHI[k] + mH2[k])/ms[k]
-                h1 = mHI[k]/ms[k]
-                h2 = mH2[k]/ms[k]
-                d['fgas_gal'+str(k)] = np.concatenate((d['fgas_gal'+str(k)],frac), axis=None)
-                d['h1_gal'+str(k)] = np.concatenate((d['h1_gal'+str(k)],h1), axis=None)
-                d['h2_gal'+str(k)] = np.concatenate((d['h2_gal'+str(k)],h2), axis=None)
-                if (mH2[k])>0:
-                    sfe = sfr[k]/(mH2[k])
-                else:
-                    sfe = 0.0
-                d['sfe_gal'+str(k)] = np.concatenate((d['sfe_gal'+str(k)],sfe),axis=None)
-                d['t_gal'+str(k)] = np.concatenate((d['t_gal'+str(k)], thubble), axis=None)
-                d['z_gal'+str(k)] = np.concatenate((d['z_gal'+str(k)], redshift), axis=None)
-                d['gal_type'+str(k)] = np.concatenate((d['gal_type'+str(k)],gals[k]), axis=None)
+                d['m'+str(k)] = np.concatenate((d['m'+str(k)], ms[k]), axis=None)
+                d['sfr'+str(k)] = np.concatenate((d['sfr'+str(k)],sfr[k]), axis=None)
+                d['h1_gas'+str(k)] = np.concatenate((d['h1_gas'+str(k)],mHI[k]), axis=None)
+                d['h2_gas'+str(k)] = np.concatenate((d['h2_gas'+str(k)],mH2[k]), axis=None)
+                d['z'+str(k)] = np.concatenate((d['z'+str(k)],redshift), axis=None)
+                d['t'+str(k)] = np.concatenate((d['t'+str(k)],thubble), axis=None)
+                d['g_type'+str(k)] = np.concatenate((d['g_type'+str(k)],gals[k]), axis=None)
                 d['caesar_id'+str(k)] = np.concatenate((d['caesar_id'+str(k)],caesar_id[k]), axis=None)
-                d['gal_pos'+str(k)] = np.array([galpos[k]])
+                d['bhar'+str(k)] = np.concatenate((d['bhar'+str(k)],bh_dot[k]), axis=None)
+                d['bhm'+str(k)] = np.concatenate((d['bhm'+str(k)],bh_mass[k]), axis=None)
+                d['pos'+str(k)] = np.array([galpos[k]])
 
             elif progenref_data[k][s-1] !=-1:
                 index = progenref_data[k][s-1]
-                d['m_gal'+str(k)] = np.concatenate((d['m_gal'+str(k)], ms[index]), axis=None)
-                d['sfr_gal'+str(k)] = np.concatenate((d['sfr_gal'+str(k)],sfr[index]), axis=None)
-                frac = (mHI[index] + mH2[index])/ms[index]
-                h1 = mHI[index]/ms[index]
-                h2 = mH2[index]/ms[index]
-                d['fgas_gal'+str(k)] = np.concatenate((d['fgas_gal'+str(k)],frac), axis=None)
-                d['h1_gal'+str(k)] = np.concatenate((d['h1_gal'+str(k)],h1), axis=None)
-                d['h2_gal'+str(k)] = np.concatenate((d['h2_gal'+str(k)],h2), axis=None)
-                if (mHI[index] + mH2[index])>0:
-                    sfe = sfr[index]/(mHI[index] + mH2[index])
-                else:
-                    sfe = 0.0
-                d['sfe_gal'+str(k)] = np.concatenate((d['sfe_gal'+str(k)],sfe),axis=None)
-                d['t_gal'+str(k)] = np.concatenate((d['t_gal'+str(k)], thubble), axis=None)
-                d['z_gal'+str(k)] = np.concatenate((d['z_gal'+str(k)], redshift), axis=None)
-                d['gal_type'+str(k)] = np.concatenate((d['gal_type'+str(k)],gals[index]), axis=None)
+                d['m'+str(k)] = np.concatenate((d['m'+str(k)], ms[index]), axis=None)
+                d['sfr'+str(k)] = np.concatenate((d['sfr'+str(k)],sfr[index]), axis=None)
+                d['h1_gas'+str(k)] = np.concatenate((d['h1_gas'+str(k)],mHI[index]), axis=None)
+                d['h2_gas'+str(k)] = np.concatenate((d['h2_gas'+str(k)],mH2[index]), axis=None)
+                d['z'+str(k)] = np.concatenate((d['z'+str(k)],redshift), axis=None)
+                d['t'+str(k)] = np.concatenate((d['t'+str(k)],thubble), axis=None)
+                d['g_type'+str(k)] = np.concatenate((d['g_type'+str(k)],gals[index]), axis=None)
                 d['caesar_id'+str(k)] = np.concatenate((d['caesar_id'+str(k)],caesar_id[index]), axis=None)
-                #print(d['gal_pos'+str(k)])
-                #print([galpos[index]])
-                d['gal_pos'+str(k)] = np.concatenate((d['gal_pos'+str(k)],np.asarray([galpos[index]])), axis=0)
-        #print(d['gal_pos'+str(k)])
+                d['bhar'+str(k)] = np.concatenate((d['bhar'+str(k)],bh_dot[index]), axis=None)
+                d['bhm'+str(k)] = np.concatenate((d['bhm'+str(k)],bh_mass[index]), axis=None)
+                d['pos'+str(k)] = np.concatenate((d['pos'+str(k)],np.asarray([galpos[index]])), axis=0)
 print('Data saved to dictionary.')
 output = open(results_folder+'progen_'+str(MODEL)+'.pkl','wb')
 pickle.dump(d, output)
