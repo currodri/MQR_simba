@@ -21,8 +21,13 @@ import sys
 from galaxy_class import GalaxyData
 from mergerFinder import merger_finder
 from quenchingFinder import quenchingFinder
+sys.path.insert(0, '../photo/SCA_simba')
+from loser_extractor import read_mags, crossmatch_loserandquench
 
 MODEL = sys.argv[1]  # e.g. m50n512
+WIND = sys.argv[2]   # e.g. s50
+SNAP_0 = sys.argv[3] # e.g. 125
+magcols = sys.argv[4:] # for UVJ plots, you need 6 0 7
 
 progen_file = '../progen_analysis/%s/progen_%s.pkl' % (MODEL, MODEL) # File holding the progen info of galaxies
 
@@ -77,19 +82,9 @@ print('Quenching analysis done.')
 
 print('Now performing cross matching of quenching catalogue and photometry data...')
 
+d_results['galaxies'] = crossmatch_loserandquench(MODEL,WIND,SNAP_0,d_results['galaxies'],magcols)
 
-
-
-
-
-
-
-
-
-
-
-
-
+print('Cross matching done!')
 
 print('Now, saving data to pickle file...')
 
