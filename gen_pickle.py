@@ -51,8 +51,8 @@ for i in range(0,ngal):
     gal_type = d['g_type'+str(i)][::-1]
     gal_pos = d['pos'+str(i)][::-1]
     caesar_id = d['caesar_id'+str(i)][::-1]
-    h1_gas = d['h1_gal'+str(i)][::-1]
-    h2_gas = d['h2_gal'+str(i)][::-1]
+    h1_gas = d['h1_gas'+str(i)][::-1]
+    h2_gas = d['h2_gas'+str(i)][::-1]
     bh_m = d['bhm'+str(i)][::-1]
     bhar = d['bhar'+str(i)][::-1]
     galaxy = GalaxyData(i, sfr_gal, galaxy_m, z_gal, galaxy_t, h1_gas, h2_gas, bh_m, bhar, gal_type, gal_pos, caesar_id)
