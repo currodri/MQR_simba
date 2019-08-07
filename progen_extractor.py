@@ -102,12 +102,12 @@ for s in range(0, len(progenref_data[0])+1):
         for gal in sim.galaxies:
             try:
                 bh_dot.append(float(gal.bhmdot.d))
-            except AttributeError:
+            except AttributeError or KeyError:
                 bh_dot.append(0.0)
         for gal in sim.galaxies:
             try:
                 bh_mass.append(float(gal.masses['bh'].d))
-            except AttributeError:
+            except AttributeError or KeyError:
                 bh_mass.append(0.0)
         bh_dot = np.asarray(bh_dot)
         bh_mass = np.asarray(bh_mass)

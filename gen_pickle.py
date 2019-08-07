@@ -75,6 +75,22 @@ d_results['galaxies'] = quenchingFinder(d_results['galaxies'][0:max_ngal], 1, ma
 
 print('Quenching analysis done.')
 
+print('Now performing cross matching of quenching catalogue and photometry data...')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 print('Now, saving data to pickle file...')
 
 import cPickle as pickle

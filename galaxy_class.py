@@ -60,3 +60,12 @@ class Merger:
         self.indx = indx
         self.merger_ratio = merger_ratio
         self.fgas_boost = fgas_boost
+
+class Magnitude:
+    def __init__(self,filtername,wave_eff,z,Abs,App):
+        self.filtername = filtername
+        self.wave_eff = wave_eff
+        self.z = z
+        self.Abs = Abs
+        self.App = App
+
