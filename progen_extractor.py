@@ -97,9 +97,20 @@ for s in range(0, len(progenref_data[0])+1):
         sfr = np.asarray([i.sfr for i in sim.galaxies])   # read in instantaneous star formation rates
         galpos = np.array([g.pos.d for g in sim.galaxies]) # the .d removes the units
         caesar_id = np.array([i.GroupID for i in sim.galaxies]) # getting the Caesar ID for each galaxy
-        bh_dot = np.array([float(i.bhmdot.d) for i in sim.galaxies]) # getting the BH accretion rate for the most massive BH particle
-        bh_mass = np.array([float(i.masses['bh'].d) for i in sim.galaxies]) # getting mass of most massive BH particle in galaxy
-
+        bh_dot = [] # getting the BH accretion rate for the most massive BH particle
+        bh_mass = [] # getting mass of most massive BH particle in galaxy
+        for gal in sim.galaxies:
+            try:
+                bh_dot.append(float(gal.bhmdot.d))
+            except AttributeError:
+                bh_dot.append(0.0)
+        for gal in sim.galaxies:
+            try:
+                bh_mass.append(float(gal.masses['bh'].d))
+            except AttributeError:
+                bh_mass.append(0.0)
+        bh_dot = np.asarray(bh_dot)
+        bh_mass = np.asarray(bh_mass)
         ssfr_gal = sfr/ms
         sfgals = 0
         ssfr_cond = sfr_condition('end',thubble)
