@@ -26,7 +26,7 @@ from loser_extractor import read_mags, crossmatch_loserandquench
 
 MODEL = sys.argv[1]  # e.g. m50n512
 WIND = sys.argv[2]   # e.g. s50
-SNAP_0 = sys.argv[3] # e.g. 125
+SNAP_0 = int(sys.argv[3]) # e.g. 125
 magcols = sys.argv[4:] # for UVJ plots, you need 6 0 7
 
 progen_file = '../progen_analysis/%s/progen_%s.pkl' % (MODEL, MODEL) # File holding the progen info of galaxies
