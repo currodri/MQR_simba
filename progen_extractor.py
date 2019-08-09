@@ -57,6 +57,7 @@ for j in range(0, lengal):
     d['caesar_id'+str(j)] = np.array([])
     d['bhm'+str(j)] = np.array([])
     d['bhar'+str(j)] = np.array([])
+    d['local_den'+str(j)] = np.array([])
     d['z'+str(j)] = np.array([])
     d['t'+str(j)] = np.array([])
 
@@ -97,6 +98,7 @@ for s in range(0, len(progenref_data[0])+1):
         sfr = np.asarray([i.sfr for i in sim.galaxies])   # read in instantaneous star formation rates
         galpos = np.array([g.pos.d for g in sim.galaxies]) # the .d removes the units
         caesar_id = np.array([i.GroupID for i in sim.galaxies]) # getting the Caesar ID for each galaxy
+        local_mass_density = np.array([i.local_mass_density for i in sim.galaxies]) # getting environmental measure of mass density
         bh_dot = [] # getting the BH accretion rate for the most massive BH particle
         bh_mass = [] # getting mass of most massive BH particle in galaxy
         for gal in sim.galaxies:
@@ -142,6 +144,7 @@ for s in range(0, len(progenref_data[0])+1):
                 d['bhar'+str(k)] = np.concatenate((d['bhar'+str(k)],bh_dot[k]), axis=None)
                 d['bhm'+str(k)] = np.concatenate((d['bhm'+str(k)],bh_mass[k]), axis=None)
                 d['pos'+str(k)] = np.array([galpos[k]])
+                d['local_den'+str(k)] = np.concatenate((d['local_den'+str(k)],local_mass_density[k]), axis=None)
 
             elif progenref_data[k][s-1] !=-1:
                 index = progenref_data[k][s-1]
@@ -156,6 +159,7 @@ for s in range(0, len(progenref_data[0])+1):
                 d['bhar'+str(k)] = np.concatenate((d['bhar'+str(k)],bh_dot[index]), axis=None)
                 d['bhm'+str(k)] = np.concatenate((d['bhm'+str(k)],bh_mass[index]), axis=None)
                 d['pos'+str(k)] = np.concatenate((d['pos'+str(k)],np.asarray([galpos[index]])), axis=0)
+                d['local_den'+str(k)] = np.concatenate((d['local_den'+str(k)],local_mass_density[index]), axis=None)
 print('Data saved to dictionary.')
 output = open(results_folder+'progen_'+str(MODEL)+'.pkl','wb')
 pickle.dump(d, output)
