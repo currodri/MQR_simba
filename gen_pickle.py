@@ -53,9 +53,10 @@ for i in range(0,ngal):
     caesar_id = d['caesar_id'+str(i)][::-1]
     h1_gas = d['h1_gas'+str(i)][::-1]
     h2_gas = d['h2_gas'+str(i)][::-1]
+    local_den = d['local_den'+str(i)][::-1]
     bh_m = d['bhm'+str(i)][::-1]
     bhar = d['bhar'+str(i)][::-1]
-    galaxy = GalaxyData(i, sfr_gal, galaxy_m, z_gal, galaxy_t, h1_gas, h2_gas, bh_m, bhar, gal_type, gal_pos, caesar_id)
+    galaxy = GalaxyData(i, sfr_gal, galaxy_m, z_gal, galaxy_t, h1_gas, h2_gas, bh_m, bhar,local_den, gal_type, gal_pos, caesar_id)
     d_results['galaxies'].append(galaxy)
 
 # Setting the limiting conditions of the survey

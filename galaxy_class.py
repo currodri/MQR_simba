@@ -15,7 +15,7 @@ import numpy as np
 """ Define classes """
 
 class GalaxyData:
-    def __init__(self,progen_id,sfr,m,z,t,h1_gas,h2_gas,bh_m,bhar,g_type,pos,caesar_id):
+    def __init__(self,progen_id,sfr,m,z,t,h1_gas,h2_gas,bh_m,bhar,local_den,g_type,pos,caesar_id):
         self.interpolation = False
         self.progen_id = int(progen_id)
         self.sfr = [sfr,0]
@@ -27,6 +27,7 @@ class GalaxyData:
         self.h2_gas = h2_gas
         self.bh_m = bh_m
         self.bhar = bhar
+        self.local_den = local_den
         self.g_type = g_type
         self.pos = pos
         self.caesar_id = caesar_id
