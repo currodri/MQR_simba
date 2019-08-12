@@ -56,6 +56,7 @@ quenching_times = np.array([i.quench_time for i in galaxy.quenching])
 print(thubble_end,thubble_start)
 print(galaxy.t[0])
 print(galaxy.t[1])
+print(galaxy.t[0][indx])
 props = dict(boxstyle='round', facecolor='white', edgecolor='k', alpha=0.7)
 for i in range(0, len(thubble_start)):
 	axes[0].plot([thubble_start[i],thubble_start[i]],[-12,-8], linestyle=':', color='b')
