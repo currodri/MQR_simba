@@ -27,6 +27,7 @@ WIND = sys.argv[2]   # e.g. s50
 GALAXY = int(sys.argv[3])  # e.6. 4973
 
 # Extract progen data from txt files
+progen_file = '../progen_analysis/%s/progen_%s.pkl' % (MODEL, MODEL) # File holding the progen info of galaxies
 obj = open(progen_file, 'rb')
 d = pickle.load(obj)
 ngal = int(d['galaxies_per_snap'][0])
@@ -104,8 +105,8 @@ print(galaxy.t[0][galaxy.quenching[0].indx])
 print(galaxy.quenching[0].above9,galaxy.quenching[0].below11)
 props = dict(boxstyle='round', facecolor='white', edgecolor='k', alpha=0.7)
 for i in range(0, len(thubble_start)):
-	axes[0].plot([thubble_start[i]-2,thubble_start[i]]-2,[-12,-8], linestyle=':', color='b')
-	axes[0].plot([thubble_end[i],thubble_end[i]],[-12,-8], linestyle=':', color='r')
+	axes[0].plot([float(thubble_start[i]),float(thubble_start[i])],[-12,-8], linestyle=':', color='b')
+	axes[0].plot([float(thubble_end[i]),float(thubble_end[i])],[-12,-8], linestyle=':', color='r')
 	xpos = thubble_start[i]-0.6
 	axes[0].text(xpos, -9, r'$\tau_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox=props)
 for i in range(0, len(mergers_idx)):
