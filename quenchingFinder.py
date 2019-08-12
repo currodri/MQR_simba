@@ -233,7 +233,7 @@ def ssfr_interpolation(galaxy):
     for quench in galaxy.quenching:
         #For each quenching, interpolate the new values creating a new galaxy
         above, below = quench.above9, (quench.below11 + 1)
-        limit = 3
+        limit = 0
         if above - limit < 0 or below + limit >= len(galaxy.t[0]):
             limit = min(len(galaxy.t[0]) - below, above)
         aboves.append(above-limit)
