@@ -44,10 +44,10 @@ for i in range(0, len(galaxy.t[0])):
 # Plot the results
 
 fig, axes = plt.subplots(2, 1, sharex='col', figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
-axes[0].plot(galaxy.t[0], np.log10(galaxy.ssfr[0]), 'k-')
+axes[0].plot(galaxy.t[0], np.log10(galaxy.ssfr[0]+1e-14), 'k-')
 axes[0].plot(galaxy.t[0], above, 'b--', label=r'Star-forming threshold: sSFR $=1/t_{U}$')
 axes[0].plot(galaxy.t[0], below, 'r--', label=r'Quench threshold: sSFR $=0.2/t_{U}$')
-axes[0].plot(galaxy.t[1], np.log10(galaxy.ssfr[1]), linestyle='--', color='grey', alpha=0.7)
+axes[0].plot(galaxy.t[1], np.log10(galaxy.ssfr[1]+1e-14), linestyle='--', color='grey', alpha=0.7)
 mergers_idx = np.array([i.indx for i in galaxy.mergers])
 reju_id = np.array([i for i in galaxy.rejuvenations])
 thubble_start = np.array([galaxy.t[1][i.above9] for i in galaxy.quenching])
@@ -79,8 +79,7 @@ for i in range(0, len(thubble_start)):
 	xpos = thubble_start[i]-0.6
 	axes[1].text(xpos, 10.5, r'$\tau_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox=props)
 for i in range(0, len(mergers_idx)):
-	print(galaxy.t[0][mergers_idx[i]],np.log10(galaxy.m[0]))
-	axes[1].plot(galaxy.t[0], np.log10(galaxy.m[0]), marker='o', alpha=0.5, color='r', markersize=10)
+	axes[1].plot(galaxy.t[0][mergers_idx[i]], np.log10(galaxy.m[0][mergers_idx[i]]), marker='o', alpha=0.5, color='r', markersize=10)
 for i in range(0, len(reju_id)):
 	axes[0].plot(galaxy.t[0][reju_id[i]], np.log10(galaxy.m[0][reju_id[i]]), marker='o', alpha=0.5, color='g', markersize=10)
 axes[1].set_xlabel(r't (Gyr)', fontsize=16)
