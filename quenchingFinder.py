@@ -192,7 +192,7 @@ def quench (galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False):
     if t > 1.2*time_min:
         #It has passed enough time since the quench was detected, we can have rejuvenations
 
-        if ssfr_gal > 10**current_lssfr:
+        if ssfr_gal > 10**sfr_condition('end', galaxy, j, d_indx):
             #We have found a sign change
             if reju_condition(galaxy, j, d_indx):
                 if interpolation:
