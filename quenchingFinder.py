@@ -157,7 +157,7 @@ def pre_quench (galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False)
 
     current_lssfr = sfr_condition('end', galaxy, j, d_indx)
 
-    if ssfr_gal <= 10**current_lssfr:
+    if ssfr_gal < 10**current_lssfr:
         #Retrieve the current quench
         quench = galaxy.quenching[-1]
         #Add the point below11 and the length time of the quench
@@ -244,7 +244,7 @@ def ssfr_interpolation(galaxy):
     below = belows.max()
     if len(range(above, below+limit,1))>3:
         #If there are at least three points in the quench, then:
-        sfr_gal_non = [galaxy.sfr[0][j] for j in range(above-limit, below+limit,1)]
+        sfr_gal_non = [galaxy.sfr[0][j] for j in range(above-limit, below+limit+1,1)]
         t_non = [galaxy.t[0][j] for j in range(above-limit, below+limit+1,1)]
         m_non = [galaxy.m[0][j] for j in range(above-limit, below+limit+1,1)]
 
