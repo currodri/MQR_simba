@@ -245,8 +245,8 @@ def ssfr_interpolation(galaxy):
     if len(range(above, below+limit,1))>3:
         #If there are at least three points in the quench, then:
         sfr_gal_non = [galaxy.sfr[0][j] for j in range(above-limit, below+limit,1)]
-        t_non = [galaxy.t[0][j] for j in range(above-limit, below+limit,1)]
-        m_non = [galaxy.m[0][j] for j in range(above-limit, below+limit,1)]
+        t_non = [galaxy.t[0][j] for j in range(above-limit, below+limit+1,1)]
+        m_non = [galaxy.m[0][j] for j in range(above-limit, below+limit+1,1)]
 
         time_new = np.arange(np.amin(t_non), np.amax(t_non), 0.001)
 
