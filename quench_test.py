@@ -103,7 +103,7 @@ print(galaxy.t[0])
 print(galaxy.t[1])
 print(galaxy.t[0][galaxy.quenching[0].indx])
 print(galaxy.quenching[0].above9,galaxy.quenching[0].below11)
-print(galaxy.quench)
+print(galaxy.quenching)
 props = dict(boxstyle='round', facecolor='white', edgecolor='k', alpha=0.7)
 for i in range(0, len(thubble_start)):
 	axes[0].plot([float(thubble_start[i]),float(thubble_start[i])],[-12,-8], linestyle=':', color='b')
