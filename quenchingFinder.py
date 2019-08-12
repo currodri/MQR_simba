@@ -157,7 +157,7 @@ def pre_quench (galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False)
 
     current_lssfr = sfr_condition('end', galaxy, j, d_indx)
 
-    if ssfr_gal < 10**current_lssfr:
+    if ssfr_gal <= 10**current_lssfr:
         #Retrieve the current quench
         quench = galaxy.quenching[-1]
         #Add the point below11 and the length time of the quench
@@ -233,7 +233,7 @@ def ssfr_interpolation(galaxy):
     for quench in galaxy.quenching:
         #For each quenching, interpolate the new values creating a new galaxy
         above, below = quench.above9, (quench.below11 + 1)
-        limit = 1
+        limit = 0
         if above - limit < 0 or below + limit >= len(galaxy.t[0]):
             limit = min(len(galaxy.t[0]) - below, above)
         aboves.append(above-limit)
