@@ -57,9 +57,10 @@ print(thubble_end,thubble_start)
 print(galaxy.t[0])
 print(galaxy.t[1])
 print(galaxy.t[0][galaxy.quenching[0].indx])
+print(galaxy.quenching[0].above9,galaxy.quenching[0].below11)
 props = dict(boxstyle='round', facecolor='white', edgecolor='k', alpha=0.7)
 for i in range(0, len(thubble_start)):
-	axes[0].plot([thubble_start[i],thubble_start[i]],[-12,-8], linestyle=':', color='b')
+	axes[0].plot([thubble_start[i]-2,thubble_start[i]]-2,[-12,-8], linestyle=':', color='b')
 	axes[0].plot([thubble_end[i],thubble_end[i]],[-12,-8], linestyle=':', color='r')
 	xpos = thubble_start[i]-0.6
 	axes[0].text(xpos, -9, r'$\tau_{q} = $'+'{:.3}'.format(quenching_times[i])+r' Gyr', fontsize=8, bbox=props)
