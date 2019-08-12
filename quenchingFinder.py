@@ -162,6 +162,7 @@ def pre_quench (galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False)
         quench = galaxy.quenching[-1]
         #Add the point below11 and the length time of the quench
         quench.below11 = j
+        print(galaxy.t[d_indx][j])
         quench.quench_time =abs(curr_state[2] - galaxy.t[d_indx][j])
         if interpolation:
             diff = abs(galaxy.t[0] - galaxy.t[1][j])
@@ -232,7 +233,7 @@ def ssfr_interpolation(galaxy):
     for quench in galaxy.quenching:
         #For each quenching, interpolate the new values creating a new galaxy
         above, below = quench.above9, (quench.below11 + 1)
-        limit = 0
+        limit = 3
         if above - limit < 0 or below + limit >= len(galaxy.t[0]):
             limit = min(len(galaxy.t[0]) - below, above)
         aboves.append(above-limit)

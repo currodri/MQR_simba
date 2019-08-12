@@ -26,12 +26,56 @@ MODEL = sys.argv[1]  # e.g. m50n512
 WIND = sys.argv[2]   # e.g. s50
 GALAXY = int(sys.argv[3])  # e.6. 4973
 
-# Extract quench data from pickle file
-data_file = '/home/curro/quenchingSIMBA/code/SH_Project/mandq_results_%s.pkl' % (MODEL)
-obj = open(data_file, 'rb')
+# Extract progen data from txt files
+obj = open(progen_file, 'rb')
 d = pickle.load(obj)
+ngal = int(d['galaxies_per_snap'][0])
+print('Total number of galaxies at z = 0: '+str(ngal))
 
-galaxy = d['galaxies'][GALAXY]
+#Store the galaxies sorted in objects of type GalaxyData
+d_results = {}
+d_results['redshifts'] = d['redshifts']
+d_results['sf_galaxies_mass'] = d['sf_galaxies_mass']
+d_results['sf_galaxies_per_snap'] = d['sf_galaxies_per_snap']
+d_results['galaxies'] = []
+
+sfr_gal = d['sfr' + str(GALAXY)][::-1]
+z_gal = d['z' + str(GALAXY)][::-1]
+galaxy_t = d['t' + str(GALAXY)][::-1]
+galaxy_m = d['m'+str(GALAXY)][::-1]
+gal_type = d['g_type'+str(GALAXY)][::-1]
+gal_pos = d['pos'+str(GALAXY)][::-1]
+caesar_id = d['caesar_id'+str(GALAXY)][::-1]
+h1_gas = d['h1_gas'+str(GALAXY)][::-1]
+h2_gas = d['h2_gas'+str(GALAXY)][::-1]
+local_den = d['local_den'+str(GALAXY)][::-1]
+bh_m = d['bhm'+str(GALAXY)][::-1]
+bhar = d['bhar'+str(GALAXY)][::-1]
+galaxy = GalaxyData(GALAXY, sfr_gal, galaxy_m, z_gal, galaxy_t, h1_gas, h2_gas, bh_m, bhar,local_den, gal_type, gal_pos, caesar_id)
+d_results['galaxies'].append(galaxy)
+
+# Setting the limiting conditions of the survey
+max_ngal = len(d_results['galaxies'])
+mass_limit = 9.5
+min_merger_ratio = 0.2
+max_redshift_mergers = 2.5
+
+d_results['mass_limit'], d_results['min_merger_ratio'], d_results['max_redshift_mergers'] = mass_limit,min_merger_ratio,max_redshift_mergers
+
+# Perform the search for mergers
+d_results['galaxies'] = merger_finder(d_results['galaxies'][0:max_ngal], min_merger_ratio, 10**mass_limit, max_redshift_mergers)
+
+print('Merger analysis done.')
+
+# Perform the quenching and rejuvenation analysis
+d_results['galaxies'] = quenchingFinder(d_results['galaxies'][0:max_ngal], 1, mass_limit)
+
+print('Performing interpolation of quenching data...')
+
+d_results['galaxies'] = quenchingFinder(d_results['galaxies'][0:max_ngal], 1, mass_limit, interpolation=True)
+
+
+galaxy = d_results['galaxies'][0]
 
 above = np.zeros(len(galaxy.t[0]))
 below = np.zeros(len(galaxy.t[0]))
