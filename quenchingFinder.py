@@ -207,7 +207,7 @@ def quench (galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False):
             new_state = curr_state
     else:
         #Now if there is a rejuvenation, the quench should be discarded.
-        if ssfr_gal > 10**sfr_condition('end', galaxy, j, d_indx):
+        if ssfr_gal > 10**current_lssfr:
             #We have found a sign change. Rollback the changes done to the lists.
             del galaxy.quenching[-1]
 
@@ -232,7 +232,7 @@ def ssfr_interpolation(galaxy):
     for quench in galaxy.quenching:
         #For each quenching, interpolate the new values creating a new galaxy
         above, below = quench.above9, (quench.below11 + 1)
-        limit = 1
+        limit = 0
         if above - limit < 0 or below + limit >= len(galaxy.t[0]):
             limit = min(len(galaxy.t[0]) - below, above)
         aboves.append(above-limit)
