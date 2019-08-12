@@ -19,7 +19,8 @@ sns.set(style="white")
 
 # Import other codes
 from mergerFinder import myrunningmedian, merger_finder
-from quenchingFinder import GalaxyData, quenchingFinder, rejuvenation_rate_calculator, quenching_histogram
+from quenchingFinder import quenchingFinder
+from galaxy_class import GalaxyData, Quench
 import sys
 simfolder = '../progen_analysis/m100n1024'#input('SIMBA simulation progen folder: ')
 sys.path.insert(0, str(simfolder))
@@ -41,17 +42,19 @@ print('Total number of galaxies at z = 0: '+str(ngal))
 #Store the galaxies sorted in objects of type GalaxyData
 galaxies = []
 ourgalaxy_n = int(input('What galaxy do you wanna plot: '))
-sfr_gal = d['sfr_gal' + str(ourgalaxy_n)][::-1]
-ssfr_gal = (d['sfr_gal' + str(ourgalaxy_n)]/d['m_gal'+str(ourgalaxy_n)])[::-1]+1e-14
-sfe_gal = d['sfe_gal' + str(ourgalaxy_n)][::-1]
-z_gal = d['z_gal' + str(ourgalaxy_n)][::-1]
-galaxy_t = d['t_gal' + str(ourgalaxy_n)][::-1]
-galaxy_m = d['m_gal'+str(ourgalaxy_n)][::-1]
-fgas_gal = d['h2_gal'+str(ourgalaxy_n)][::-1]
-gal_type = d['gal_type'+str(ourgalaxy_n)][::-1]
-gal_pos = d['gal_pos'+str(ourgalaxy_n)][::-1]
+sfr_gal = d['sfr' + str(ourgalaxy_n)][::-1]
+z_gal = d['z' + str(ourgalaxy_n)][::-1]
+galaxy_t = d['t' + str(ourgalaxy_n)][::-1]
+galaxy_m = d['m'+str(ourgalaxy_n)][::-1]
+h2_gas = d['h2_gas'+str(ourgalaxy_n)][::-1]
+h1_gas = 0
+bh_m = 0
+bhar = 0
+local_den = 0
+gal_type = d['g_type'+str(ourgalaxy_n)][::-1]
+gal_pos = d['pos'+str(ourgalaxy_n)][::-1]
 caesar_id = d['caesar_id'+str(ourgalaxy_n)][::-1]
-galaxy = GalaxyData(ourgalaxy_n, sfr_gal, sfe_gal, z_gal, galaxy_t, galaxy_m, fgas_gal, gal_type, gal_pos, caesar_id)
+galaxy = GalaxyData(ourgalaxy_n, sfr_gal, galaxy_m, z_gal, galaxy_t, h1_gas, h2_gas, bh_m, bhar,local_den, gal_type, gal_pos, caesar_id)
 galaxies.append(galaxy)
 
 above = []
@@ -85,42 +88,65 @@ quenchingFinder(galaxies_interpolated, 1, mass_limit, True)
 reju_z = []
 reju_m = []
 reju_t = []
-reju_id = []
+
 
 for i in range(len(galaxies_interpolated)):
-	galaxy = galaxies_interpolated[i]
-	for k in range(0, len(galaxy.rate), 4):
-		reju_z.append(galaxy.rate[k])
-		reju_t.append(galaxy.rate[k+1])
-		reju_m.append(galaxy.rate[k+2])
-		reju_id.append(galaxy.rate[k+3])
+    galaxy = galaxies_interpolated[i]
+    for index in galaxy.rejuvenations:
+        reju_z.append(galaxy.z[index])
+        reju_t.append(galaxy.t[0][index])
+        reju_m.append(np.log10(galaxy.m[0][index]))
 
-print(reju_z, reju_t, reju_m)
-print('Total number of rejuvenations: '+str(len(reju_z)))
-redshifts = []
-ste_mass = []
-quenching_times = []
-frac_gas = []
-thubble_start = []
-thubble_end = []
+# Save quenchings in the classification schemed chosen
+redshifts2_all = []
+quenching_times2_all = []
+ste_mass2_all = []
+thubble2_all = []
 
+redshifts2 = [[[],[],[]],[[],[],[]]]
+quenching_times2 = [[[],[],[]],[[],[],[]]]
+ste_mass2 = [[[],[],[]],[[],[],[]]]
+thubble2 = [[[],[],[]],[[],[],[]]]
+
+
+finalis = 0
+nofinalis = 0
 for i in range(0, len(galaxies_interpolated)):
-	galaxy = galaxies_interpolated[i]
-	for quench in galaxy.quenching:
-		start = quench.above9 + 1
-		end = quench.below11
-		redshifts.append(galaxy.z_gal)
-		ste_mass.append(galaxy.m_gal[end])
-		quenching_times.append(quench.quench_time)
-		frac_gas.append(galaxy.fgas_gal)
-		thubble_start.append(galaxy.galaxy_t[start])
-		thubble_end.append(galaxy.galaxy_t[end])
-
-print(redshifts, quenching_times, thubble_start, thubble_end)
-print([merg.galaxy_t[1] for merg in mergers])
-print(reju_t)
-print('Number of quenching events in second loop: '
-		+str(sum([1 for galaxy in galaxies_interpolated for quench in galaxy.quenching])))
+    galaxy = galaxies_interpolated[i]
+    if not isinstance(galaxy.m[1], int):
+        if len(galaxy.quenching)>0:
+            lastquench = galaxy.quenching[-1]
+            # if len(galaxy.quenching)>1:
+            #     for caca in range(0, len(galaxy.quenching)):
+            #         print(galaxy.quenching[caca].quench_time)
+        for quench in galaxy.quenching:
+            start = quench.above9 + 1
+            end = quench.below11
+            if quench is lastquench:
+                pos = 0
+                finalis = finalis + 1
+                for index in galaxy.rejuvenations:
+                    if 0.2*galaxy.t[1][start]> (galaxy.t[1][start] - galaxy.t[0][index]) >=0:
+                        pos = 2
+            else:
+                nofinalis = nofinalis + 1
+                pos = 1
+            #print(len(galaxy.z_gal), start, end, galaxy.id)
+            if np.log10(galaxy.m[1][end])>=mass_limit:
+                q_indx = int(quench.indx)
+                q_type = 1 - int(galaxy.g_type[q_indx])
+                redshifts2[q_type][pos].append(galaxy.z[q_indx])
+                ste_mass2[q_type][pos].append(np.log10(galaxy.m[1][end]))
+                quenching_times2[q_type][pos].append(np.log10(quench.quench_time/galaxy.t[1][end]))
+                thubble2[q_type][pos].append(np.log10(galaxy.t[1][end]))
+                redshifts2_all.append(galaxy.z[q_indx])
+                ste_mass2_all.append(galaxy.m[1][end])
+                quenching_times2_all.append(quench.quench_time)
+                thubble2_all.append(galaxy.t[1][end])
+print(len(quenching_times2[0][0]), len(quenching_times2[0][1]), len(quenching_times2[0][2]), len(quenching_times2[0][0])+len(quenching_times2[0][1]))
+print(len(quenching_times2[1][0]), len(quenching_times2[1][1]), len(quenching_times2[1][2]), len(quenching_times2[1][0])+len(quenching_times2[1][1]))
+print('Quenching and Rejuvenation analysis done.')
+print(' ')
 # Plot the results
 import seaborn as sns
 sns.set(style="white")
