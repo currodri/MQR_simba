@@ -26,8 +26,6 @@ MODEL = sys.argv[1]  # e.g. m50n512
 WIND = sys.argv[2]   # e.g. s50
 GALAXY = int(sys.argv[3])  # e.6. 4973
 
-progen_file = '../progen_analysis/%s/progen_%s.pkl' % (MODEL, MODEL) # File holding the progen info of galaxies
-
 # Extract quench data from pickle file
 data_file = '/home/curro/quenchingSIMBA/code/SH_Project/mandq_results_%s.pkl' % (MODEL)
 obj = open(data_file, 'rb')
@@ -52,8 +50,8 @@ axes[0].plot(galaxy.t[0], below, 'r--', label=r'Quench threshold: sSFR $=0.2/t_{
 axes[0].plot(galaxy.t[1], np.log10(galaxy.ssfr[1]), linestyle='--', color='grey', alpha=0.7)
 mergers_idx = np.array([i.indx for i in galaxy.mergers])
 reju_id = np.array([i for i in galaxy.rejuvenations])
-thubble_start = np.array([galaxy.t[1][i.start] for i in galaxy.quenching])
-thubble_end = np.array([galaxy.t[1][i.end] for i in galaxy.quenching])
+thubble_start = np.array([galaxy.t[1][i.above9] for i in galaxy.quenching])
+thubble_end = np.array([galaxy.t[1][i.below11] for i in galaxy.quenching])
 quenching_times = np.array([i.quench_time for i in galaxy.quenching])
 props = dict(boxstyle='round', facecolor='white', edgecolor='k', alpha=0.7)
 axes[0].plot([8.739101250191442,8.739101250191442],[-12,-8], linestyle='-', color='k')
