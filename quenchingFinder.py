@@ -96,6 +96,7 @@ def quenchingFinder(galaxies,sfr_condition, mass_limit, interpolation=False, out
             #Check if the last quenching is a valid one:
             if galaxy.quenching and galaxy.quenching[-1].below11 == None:
                 del galaxy.quenching[-1]
+            print(galaxy.quenching[0].above9,galaxy.quenching[0].below11)
     print ('Total number of quenched galaxies at z=0 : '+str(total_quenched))
     # if out_file:
     #     d = {}
