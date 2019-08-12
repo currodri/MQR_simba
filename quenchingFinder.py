@@ -69,8 +69,6 @@ def quenchingFinder(galaxies,sfr_condition, mass_limit, interpolation=False, out
                 #Check if the last quenching is a valid one:
                 if galaxy.quenching and galaxy.quenching[-1].below11 == None:
                     del galaxy.quenching[-1]
-                print(galaxy.quenching[0].above9,galaxy.quenching[0].below11)
-
                 # galaxy_interpolated = ssfr_interpolation(galaxy)
                 if galaxy.quenching:
                     galaxy = ssfr_interpolation(galaxy)
@@ -97,7 +95,6 @@ def quenchingFinder(galaxies,sfr_condition, mass_limit, interpolation=False, out
             #Check if the last quenching is a valid one:
             if galaxy.quenching and galaxy.quenching[-1].below11 == None:
                 del galaxy.quenching[-1]
-            print(galaxy.quenching[0].above9,galaxy.quenching[0].below11)
     print ('Total number of quenched galaxies at z=0 : '+str(total_quenched))
     # if out_file:
     #     d = {}
@@ -165,7 +162,6 @@ def pre_quench (galaxy,j,curr_state, sfr_condition, d_indx, interpolation=False)
         quench = galaxy.quenching[-1]
         #Add the point below11 and the length time of the quench
         quench.below11 = j
-        print(galaxy.t[d_indx][j])
         quench.quench_time =abs(curr_state[2] - galaxy.t[d_indx][j])
         if interpolation:
             diff = abs(galaxy.t[0] - galaxy.t[1][j])
@@ -248,8 +244,8 @@ def ssfr_interpolation(galaxy):
     if len(range(above, below+limit,1))>3:
         #If there are at least three points in the quench, then:
         sfr_gal_non = [galaxy.sfr[0][j] for j in range(above-limit, below+limit+1,1)]
-        t_non = [galaxy.t[0][j] for j in range(above-limit, below+limit+1,1)]
-        m_non = [galaxy.m[0][j] for j in range(above-limit, below+limit+1,1)]
+        t_non = [galaxy.t[0][j] for j in range(above-limit, below+limit,1)]
+        m_non = [galaxy.m[0][j] for j in range(above-limit, below+limit,1)]
 
         time_new = np.arange(np.amin(t_non), np.amax(t_non), 0.001)
 
