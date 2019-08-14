@@ -81,7 +81,7 @@ def sfr_condition(type, time):
 
 for s in range(0, len(progenref_data[0])+1):
 
-    if caesarfile+snaps_sorted[s] != 'm50n512_116.hdf5' and WIND == 's50': # This condition is just to solve an issue with that snapshot
+    if snaps_sorted[s] != 'm50n512_116.hdf5' and WIND == 's50': # This condition is just to solve an issue with that snapshot
         sim = caesar.load(caesarfile+snaps_sorted[s],LoadHalo=False) # load caesar file
 
         # initialize simulation parameters
