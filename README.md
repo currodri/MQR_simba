@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 # MQR_simba
 Codes for the finding of mergers and quenching events in SIMBA progen data, as well as the cross-matching
 with photometry data catalogues
+=======
+# MGR_simba
+Codes for the finding of mergers and quenching events in SIMBA progen data
+>>>>>>> cc99ed6241d58bed57ca984c0cfe18cc115bce3d
 -----------------------------------
 In this repository I include the codes that were developed for the SH Project at the Institute of Astronomy, Edinburgh
 during the months of January - March 2019.
