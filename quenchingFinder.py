@@ -73,6 +73,7 @@ def quenchingFinder(galaxies,sfr_condition, mass_limit, interpolation=False, out
                 if galaxy.quenching:
                     galaxy = ssfr_interpolation(galaxy)
                 galaxy.quenching = []
+                galaxy.rejuvenations = []
         elif interpolation and not isinstance(galaxy.t[d_indx], int):
             galaxy.interpolation = True
             galaxy.get_ssfr()
@@ -249,6 +250,12 @@ def ssfr_interpolation(galaxy):
 
         time_new = np.arange(np.amin(t_non), np.amax(t_non), 0.001)
 
+        # f = interpolate.interp1d(t_non,sfr_gal_non,kind='cubic')
+        # sfr_new = f(time_new)
+
+        # f = interpolate.interp1d(t_non,m_non,kind='cubic')
+        # m_new = f(time_new)
+
         tck = interpolate.splrep(t_non,sfr_gal_non, k=3)
         sfr_new = interpolate.splev(time_new, tck, der=0)
 
@@ -290,6 +297,7 @@ def sfr_condition_2(type, galaxy, j, d_indx):
             lsfr = np.log10(1/(galaxy.t[d_indx][j]))-9
         elif type == 'end':
             lsfr  = np.log10(0.2/(galaxy.t[d_indx][j]))-9
+            #lsfr  = np.log10(0.04/(galaxy.t[d_indx][j]))-9
     else:
         lsfr = 0
     return lsfr

@@ -43,6 +43,7 @@ d_results = {}
 d_results['redshifts'] = d['redshifts']
 d_results['sf_galaxies_mass'] = d['sf_galaxies_mass']
 d_results['sf_galaxies_per_snap'] = d['sf_galaxies_per_snap']
+d_results['boxsize_in_kpccm'] = d['boxsize_in_kpccm']
 d_results['galaxies'] = []
 for i in range(0,ngal):
     sfr_gal = d['sfr' + str(i)][::-1]

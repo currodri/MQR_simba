@@ -27,7 +27,7 @@ WIND = sys.argv[2]  # e.g. s50 for Simba
 
 # Import other codes
 from quenchingFinder import GalaxyData
-results_folder = '../mandq_analysis/%s/' % (MODEL) # You can change this to the folder where you want your resulting plots
+results_folder = '../mandq_relations/%s/' % (MODEL) # You can change this to the folder where you want your resulting plots
 merger_file = '../mergers/%s/merger_results.pkl' % (MODEL) # File holding the progen info of galaxies
 quench_file = '../quench_analysis/%s/quenching_results.pkl' % (MODEL) # File holding the progen info of galaxies
 
@@ -41,67 +41,68 @@ obj = open(quench_file, 'rb')
 quench_data = pickle.load(obj)
 obj.close()
 galaxies_interpolated = quench_data['quenched_galaxies']
+mass_limit = quench_data['mass_limit']
+# # Save results of rejuvenations coming from first loop
+# reju_z = []
+# reju_m = []
+# reju_t = []
+# reju_id = []
 
-# Save results of rejuvenations coming from first loop
-reju_z = []
-reju_m = []
-reju_t = []
-reju_id = []
+# for i in range(len(galaxies_interpolated)):
+#     galaxy = galaxies_interpolated[i]
+#     for k in range(0, len(galaxy.rate), 4):
+#         #if np.log10(galaxy.rate[k+1])>=mass_limit:
+#         #print(galaxy.rate)
+#         reju_z.append(galaxy.rate[k])
+#         reju_t.append(galaxy.rate[k+1])
+#         reju_m.append(galaxy.rate[k+2])
+#         reju_id.append(galaxy.rate[k+3])
 
-for i in range(len(galaxies_interpolated)):
-    galaxy = galaxies_interpolated[i]
-    for k in range(0, len(galaxy.rate), 3):
-        #if np.log10(galaxy.rate[k+1])>=mass_limit:
-        reju_id.append(galaxy.id)
-        reju_z.append(galaxy.rate[k])
-        reju_t.append(galaxy.rate[k+1])
-        reju_m.append(galaxy.rate[k+2])
+# # Save results of quenchings in the classification scheme chosen
+# redshifts2_all = []
+# quenching_times2_all = []
+# ste_mass2_all = []
+# frac_gas2_all = []
+# thubble2_all = []
 
-# Save results of quenchings in the classification scheme chosen
-redshifts2_all = []
-quenching_times2_all = []
-ste_mass2_all = []
-frac_gas2_all = []
-thubble2_all = []
-
-redshifts2 = [[[],[],[]],[[],[],[]]]
-quenching_times2 = [[[],[],[]],[[],[],[]]]
-ste_mass2 = [[[],[],[]],[[],[],[]]]
-frac_gas2 = [[[],[],[]],[[],[],[]]]
-thubble2 = [[[],[],[]],[[],[],[]]]
-sfr_2 = [[[],[],[]],[[],[],[]]]
+# redshifts2 = [[[],[],[]],[[],[],[]]]
+# quenching_times2 = [[[],[],[]],[[],[],[]]]
+# ste_mass2 = [[[],[],[]],[[],[],[]]]
+# frac_gas2 = [[[],[],[]],[[],[],[]]]
+# thubble2 = [[[],[],[]],[[],[],[]]]
+# sfr_2 = [[[],[],[]],[[],[],[]]]
 
 
-finalis = 0
-nofinalis = 0
-for i in range(0, len(galaxies_interpolated)):
-    galaxy = galaxies_interpolated[i]
-    if len(galaxy.quenching)>0:
-        lastquench = galaxy.quenching[-1]
-    for quench in galaxy.quenching:
-        start = quench.above9 + 1
-        end = quench.below11
-        if quench is lastquench:
-            pos = 0
-            finalis = finalis + 1
-            for k in range(0, len(galaxy.rate), 3):
-                if 0.2*galaxy.galaxy_t[start]> (galaxy.galaxy_t[start] - galaxy.rate[k+1]) >=0:
-                    pos = 2
-        else:
-            nofinalis = nofinalis + 1
-            pos = 1
-        if np.log10(galaxy.m_gal)>=mass_limit:
-            redshifts2[int(quench.type)][pos].append(galaxy.z_gal)
-            ste_mass2[int(quench.type)][pos].append(np.log10(galaxy.m_gal))
-            quenching_times2[int(quench.type)][pos].append(np.log10(quench.quench_time))
-            frac_gas2[int(quench.type)][pos].append(np.log10(galaxy.fgas_gal))
-            thubble2[int(quench.type)][pos].append(np.log10(galaxy.galaxy_t[end]))
-            sfr_2[int(quench.type)][pos].append(np.log10(galaxy.ssfr_gal[start-1]*galaxy.m_gal))
-            redshifts2_all.append(galaxy.z_gal)
-            ste_mass2_all.append(galaxy.m_gal)
-            quenching_times2_all.append(quench.quench_time)
-            frac_gas2_all.append(galaxy.fgas_gal)
-            thubble2_all.append(galaxy.galaxy_t[end])
+# finalis = 0
+# nofinalis = 0
+# for i in range(0, len(galaxies_interpolated)):
+#     galaxy = galaxies_interpolated[i]
+#     if len(galaxy.quenching)>0:
+#         lastquench = galaxy.quenching[-1]
+#     for quench in galaxy.quenching:
+#         start = quench.above9 + 1
+#         end = quench.below11
+#         if quench is lastquench:
+#             pos = 0
+#             finalis = finalis + 1
+#             for k in range(0, len(galaxy.rate), 3):
+#                 if 0.2*galaxy.galaxy_t[start]> (galaxy.galaxy_t[start] - galaxy.rate[k+1]) >=0:
+#                     pos = 2
+#         else:
+#             nofinalis = nofinalis + 1
+#             pos = 1
+#         if np.log10(galaxy.m_gal)>=mass_limit:
+#             redshifts2[int(quench.type)][pos].append(galaxy.z_gal)
+#             ste_mass2[int(quench.type)][pos].append(np.log10(galaxy.m_gal))
+#             quenching_times2[int(quench.type)][pos].append(np.log10(quench.quench_time))
+#             frac_gas2[int(quench.type)][pos].append(np.log10(galaxy.fgas_gal))
+#             thubble2[int(quench.type)][pos].append(np.log10(galaxy.galaxy_t[end]))
+#             sfr_2[int(quench.type)][pos].append(np.log10(galaxy.ssfr_gal[start-1]*galaxy.m_gal))
+#             redshifts2_all.append(galaxy.z_gal)
+#             ste_mass2_all.append(galaxy.m_gal)
+#             quenching_times2_all.append(quench.quench_time)
+#             frac_gas2_all.append(galaxy.fgas_gal)
+#             thubble2_all.append(galaxy.galaxy_t[end])
 
 def mqr_relation():
     print('Start finding for connection between mergers and quenching')
@@ -113,6 +114,7 @@ def mqr_relation():
         merg = mergers[i]
         possible_q = []
         possible_q_time = []
+        possible_r = []
         for j in range(0, len(galaxies_interpolated)):
             galaxy = galaxies_interpolated[j]
             if galaxy.id == merg.id:
@@ -202,6 +204,47 @@ def mqr_relation():
     ax.set_xlim([0.0,6.66])
     fig.tight_layout()
     fig.savefig(str(results_folder)+'mergertime_and_quench_reju.png',format='png', dpi=250, bbox_inches='tight')
+
+def reju_fastquench(galaxies_interpolated):
+
+    delays = []
+
+    for gal in galaxies_interpolated:
+        possible_r = []
+        possible_q = []
+        for k in range(0, len(gal.rate), 4):
+            possible_r.append(gal.rate[k+1])
+        for quench in gal.quenching:
+            start = quench.above9 + 1
+            end = quench.below11
+            if np.log10(gal.m_gal[start])>=9.5 and np.log10(quench.quench_time/gal.galaxy_t[end])<-1.5:
+                possible_q.append(gal.galaxy_t[start])
+        possible_q = np.asarray(possible_q)
+        possible_r = np.asarray(possible_r)
+        if len(possible_r) and len(possible_q):
+            for rej in possible_r:
+                diff = possible_q - rej
+                if diff[np.argmin(diff)]>=0:
+                    delays.append(diff[np.argmin(diff)])
+    delays = np.asarray(delays)
+    median = np.median(delays)
+    print(median)
+    binis = np.linspace(np.log10(1e-1), np.log10(7), 10)
+    binis = 10**binis
+    hist, bin_edges = np.histogram(delays, bins=binis)
+    bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
+    fig = plt.figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
+    ax = fig.add_subplot(1,1,1)
+    ax.plot([median, median],[0, hist.max()], 'm:', linewidth=2.0)
+    ax.step(bin_cent, hist, 'm', where='mid')
+    ax.legend(loc='best', fontsize=16)
+    ax.tick_params(labelsize=12)
+    ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%.1e'))
+    ax.set_xlim([0.0,6.66])
+    fig.tight_layout()
+    fig.savefig('rej_fastq_delay.png',format='png', dpi=250, bbox_inches='tight')
+
+
 def quench_merger_scatter():
     print('Start finding for connection between mergers, quenching and rejuvenations')
     quench_t = []
@@ -217,7 +260,7 @@ def quench_merger_scatter():
                 for quench in galaxy.quenching:
                     start = quench.above9 #+ 1
                     end = quench.below11
-                    if np.log10(galaxy.m_gal)>=mass_limit:
+                    if np.log10(galaxy.m_gal[start])>=mass_limit:
                         possible_q.append(galaxy.galaxy_t[start])
                         possible_q_t.append(np.log10(quench.quench_time/galaxy.galaxy_t[end]))
         diff_q = []
@@ -235,7 +278,7 @@ def quench_merger_scatter():
     print('Galaxies with mergers and quenching: '+str(len(merger_t)))
     fig = plt.figure(num=None, figsize=(8, 8), dpi=80, facecolor='w', edgecolor='k')
     ax = fig.add_subplot(1,1,1)
-    sc = ax.scatter(quench_t, merger_t, c = quench_scale, cmap='winter', s=10)
+    sc = ax.scatter(quench_t, merger_t, c = quench_scale, cmap='jet', s=15)
     ax.plot([1.9, 14], [1.9, 14], 'k--')
     ax.set_xlim([quench_t.min()*0.9, quench_t.max()*1.1])
     ax.set_ylim([merger_t.min()*0.9, merger_t.max()*1.1])
@@ -333,6 +376,7 @@ def merger_reju_scatter():
 #time_diff, q_times, m_ratios = mergerquench_relation()
 #quench_delay(time_diff,q_times,m_ratios)
 #merger_reju_relation()
-merger_reju_scatter()
-mqr_relation()
+#merger_reju_scatter()
+#mqr_relation()
 quench_merger_scatter()
+#reju_fastquench(galaxies_interpolated)

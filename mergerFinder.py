@@ -59,11 +59,11 @@ def merger_finder(galaxies, merger_ratio, mass_limit, redshift_limit, out_file=F
             if z[i]<=redshift_limit:
                 delta_t = t[i+1]-t[i]
                 condition,ratio = merger_condition(sfr[i], delta_t, mass, i, merger_ratio, mass_limit)
-                sfcondition = sfr_condition_2('end', gal, i, 0)
+                sfcondition = sfr_condition_2('end', gal, i+1, 0)
                 ssfr = sfr/mass
-                if condition == True and ssfr[i+2]>=(10**sfcondition):
+                if condition == True and ssfr[i+1]>=(10**sfcondition):
                     boost = (fgas[i+1]-fgas[i-1])/fgas[i-1]
-                    # Save data at the merger, after and before
+                    # Save data at the merger
                     merger = Merger(i,ratio,boost)
                     gal.mergers.append(merger)
                 # else:
@@ -150,7 +150,7 @@ def plotmedian(x,y,yflag=[],c='k',ltype='--',lw=3,stat='median',ax='plt',bins=8,
     return bin_means,var
 
 
-def plotmedian2(x,y,yflag=[],c='k',ltype='--',lw=3,stat='median',ax='plt',bins=8,label=None,pos=None,boxsize=-1, edges=0):
+def plotmedian2(x,y,yflag=[],c='k',ltype='--',lw=3,stat='median',ax='plt',bins=7,label=None,pos=None,boxsize=-1, edges=0):
     if len(yflag) != len(x):
         #print 'Plotmedian: No flag provided, using all values'
         xp = x
@@ -167,7 +167,7 @@ def plotmedian2(x,y,yflag=[],c='k',ltype='--',lw=3,stat='median',ax='plt',bins=8
     #print(np.arange(0.999*min(xp),1.001*max(xp),(max(xp)-min(xp))/(bins)))
     bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
     #ax.plot(bin_cent, bin_means, ltype, lw=lw, color=c, label=label)
-
+    print(bins)
     if boxsize > 0:  # determine cosmic variance over 8 octants, plot errorbars
 	if len(yflag) != len(x): posp = pos
 	else: posp = pos[yflag]
@@ -201,24 +201,29 @@ def plotmedian2(x,y,yflag=[],c='k',ltype='--',lw=3,stat='median',ax='plt',bins=8
         var = np.zeros(len(bin_cent))
     return bin_cent,bin_means,var
 # Running median through scatter data
-def myrunningmedian(x,y,nbins, sigma=True):
-    bins = np.linspace(x.min(), x.max(), nbins)
-    delta = bins[1]-bins[0]
-    idx = np.digitize(x, bins)
-    running_median = [np.median(y[idx==k]) for k in range(0,nbins)]
-    running_median = np.asarray(running_median)
-    delitems = []
-    ynan = np.isnan(running_median)
-    for i in range(0, len(ynan)):
-        if ynan[i]:
-            delitems.append(i)
-    running_median = np.delete(running_median, delitems)
-    bins = np.delete(bins, delitems)
-    bin_cent = bins - delta/2
-    if sigma==True:
-        running_std = [y[idx==k].std() for k in range(0,nbins)]
-        running_std = np.asarray(running_std)
-        running_std = np.delete(running_std, delitems)
-        return bin_cent, running_median, running_std
-    else:
-        return bin_cent, running_median
+def myrunningmedian(x,y,nbins,bins=True, sigma=True):
+    if not isinstance(bins, np.ndarray):
+        bins = np.linspace(x.min(), x.max(), nbins)
+    bin_means, bin_edges, binnumber = stats.binned_statistic(x,y,bins=bins,statistic='median')
+    bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
+    return bin_cent,bin_means,bin_means
+    
+    # delta = bins[1]-bins[0]
+    # idx = np.digitize(x, bins)
+    # running_median = [np.median(y[idx==k]) for k in range(0,nbins)]
+    # running_median = np.asarray(running_median)
+    # delitems = []
+    # ynan = np.isnan(running_median)
+    # for i in range(0, len(ynan)):
+    #     if ynan[i]:
+    #         delitems.append(i)
+    # running_median = np.delete(running_median, delitems)
+    # bins = np.delete(bins, delitems)
+    # bin_cent = bins - delta/2
+    # if sigma==True:
+    #     running_std = [y[idx==k].std() for k in range(0,nbins)]
+    #     running_std = np.asarray(running_std)
+    #     running_std = np.delete(running_std, delitems)
+    #     return bin_cent, running_median, running_std
+    # else:
+    #     return bin_cent, running_median

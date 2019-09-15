@@ -35,6 +35,7 @@ class GalaxyData:
         self.quenching = []
         self.rejuvenations = []
         self.mags = []
+        self.scs = []
     def get_ssfr(self):
         if self.interpolation:
             self.ssfr[1] = self.sfr[1]/self.m[1]
@@ -70,3 +71,8 @@ class Magnitude:
         self.Abs = []
         self.App = []
 
+class SuperColour:
+    def __init__(self):
+        self.sc_number = None
+        self.z = []
+        self.values = []

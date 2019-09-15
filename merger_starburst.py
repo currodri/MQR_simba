@@ -12,6 +12,7 @@ The version here detailed provides the merger statistics plots given in Rodrigue
 
 # Import required libraries
 import numpy as np
+import random
 from decimal import Decimal
 import matplotlib
 matplotlib.use('Agg') # Must be before importing matplotlib.pyplot or pylab!
@@ -27,557 +28,282 @@ MODEL = sys.argv[1]  # e.g. m50n512
 WIND = sys.argv[2]  # e.g. s50 for Simba
 
 # Import other codes
-from quenchingFinder import GalaxyData
-from mergerFinder import plotmedian, plotmedian2, histedges_equalN
+from galaxy_class import GalaxyData, Merger
 results_folder = '../mergers/%s/' % (MODEL) # You can change this to the folder where you want your resulting plots
-merger_file = '../mergers/%s/merger_results.pkl' % (MODEL) # File holding the progen info of galaxies
+data_file = '/home/curro/quenchingSIMBA/code/SH_Project/mandq_results_%s.pkl' % (MODEL) # File holding the mergerFinder and quenchingFinder info of galaxies
 
 # Extract data from mergers and quenching pickle files
-obj = open(merger_file, 'rb')
-merger_data = pickle.load(obj)
+print('Loading pickle file with data...')
+obj = open(data_file, 'rb')
+data = pickle.load(obj)
 obj.close()
-mergers, sf_galaxies, max_redshift_mergers = merger_data['mergers'], merger_data['sf_galaxies'], merger_data['redshift_limit']
+galaxies = data['galaxies']
+max_redshift_mergers = data['max_redshift_mergers']
+print('Data extracted from pickle file!')
 
-def merger_vs_msqPlots(mergers, sf_galaxies):
+def lsfr_condition(type, galaxy, i, d_indx):
+    if d_indx != None:
+        if type == 'start':
+            lsfr = np.log10(1/(galaxy.t[d_indx][i]))-9
+        elif type == 'end':
+            lsfr  = np.log10(0.2/(galaxy.t[d_indx][i]))-9
+    else:
+        lsfr = 0
+    return lsfr
+
+def plotmedian(x,y,yflag=[],c='k',ltype='--',lw=3,stat='median',bins=8,label=None,pos=None,boxsize=-1):
+    if len(yflag) != len(x):
+        #print 'Plotmedian: No flag provided, using all values'
+        xp = x
+        yp = y
+    else:
+        xp = x[yflag]
+        yp = y[yflag]
+    b = bins
+    # bins<0 sets bins such that there are equal numbers per bin
+    if not isinstance(bins, np.ndarray):
+        bins = np.arange(0.999*min(xp),1.001*max(xp),(max(xp)-min(xp))/(bins))
+    else:
+        b = len(bins)-1
+    bin_means, bin_edges, binnumber = stats.binned_statistic(xp,yp,bins=bins,statistic=stat)
+    bin_std, useless1, useless2 = stats.binned_statistic(xp,yp,bins=bins,statistic='std')
+    bin_cent = 0.5*(bin_edges[1:]+bin_edges[:-1])
+
+    if boxsize > 0:  # determine cosmic variance over 8 octants, plot errorbars
+        if len(yflag) != len(x): posp = pos
+        else: posp = pos[yflag]
+        pos = np.floor(posp/(0.5*boxsize)).astype(np.int)
+        gal_index = pos[:,0] + pos[:,1]*2 + pos[:,2]*4
+        bin_oct = np.zeros((abs(b),8))
+        for i0 in xrange(8):
+            xq = xp[gal_index==i0]
+            yq = yp[gal_index==i0]
+            bin_oct[:,i0], bin_edges, binnumber = stats.binned_statistic(xq,yq,bins=bin_edges,statistic=stat)
+        bin_oct  = np.ma.masked_invalid(bin_oct)
+        var  = np.ma.std(bin_oct, axis=1)
+    elif boxsize == -1:
+        var = []
+        for i0 in range(len(bin_edges)-1):
+            xq = xp[(xp>bin_edges[i0])&(xp<bin_edges[i0+1])]
+            yq = yp[(xp>bin_edges[i0])&(xp<bin_edges[i0+1])]
+    else:
+        var = np.zeros(len(bin_cent))
+    return bin_cent,bin_means,var,bin_std
+
+def compare_MergMSQ(galaxies, nbins):
     ylabels = [r'$\log$(sSFR[yr$^{-1}$])',r'$\log(f_{H_2})$',r'$\log$(SFE[yr$^{-1}$])']
     names = ['burst_ssfr','gas_frac','sfe_gal']
     merger_labels = ['Merger','MSQ non merger']
     titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
     zlimits = [[0.0, 0.5], [1.0, 1.5], [2.0, 2.5]]
-    colours = ['b','k']
+    colours = ['y','k']
     colour_lines = ['r']
     props = dict(boxstyle='round', facecolor='white', alpha=0.5, edgecolor='k')
-    for i in range(0, len(ylabels)):
-        fig, axes = plt.subplots(len(titles), 1, sharex='col', num=None, figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
-        for m in range(0, len(titles)):
-            axes[m].set_ylabel(ylabels[i], fontsize=16)
-            axes[m].tick_params(labelsize=12)
-            a = []
-            b = []
-            for j in range(0, len(mergers)):
-                if zlimits[m][0] <= mergers[j].z_gal[2] < zlimits[m][1]:
-                    a.append(np.log10(mergers[j].m_gal[2]))
-                    if i==0:
-                        b.append(np.log10(mergers[j].ssfr_gal[2]))
-                        if m==0 and b[-1]<-11:
-                            b[-1] = -11 + 0.01*random.randint(0,10)
-                            axes[m].arrow(a[-1],b[-1],0,-0.2, head_width=0.018,
-                                                            width=0.005, head_length=0.1,
-                                                            color=colours[0])
-                        elif m==1 and b[-1]<-10.2:
-                            b[-1] = -10.2 + 0.01*random.randint(0,10)
-                            axes[m].arrow(a[-1],b[-1],0,-0.2, head_width=0.018,
-                                                            width=0.005, head_length=0.1,
-                                                            color=colours[0])
-                        elif m==2 and b[-1]<-10:
-                            b[-1] = -10 + 0.01*random.randint(0,10)
-                            axes[m].arrow(a[-1],b[-1],0,-0.2, head_width=0.018,
-                                                            width=0.005, head_length=0.1,
-                                                            color=colours[0])
-                    elif i==1:
-                        b.append(np.log10(mergers[j].fgas_gal[2]))
-                        if m==0 and b[-1]<-2:
-                            b[-1] = -2 + 0.01*random.randint(0,10)
-                            axes[m].arrow(a[-1],b[-1],0,-0.2, head_width=0.018,
-                                                            width=0.005, head_length=0.1,
-                                                            color=colours[0])
-                        elif m==1 and b[-1]<-1.7:
-                            b[-1] = -1.7 + 0.01*random.randint(0,10)
-                            axes[m].arrow(a[-1],b[-1],0,-0.2, head_width=0.018,
-                                                            width=0.005, head_length=0.1,
-                                                            color=colours[0])
-                        elif m==2 and b[-1]<-1.5:
-                            b[-1] = -1.5 + 0.01*random.randint(0,10)
-                            axes[m].arrow(a[-1],b[-1],0,-0.2, head_width=0.018,
-                                                            width=0.005, head_length=0.1,
-                                                            color=colours[0])
-                    elif i==2:
-                        b.append(np.log10(mergers[j].sfe_gal[2]))
-                        if m==0 and b[-1]<-11:
-                            b[-1] = -11 + 0.01*random.randint(0,10)
-                            axes[m].arrow(a[-1],b[-1],0,-0.2, head_width=0.018,
-                                                            width=0.005, head_length=0.1,
-                                                            color=colours[0])
-                        elif m==1 and b[-1]<-10.5:
-                            b[-1] = -10.5 + 0.01*random.randint(0,10)
-                            axes[m].arrow(a[-1],b[-1],0,-0.2, head_width=0.018,
-                                                            width=0.005, head_length=0.1,
-                                                            color=colours[0])
-                        elif m==2 and b[-1]<-10.2:
-                            b[-1] = -10.2 + 0.01*random.randint(0,10)
-                            axes[m].arrow(a[-1],b[-1],0,-0.2, head_width=0.018,
-                                                            width=0.005, head_length=0.1,
-                                                            color=colours[0])
-            x,y,ysig = myrunningmedian(np.asarray(a),np.asarray(b),10)
-            axes[m].scatter(np.asarray(a),np.asarray(b), color=colours[0], label=merger_labels[0],
-                                marker='.', s=30.0, alpha=0.7)
-            axes[m].plot(x, y, color = colour_lines[0], linewidth=2.5)
-            if i==0:
-                print('Number of mergers in redshift range '+str(titles[m])+' : '+str(len(a)))
-            a = []
-            b = []
-            for n in range(0, len(sf_galaxies)):
-                if zlimits[m][0] <= sf_galaxies[n].z_gal < zlimits[m][1]:
-                    a.append(np.log10(sf_galaxies[n].m_gal))
-                    if i==0:
-                        b.append(np.log10(sf_galaxies[n].ssfr_gal))
-                    elif i==1:
-                        b.append(np.log10(sf_galaxies[n].fgas_gal))
-                    elif i==2:
-                        b.append(np.log10(sf_galaxies[n].sfe_gal))
-            x,y,ysig = myrunningmedian(np.asarray(a),np.asarray(b),20)
-            axes[m].plot(x, y, color = colours[1], label=merger_labels[1])
-            axes[m].fill_between(x, y-ysig, y+ysig, facecolor=colours[1], alpha=0.25)
-            axes[m].text(0.05, 0.05, titles[m], transform=axes[m].transAxes, fontsize=14,
-                            verticalalignment='bottom', bbox=props)
-            axes[m].margins(.2)
-            axes[m].set_xlim([9.5,12.0])
-
-        axes[len(titles)-1].set_xlabel(r'$\log(M_{*}[M_{\odot}])$', fontsize=16)
-
-        axes[0].legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-               ncol=3, mode="expand", borderaxespad=0., prop={'size': 13})
-        fig.tight_layout()
-        fig.savefig(str(results_folder)+'merger_'+str(names[i])+'.png', format='png', dpi=200, bbox_inches='tight')
-
-def after_before_vs_msqPlots(mergers, sf_galaxies):
-    ylabels = [r'$\log(sSFR)$',r'$\log(f_{H_2})$',r'$\log(SFE)$']
-    names = ['burst_ssfr','gas_frac','sfe_gal']
-    merger_labels = ['Before merger','After merger','MSQ non merger']
-    titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
-    zlimits = [[0.0, 0.5], [1.0, 1.5], [2.0, 2.5]]
-    colours = ['b','r','k']
-    colour_lines = ['c','m']
-    props = dict(boxstyle='round', facecolor='white', alpha=0.5, edgecolor='k')
-    for i in range(0, len(ylabels)):
-        fig, axes = plt.subplots(len(titles), 1, sharex='col', num=None, figsize=(8, 10), dpi=80, facecolor='w', edgecolor='k')
-        for m in range(0, len(titles)):
-            axes[m].set_ylabel(ylabels[i], fontsize=16)
-            a = [[],[]]
-            b = [[],[]]
-            #a_m = []
-            #b_m = []
-            for j in range(0, len(mergers)):
-                if zlimits[m][0] <= mergers[j].z_gal[1] < zlimits[m][1]:
-                    a[0].append(np.log10(mergers[j].m_gal[0]))
-                    #a_m.append(np.log10(mergers[j].m_gal[1]))
-                    a[1].append(np.log10(mergers[j].m_gal[2]))
-                    if i==0:
-                        b[0].append(np.log10(mergers[j].ssfr_gal[0]))
-                        #b_m.append(np.log10(mergers[j].sfr_gal[1]/mergers[j].m_gal[1]))
-                        b[1].append(np.log10(mergers[j].ssfr_gal[2]))
-                        for s in range(0, len(b)):
-                            if m==0 and b[s][-1]<-11:
-                                b[s][-1] = -11 + 0.01*random.randint(0,10)
-                                axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
-                                                                width=0.005, head_length=0.1,
-                                                                color=colours[s])
-                            elif m==1 and b[s][-1]<-10.2:
-                                b[s][-1] = -10.2 + 0.01*random.randint(0,10)
-                                axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
-                                                                width=0.005, head_length=0.1,
-                                                                color=colours[s])
-                            elif m==2 and b[s][-1]<-10:
-                                b[s][-1] = -10 + 0.01*random.randint(0,10)
-                                axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
-                                                                width=0.005, head_length=0.1,
-                                                                color=colours[s])
-                    elif i==1:
-                        b[0].append(np.log10(mergers[j].fgas_gal[0]))
-                        #b_m.append(np.log10(mergers[j].fgas_gal[1]))
-                        b[1].append(np.log10(mergers[j].fgas_gal[2]))
-                        for s in range(0, len(b)):
-                            if m==0 and b[s][-1]<-2:
-                                b[s][-1] = -2 + 0.01*random.randint(0,10)
-                                axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
-                                                                width=0.005, head_length=0.1,
-                                                                color=colours[s])
-                            elif m==1 and b[s][-1]<-1.7:
-                                b[s][-1] = -1.7 + 0.01*random.randint(0,10)
-                                axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
-                                                                width=0.005, head_length=0.1,
-                                                                color=colours[s])
-                            elif m==2 and b[s][-1]<-1.5:
-                                b[s][-1] = -1.5 + 0.01*random.randint(0,10)
-                                axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
-                                                                width=0.005, head_length=0.1,
-                                                                color=colours[s])
-                    elif i==2:
-                        b[0].append(np.log10(mergers[j].sfe_gal[0]))
-                        #b_m.append(np.log10(mergers[j].sfe_gal[1]))
-                        b[1].append(np.log10(mergers[j].sfe_gal[2]))
-                        for s in range(0, len(b)):
-                            if m==0 and b[s][-1]<-11:
-                                b[s][-1] = -11 + 0.01*random.randint(0,10)
-                                axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
-                                                                width=0.005, head_length=0.1,
-                                                                color=colours[s])
-                            elif m==1 and b[s][-1]<-10.5:
-                                b[s][-1] = -10.5 + 0.01*random.randint(0,10)
-                                axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
-                                                                width=0.005, head_length=0.1,
-                                                                color=colours[s])
-                            elif m==2 and b[s][-1]<-10.2:
-                                b[s][-1] = -10.2 + 0.01*random.randint(0,10)
-                                axes[m].arrow(a[s][-1],b[s][-1],0,-0.2, head_width=0.018,
-                                                                width=0.005, head_length=0.1,
-                                                                color=colours[s])
-            for k in range(0, len(a)):
-                x,y,ysig = myrunningmedian(np.asarray(a[k]),np.asarray(b[k]),15)
-                axes[m].scatter(np.asarray(a[k]),np.asarray(b[k]), color=colours[k], label=merger_labels[k],
-                                    marker='.', s=10.0, alpha=0.7)
-                axes[m].plot(x, y, color = colour_lines[k], linewidth=2.5)
-            a = []
-            b = []
-            for n in range(0, len(sf_galaxies)):
-                if zlimits[m][0] <= sf_galaxies[n].z_gal < zlimits[m][1]:
-                    a.append(np.log10(sf_galaxies[n].m_gal))
-                    if i==0:
-                        b.append(np.log10(sf_galaxies[n].ssfr_gal))
-                    elif i==1:
-                        b.append(np.log10(sf_galaxies[n].fgas_gal))
-                    elif i==2:
-                        b.append(np.log10(sf_galaxies[n].sfe_gal))
-            x,y,ysig = myrunningmedian(np.asarray(a),np.asarray(b),20)
-            axes[m].plot(x, y, color = colours[2], label=merger_labels[2])
-            axes[m].fill_between(x, y-ysig, y+ysig, facecolor=colours[2], alpha=0.25)
-            axes[m].text(0.05, 0.05, titles[m], transform=axes[m].transAxes, fontsize=14,
-                            verticalalignment='bottom', bbox=props)
-            axes[m].margins(.2)
-            axes[m].set_xlim([9.3,11.9])
-
-        axes[len(titles)-1].set_xlabel(r'$\log(M_{*})$', fontsize=16)
-
-        axes[0].legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-               ncol=3, mode="expand", borderaxespad=0., prop={'size': 13})
-        fig.tight_layout()
-        fig.savefig(str(results_folder)+'merger_'+str(names[i])+'.png', format='png', dpi=200)
-
-def statsMergers(mergers, sf_galaxies, nbins, printresults = True, plot=False):
-    ylabels = [r'$\log(sSFR)$',r'$\log(F_{H_2})$',r'$\log(SFE)$']
-    names = ['burst_ssfr','gas_frac','sfe_gal']
-    titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
-    zlimits = [[0.0, 0.5], [1.0, 1.5], [2.0, 2.5]]
-    stats_results = {}
-    for m in range(0, len(names)):
-        stats_results[names[m]] = {}
+    d = {}
+    d['bhm'] = []
+    d['pos'] = {}
+    for label in ylabels:
+        d[label] = {}
+        for mlabel in merger_labels:
+            d[label][mlabel] = []
+            d[mlabel] = []
+            for i in range(0, len(titles)):
+                d[label][mlabel].append([])
+                d[mlabel].append([])       
+    for mlabel in merger_labels:
+        d['pos'][mlabel] = []
         for i in range(0, len(titles)):
-            stats_results[names[m]][titles[i]] = {}
-            aft_m = []
-            aft = []
-            bef_m = []
-            bef = []
-            msq_m = []
-            msq = []
-            for j in range(0, len(mergers)):
-                if zlimits[i][0] <= mergers[j].z_gal[1] < zlimits[i][1]:
-                    bef_m.append(np.log10(mergers[j].m_gal[0]))
-                    aft_m.append(np.log10(mergers[j].m_gal[2]))
-                    if m==0:
-                        bef.append(np.log10(mergers[j].ssfr_gal[0]))
-                        aft.append(np.log10(mergers[j].ssfr_gal[2]))
-                    elif m==1:
-                        bef.append(np.log10(mergers[j].fgas_gal[0]))
-                        aft.append(np.log10(mergers[j].fgas_gal[2]))
-                    elif m==2:
-                        bef.append(np.log10(mergers[j].sfe_gal[0]))
-                        aft.append(np.log10(mergers[j].sfe_gal[2]))
-            for n in range(0, len(sf_galaxies)):
-                if zlimits[i][0] <= sf_galaxies[n].z_gal < zlimits[i][1]:
-                    msq_m.append(np.log10(sf_galaxies[n].m_gal))
-                    if m==0:
-                        msq.append(np.log10(sf_galaxies[n].ssfr_gal))
-                    elif m==1:
-                        msq.append(np.log10(sf_galaxies[n].fgas_gal))
-                    elif m==2:
-                        msq.append(np.log10(sf_galaxies[n].sfe_gal))
-            aft_m = np.asarray(aft_m)
-            aft = np.asarray(aft)
-            bef_m = np.asarray(bef_m)
-            bef = np.asarray(bef)
-            msq_m = np.asarray(msq_m)
-            msq = np.asarray(msq)
-            maxs = np.array([aft_m.max(),bef_m.max()])
-            mins = np.array([aft_m.min(),bef_m.min()])
-            bins = np.linspace(mins.min(), maxs.max(), nbins)
-            delta = bins[1] - bins[0]
-            bin_cent = bins - delta/2
-            stats_results[names[m]][titles[i]]['merger_pvalue'] = np.zeros(len(bins)-1)
-            stats_results[names[m]][titles[i]]['aftvsbef_pvalue'] = np.zeros(len(bins)-1)
-            stats_results[names[m]][titles[i]]['bin_cent'] = np.delete(bin_cent, 0)
-            digi_aft = np.digitize(aft_m, bins, right=True)
-            digi_bef = np.digitize(bef_m, bins, right=True)
-            digi_msq = np.digitize(msq_m, bins, right=True)
-            for j in range(1, len(bins)):
-                aft_bin = []
-                bef_bin = []
-                msq_bin = []
-                for k in range(0, len(aft_m)):
-                    if digi_aft[k]==j:
-                        aft_bin.append(aft[k])
-                for k in range(0, len(bef_m)):
-                    if digi_bef[k]==j:
-                        bef_bin.append(bef[k])
-                for k in range(0, len(msq_m)):
-                    if digi_msq[k]==j:
-                        msq_bin.append(msq[k])
-                aft_bin = np.asarray(aft_bin)
-                bef_bin = np.asarray(bef_bin)
-                merger_bin = np.concatenate((aft_bin, bef_bin), axis=None)
-                msq_bin = np.asarray(msq_bin)
-                statsKS, pvalue = stats.ks_2samp(merger_bin, msq_bin)
-                stats_results[names[m]][titles[i]]['merger_pvalue'][j-1] = pvalue
-                statsKS, pvalue = stats.ks_2samp(aft_bin, bef_bin)
-                stats_results[names[m]][titles[i]]['aftvsbef_pvalue'][j-1] = pvalue
-        if printresults==True:
-            print('#########################################')
-            print('VARIABLE STUDIED: '+str(names[m]))
-            print('Statistical significance of merger with respect to star-forming main sequence')
-            for w in range(0, len(titles)):
-                print('----------------------------------')
-                print('Redshift bin considered: '+str(titles[w]))
-                for v in range(0, nbins-1):
-                    print('................')
-                    print('Mass bin center: '+str(stats_results[names[m]][titles[w]]['bin_cent'][v]))
-                    print('p-value from KS 2-sample test: '+str(stats_results[names[m]][titles[w]]['merger_pvalue'][v]))
-            print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.')
-            print('Statistical significance of difference between after and before merger data')
-            for w in range(0, len(titles)):
-                print('----------------------------------')
-                print('Redshift bin considered: '+str(titles[w]))
-                for v in range(0, nbins-1):
-                    print('................')
-                    print('Mass bin center: '+str(stats_results[names[m]][titles[w]]['bin_cent'][v]))
-                    print('p-value from KS 2-sample test: '+str(stats_results[names[m]][titles[w]]['aftvsbef_pvalue'][v]))
-
-def distanceMSQ(mergers, sf_galaxies, nbins):
-    ylabels = [r'$\Delta_{MSQ}(sSFR)$',r'$\Delta_{MSQ}(f_{H_2})$',r'$\Delta_{MSQ}(SFE)$']
-    names = ['burst_ssfr','gas_frac','sfe_gal']
-    merger_labels = ['After merger','Before merger','Non merger']
-    titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
-    zlimits = [[0.0, 0.5], [1.0, 1.5], [2.0, 2.5]]
-    colours = ['r', 'g']
-    lines = ['-','--','-.']
-    markers = ['o','v', 's']
-    props = dict(boxstyle='round', facecolor='white', alpha=0.5, edgecolor='k')
-    distance_results = {}
-    for i in range(0, len(ylabels)):
-        distance_results[names[i]] = {}
-        fig = plt.figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
-        ax = fig.add_subplot(1,1,1)
-        ax.set_ylabel(ylabels[i], fontsize=16)
-        ax.set_xlabel(r'$\log(M_{*})$', fontsize=16)
-        for m in range(0, len(titles)):
-            distance_results[names[i]]['aft_d'+str(m)] = []
-            distance_results[names[i]]['aft_cent'+str(m)] = []
-            distance_results[names[i]]['bef_d'+str(m)] = []
-            distance_results[names[i]]['bef_cent'+str(m)] = []
-            aft_m = []
-            aft = []
-            bef_m = []
-            bef = []
-            msq_m = []
-            msq = []
-            for j in range(0, len(mergers)):
-                if zlimits[i][0] <= mergers[j].z_gal[1] < zlimits[i][1]:
-                    bef_m.append(np.log10(mergers[j].m_gal[0]))
-                    aft_m.append(np.log10(mergers[j].m_gal[2]))
-                    if m==0:
-                        bef.append(np.log10(mergers[j].ssfr_gal[0]))
-                        aft.append(np.log10(mergers[j].ssfr_gal[2]))
-                    elif m==1:
-                        bef.append(np.log10(mergers[j].fgas_gal[0]))
-                        aft.append(np.log10(mergers[j].fgas_gal[2]))
-                    elif m==2:
-                        bef.append(np.log10(mergers[j].sfe_gal[0]))
-                        aft.append(np.log10(mergers[j].sfe_gal[2]))
-            for n in range(0, len(sf_galaxies)):
-                if zlimits[i][0] <= sf_galaxies[n].z_gal < zlimits[i][1]:
-                    msq_m.append(np.log10(sf_galaxies[n].m_gal))
-                    if m==0:
-                        msq.append(np.log10(sf_galaxies[n].ssfr_gal))
-                    elif m==1:
-                        msq.append(np.log10(sf_galaxies[n].fgas_gal))
-                    elif m==2:
-                        msq.append(np.log10(sf_galaxies[n].sfe_gal))
-            aft_m = np.asarray(aft_m)
-            aft = np.asarray(aft)
-            bef_m = np.asarray(bef_m)
-            bef = np.asarray(bef)
-            msq_m = np.asarray(msq_m)
-            msq = np.asarray(msq)
-            maxs = np.array([aft_m.max(),bef_m.max(),msq_m.max()])
-            mins = np.array([aft_m.min(),bef_m.min(),msq_m.min()])
-            bins = np.linspace(mins.min(), maxs.max(), nbins)
-            delta = bins[1] - bins[0]
-            bin_cent = bins - delta/2
-            idx = np.digitize(aft_m, bins)
-            running_median = [np.median(aft[idx==k]) for k in range(0,nbins)]
-            aft_median = np.asarray(running_median)
-            idx = np.digitize(bef_m, bins)
-            running_median = [np.median(bef[idx==k]) for k in range(0,nbins)]
-            bef_median = np.asarray(running_median)
-            idx = np.digitize(msq_m, bins)
-            running_median = [np.median(msq[idx==k]) for k in range(0,nbins)]
-            msq_median = np.asarray(running_median)
-            for j in range(0, len(aft_median)):
-                if not np.isnan(aft_median[j]) and not np.isnan(msq_median[j]):
-                    distance_results[names[i]]['aft_d'+str(m)].append((10**aft_median[j]-10**msq_median[j])/abs(10**msq_median[j]))
-                    distance_results[names[i]]['aft_cent'+str(m)].append(bin_cent[j])
-
-            for j in range(0, len(bef_median)):
-                if not np.isnan(bef_median[j]) and not np.isnan(msq_median[j]):
-                    distance_results[names[i]]['bef_d'+str(m)].append((10**bef_median[j]-10**msq_median[j])/abs(10**msq_median[j]))
-                    distance_results[names[i]]['bef_cent'+str(m)].append(bin_cent[j])
-            # if names[i]=='gas_frac':
-            #     prob = ['aft', 'bef']
-            #     for l in range(0, 2):
-            #         for k in range(0, len(distance_results[names[i]][str(prob[l])+'_cent'+str(m)])):
-            #             if abs(distance_results[names[i]][str(prob[l])+'_d'+str(m)][k]) > 2.5:
-            #                 if distance_results[names[i]][str(prob[l])+'_d'+str(m)][k]>0:
-            #                     distance_results[names[i]][str(prob[l])+'_d'+str(m)][k] = 2.5
-            #                     head = 2.5*0.1
-            #                 else:
-            #                     distance_results[names[i]][str(prob[l])+'_d'+str(m)][k] = -2.5
-            #                     head = -2.5*0.1
-            #                 ax.arrow(distance_results[names[i]][str(prob[l])+'_cent'+str(m)][k],distance_results[names[i]][str(prob[l])+'_d'+str(m)][k],0,head,
-            #                             head_width=0.015, width=0.008,
-            #                             head_length=0.1, color=colours[l])
-            # elif names[i]=='sfe_gal':
-            #     prob = ['aft', 'bef']
-            #     for l in range(0, 2):
-            #         for k in range(0, len(distance_results[names[i]][str(prob[l])+'_cent'+str(m)])):
-            #             if abs(distance_results[names[i]][str(prob[l])+'_d'+str(m)][k]) > 0.1:
-            #                 if distance_results[names[i]][str(prob[l])+'_d'+str(m)][k]>0:
-            #                     distance_results[names[i]][str(prob[l])+'_d'+str(m)][k] = 0.1
-            #                     head = 0.1*0.1
-            #                 else:
-            #                     distance_results[names[i]][str(prob[l])+'_d'+str(m)][k] = -0.1
-            #                     head = -0.1*0.1
-            #                 ax.arrow(distance_results[names[i]][str(prob[l])+'_cent'+str(m)][k],distance_results[names[i]][str(prob[l])+'_d'+str(m)][k],0,head,
-            #                             head_width=0.015, width=0.008,
-            #                             head_length=0.005, color=colours[l])
-            # elif names[i]=='burst_ssfr':
-            #     prob = ['aft', 'bef']
-            #     for l in range(0, 2):
-            #         for k in range(0, len(distance_results[names[i]][str(prob[l])+'_cent'+str(m)])):
-            #             if abs(distance_results[names[i]][str(prob[l])+'_d'+str(m)][k]) > 0.1:
-            #                 if distance_results[names[i]][str(prob[l])+'_d'+str(m)][k]>0:
-            #                     distance_results[names[i]][str(prob[l])+'_d'+str(m)][k] = 0.1
-            #                     head = 0.1*0.1
-            #                 else:
-            #                     distance_results[names[i]][str(prob[l])+'_d'+str(m)][k] = -0.1
-            #                     head = -0.1*0.1
-            #                 ax.arrow(distance_results[names[i]][str(prob[l])+'_cent'+str(m)][k],distance_results[names[i]][str(prob[l])+'_d'+str(m)][k],0,head,
-            #                             head_width=0.015, width=0.008,
-            #                             head_length=0.01, color=colours[l])
-
-            ax.plot(distance_results[names[i]]['aft_cent'+str(m)], distance_results[names[i]]['aft_d'+str(m)], label='After at '+str(titles[m]), color=colours[0], linestyle=lines[m], marker=markers[m])
-            ax.plot(distance_results[names[i]]['bef_cent'+str(m)], distance_results[names[i]]['bef_d'+str(m)], label='Before at '+str(titles[m]), color=colours[1], linestyle=lines[m], marker=markers[m])
-        ax.plot([9.5, 11.8],[0.0, 0.0], 'k--')
-        ax.legend(loc='best')
-        #ax.margins(x=None, y=.2)
-        fig.tight_layout()
-        fig.savefig(str(results_folder)+'distance_msq_'+str(names[i])+'.png', format='png', dpi=200)
-
-def distanceMSQ_2(mergers, sf_galaxies, nbins):
-    ylabels = [r'$\Delta_{MSQ}$(sSFR[yr$^{-1}$])',r'$\Delta_{MSQ}(f_{H_2})$',r'$\Delta_{MSQ}$(SFE[yr$^{-1}$])']
-    names = ['burst_ssfr','gas_frac','sfe_gal']
-    titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
-    colours = ['b','r','tab:orange']
-    zlimits = [[0.0, 0.5], [1.0, 1.5], [2.0, 2.5]]
-    props = dict(boxstyle='round', facecolor='white', alpha=0.5, edgecolor='k')
-    fig1 = plt.figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
-    ax1 = fig1.add_subplot(1,1,1)
-    fig2, axes = plt.subplots(3, 1, sharex=True, num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
+            d['pos'][mlabel].append([])
+    for i in range(0, len(titles)):
+        d['bhm'].append([])
+    for gal in galaxies:
+        if gal.mergers:
+            mergs = np.asarray([int(merg.indx) for merg in gal.mergers]) + 1
+        else:
+            mergs = np.array([])
+        for k in range(0, len(gal.z)):
+            zpos = None
+            mpos = None
+            for i in range(0, len(titles)):
+                if zlimits[i][0] <= gal.z[k] < zlimits[i][1]:
+                    zpos = i
+            if np.any(mergs==k) and gal.bh_m[k]>0:
+                mpos = 0
+            elif (gal.sfr[0][k]/gal.m[0][k]) >= (10**lsfr_condition('end',gal,k,0)) and gal.h2_gas[k]>0:
+                mpos = 1
+            if zpos != None and mpos != None:
+                d[ylabels[0]][merger_labels[mpos]][zpos].append(np.log10(gal.sfr[0][k]/gal.m[0][k]))
+                d[ylabels[1]][merger_labels[mpos]][zpos].append(np.log10(gal.h2_gas[k]/gal.m[0][k]))
+                d[ylabels[2]][merger_labels[mpos]][zpos].append(np.log10(gal.sfr[0][k]/gal.h2_gas[k]))
+                bhm = np.log10(gal.bh_m[k]/gal.m[0][k])
+                if bhm >= -2.0:
+                    bhm = -2.0
+                elif bhm <= -4.0:
+                    bhm = -4.0
+                if mpos==0:
+                    d['bhm'][zpos].append(bhm)
+                d[merger_labels[mpos]][zpos].append(np.log10(gal.m[0][k]))
+                d['pos'][merger_labels[mpos]][zpos].append(gal.pos[k])
+    
+    fig2, axes2 = plt.subplots(len(ylabels), 1, sharex=True, num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
     fig2.subplots_adjust(hspace=0)
-    axes[2].set_xlabel(r'$\log(M_{*}[M_{\odot}])$', fontsize=16)
-    #mergers_m = np.asarray([np.log10(merg.m_gal[2]) for merg in mergers])
-    #bins = histedges_equalN(mergers_m, nbins)
-    bins = np.linspace(9.5, 11.0, 8)
-    bins = np.concatenate((bins, np.array([12.0])))
-    delta = bins[1] - bins[0]
-    #bin_cent = bins - delta/2
-    #bin_cent = np.delete(bin_cent, 0)
-    fgas = [0,0,0]
-    sfe = [0,0,0]
-    for i in range(0, len(ylabels)):
-        axes[i].set_ylabel(ylabels[i], fontsize=16)
-        axes[i].plot([9.5,12.0],[0.0,0.0], 'k--')
-        axes[i].tick_params(labelsize=12)
-        for m in range(0, len(titles)):
-            mer_m = []
-            mer = []
-            mer_pos = []
-            msq_m = []
-            msq = []
-            msq_pos = []
-            for j in range(0, len(mergers)):
-                if zlimits[m][0] <= mergers[j].z_gal[2] < zlimits[m][1]:
-                    mer_m.append(np.log10(mergers[j].m_gal[2]))
-                    mer_pos.append(mergers[j].gal_pos[2])
-                    if i==0:
-                        mer.append(mergers[j].ssfr_gal[2])
-                    elif i==1:
-                        mer.append(mergers[j].fgas_gal[2])
-                    elif i==2:
-                        mer.append(mergers[j].sfe_gal[2])
-            for n in range(0, len(sf_galaxies)):
-                if zlimits[m][0] <= sf_galaxies[n].z_gal < zlimits[m][1]:
-                    msq_m.append(np.log10(sf_galaxies[n].m_gal))
-                    msq_pos.append(sf_galaxies[n].gal_pos)
-                    if i==0:
-                        msq.append(sf_galaxies[n].ssfr_gal)
-                    elif i==1:
-                        msq.append(sf_galaxies[n].fgas_gal)
-                    elif i==2:
-                        msq.append(sf_galaxies[n].sfe_gal)
-            mer_m = np.asarray(mer_m)
-            mer = np.asarray(mer)
-            mer_cen, mer_median, mer_var = plotmedian2(mer_m,mer,pos=mer_pos,boxsize=d['boxsize_in_kpccm'], edges=bins)
-            msq_m = np.asarray(msq_m)
-            msq = np.asarray(msq)
-            msq_cen, msq_median, msq_var = plotmedian2(msq_m,msq,pos=msq_pos,boxsize=d['boxsize_in_kpccm'], edges=bins)
-            distance_std = np.sqrt(((msq_var/msq_median)**2) + ((mer_var/mer_median)**2))
-            distance_std = distance_std/np.log(10)
-            distance = np.log10(mer_median/msq_median)
-            if i==1:
-                fgas[m] = distance
-            elif i==2:
-                sfe[m] = distance
-            axes[i].plot(mer_cen, distance, label=titles[m], color=colours[m])
-            axes[i].fill_between(mer_cen, distance-distance_std, distance+distance_std, facecolor=colours[m], alpha=0.25)
-            axes[i].set_ylabel(ylabels[i], fontsize=16)
-            axes[i].set_ylim([-0.3,0.85])
-            axes[i].set_xlim([9.5,11.6])
-    axes[1].legend(loc='best', prop={'size': 12})
+    colours2 = ['b','r','tab:orange']
+    ylabels2 = [r'$\Delta_{MSQ}$(sSFR[yr$^{-1}$])',r'$\Delta_{MSQ}(f_{H_2})$',r'$\Delta_{MSQ}$(SFE[yr$^{-1}$])']
+    axes2[len(ylabels2)-1].set_xlabel(r'$\log(M_{*}[M_{\odot}])$', fontsize=16)
+    for l in range(0,len(ylabels)):
+        fig, axes = plt.subplots(len(titles), 1, sharex=True, num=None, figsize=(8,11), dpi=80, facecolor='w', edgecolor='k',)
+        axes2[l].set_ylabel(ylabels2[l], fontsize=16)
+        axes2[l].plot([9.5,12.0],[0.0,0.0], 'k--')
+        axes2[l].tick_params(labelsize=12)
+        axes2[l].set_ylim([-0.3,0.85])
+        axes2[l].set_xlim([9.5,11.6])
+        for i in range(0, len(titles)):
+            axes[i].set_ylabel(ylabels[l], fontsize=16)
+            axes[i].tick_params(labelsize=12)
+            mer = np.asarray(d[ylabels[l]][merger_labels[0]][i])
+            mer_m = np.asarray(d[merger_labels[0]][i])
+            mer_pos = np.asarray(d['pos'][merger_labels[0]][i])
+            msq = np.asarray(d[ylabels[l]][merger_labels[1]][i])
+            msq_m =  np.asarray(d[merger_labels[1]][i])
+            msq_pos = np.asarray(d['pos'][merger_labels[1]][i])
+            lbh = np.asarray(d['bhm'][i])
+            sc = axes[i].scatter(mer_m,mer, c=lbh,cmap='plasma', label=merger_labels[0],
+                    marker='.', s=30.0, alpha=0.7)
+
+            bins = np.arange(0.999*min(mer_m),11.5,(11.5-min(mer_m))/(nbins))
+            bins = np.concatenate((bins,np.array([12.0])))
+            mer_cen,mer_median,mer_var,mer_std = plotmedian(mer_m,mer,bins=bins,pos=mer_pos,boxsize=data['boxsize_in_kpccm'])
+            msq_cen,msq_median,msq_var,msq_std = plotmedian(msq_m,msq,bins=bins,pos=msq_pos,boxsize=data['boxsize_in_kpccm'])
+
+            axes[i].plot(mer_cen, mer_median, color = colour_lines[0], linewidth=2.5)
+            axes[i].plot(msq_cen, msq_median, color=colours[1])
+            axes[i].fill_between(msq_cen, msq_median-msq_std, msq_median+msq_std, facecolor=colours[1], alpha=0.25)
+
+            axes[i].text(0.05, 0.05, titles[i], transform=axes[i].transAxes, fontsize=14,
+                            verticalalignment='bottom', bbox=props)
+            axes[i].margins(.2)
+            axes[i].set_xlim([9.5,12.0])
+
+            distance = mer_median - msq_median
+            distance_std = np.sqrt(mer_var**2+msq_var**2)
+            axes2[l].plot(mer_cen, distance, label=titles[i], color=colours2[i])
+            axes2[l].fill_between(mer_cen, distance-distance_std, distance+distance_std, facecolor=colours2[i], alpha=0.25)
+
+        fig.subplots_adjust(hspace=0)
+        cb = fig.colorbar(sc, ax=axes.ravel().tolist(), orientation='horizontal', pad=0.08)
+        cb.set_label(label=r'$\log(M_{BH}/M_*)$', fontsize=16)
+        axes[len(titles)-1].set_xlabel(r'$\log(M_{*}[M_{\odot}])$', fontsize=16)
+        fig.savefig(str(results_folder)+'merger_'+str(names[l])+'.png', format='png', dpi=200, bbox_inches='tight')
+    axes2[2].set_xlabel(r'$\log(M_{*}[M_{\odot}])$', fontsize=16)
+    axes2[1].legend(loc='best', prop={'size': 12})
     fig2.savefig(str(results_folder)+'distance_msq.png', format='png', dpi=200, bbox_inches='tight')
-    for i in range(0, len(fgas)):
-        ax1.plot(mer_cen, fgas[i]*sfe[i], label=titles[i])
-    ax1.legend(loc='best', prop={'size': 12})
-    fig1.savefig(str(results_folder)+'test_distance.png', format='png', dpi=200)
-print('MERGER-INDUCED STARBURST ANALYSIS')
-print(' ')
-print('---------------------------------')
-print(' ')
-print('The following functions are available:')
-print(' ')
-print('- Comparison plots showing the mergers with respect to MSQ. (Press 1)')
-print(' ')
-print('- 2-sample Kolmogorov-Smirnov test comparing the difference of the after and before merger values with the MSQ. (Press 2)')
-print(' ')
-print('- Deviation plot of running median of after and before merger with respect to MSQ. (Press 3)')
-print(' ')
-print('- Deviation plot of running median with respect to MSQ. (Press 4)')
-print(' ')
-u_selec = input('Write the number of the function you would like to use: ')
-if u_selec==1:
-    merger_vs_msqPlots(mergers, sf_galaxies)
-elif u_selec==2:
-    statsMergers(mergers, sf_galaxies, 5)
-elif u_selec==3:
-    distanceMSQ(mergers, sf_galaxies, 10)
-elif u_selec==4:
-    distanceMSQ_2(mergers, sf_galaxies, 8)
-else:
-    print('ERROR: function not found')
+
+
+def compare_MergMSQ2(galaxies, nbins):
+    ylabels = [r'$\log$(sSFR[yr$^{-1}$])',r'$\log(M_{H_2}/M_{HI})$',r'$\log$(SFE[yr$^{-1}$])']
+    names = ['burst_ssfr','gas_ratio','sfe_gal']
+    merger_labels = ['Merger','MSQ non merger']
+    titles = [r'$0 < z < 0.5$',r'$1 < z < 1.5$',r'$2 < z < 2.5$']
+    zlimits = [[0.0, 0.5], [1.0, 1.5], [2.0, 2.5]]
+    colours = ['y','k']
+    colour_lines = ['r']
+    props = dict(boxstyle='round', facecolor='white', alpha=0.5, edgecolor='k')
+    d = {}
+    d['bhm'] = []
+    d['pos'] = {}
+    for label in ylabels:
+        d[label] = {}
+        for mlabel in merger_labels:
+            d[label][mlabel] = []
+            d[mlabel] = []
+            for i in range(0, len(titles)):
+                d[label][mlabel].append([])
+                d[mlabel].append([])       
+    for mlabel in merger_labels:
+        d['pos'][mlabel] = []
+        for i in range(0, len(titles)):
+            d['pos'][mlabel].append([])
+    for i in range(0, len(titles)):
+        d['bhm'].append([])
+    for gal in galaxies:
+        if gal.mergers:
+            mergs = np.asarray([int(merg.indx) for merg in gal.mergers]) + 1
+        else:
+            mergs = np.array([])
+        for k in range(0, len(gal.z)):
+            zpos = None
+            mpos = None
+            for i in range(0, len(titles)):
+                if zlimits[i][0] <= gal.z[k] < zlimits[i][1]:
+                    zpos = i
+            if np.any(mergs==k):#and gal.bh_m[k]>0:
+                mpos = 0
+            elif (gal.sfr[0][k]/gal.m[0][k]) >= (10**lsfr_condition('end',gal,k,0)) and gal.h2_gas[k]>0 and gal.h1_gas[k]>0:
+                mpos = 1
+            if zpos != None and mpos != None:
+                d[ylabels[0]][merger_labels[mpos]][zpos].append(np.log10(gal.sfr[0][k]/gal.m[0][k]))
+                d[ylabels[1]][merger_labels[mpos]][zpos].append(np.log10(gal.h2_gas[k]/gal.h1_gas[k]))
+                d[ylabels[2]][merger_labels[mpos]][zpos].append(np.log10(gal.sfr[0][k]/gal.h2_gas[k]))
+                bhm = np.log10(gal.bh_m[k]/gal.m[0][k])
+                if bhm >= -2.0:
+                    bhm = -2.0
+                elif bhm <= -4.0:
+                    bhm = -4.0
+                if mpos==0:
+                    d['bhm'][zpos].append(bhm)
+                d[merger_labels[mpos]][zpos].append(np.log10(gal.m[0][k]))
+                d['pos'][merger_labels[mpos]][zpos].append(gal.pos[k])
+    
+    fig2, axes2 = plt.subplots(len(ylabels), 1, sharex=True, num=None, figsize=(8, 9), dpi=80, facecolor='w', edgecolor='k')
+    fig2.subplots_adjust(hspace=0)
+    colours2 = ['b','r','tab:orange']
+    ylabels2 = [r'$\Delta_{MSQ}$(sSFR[yr$^{-1}$])',r'$\Delta_{MSQ}(M_{H_2}/M_{HI})$',r'$\Delta_{MSQ}$(SFE[yr$^{-1}$])']
+    axes2[len(ylabels2)-1].set_xlabel(r'$\log(M_{*}[M_{\odot}])$', fontsize=16)
+    for l in range(0,len(ylabels)):
+        fig, axes = plt.subplots(len(titles), 1, sharex=True, num=None, figsize=(8,11), dpi=80, facecolor='w', edgecolor='k',)
+        axes2[l].set_ylabel(ylabels2[l], fontsize=16)
+        axes2[l].plot([9.5,12.0],[0.0,0.0], 'k--')
+        axes2[l].tick_params(labelsize=12)
+        axes2[l].set_ylim([-0.3,0.85])
+        axes2[l].set_xlim([9.5,11.6])
+        for i in range(0, len(titles)):
+            axes[i].set_ylabel(ylabels[l], fontsize=16)
+            axes[i].tick_params(labelsize=12)
+            mer = np.asarray(d[ylabels[l]][merger_labels[0]][i])
+            mer_m = np.asarray(d[merger_labels[0]][i])
+            mer_pos = np.asarray(d['pos'][merger_labels[0]][i])
+            msq = np.asarray(d[ylabels[l]][merger_labels[1]][i])
+            msq_m =  np.asarray(d[merger_labels[1]][i])
+            msq_pos = np.asarray(d['pos'][merger_labels[1]][i])
+            lbh = np.asarray(d['bhm'][i])
+            sc = axes[i].scatter(mer_m,mer, c=lbh,cmap='plasma', label=merger_labels[0],
+                    marker='.', s=30.0, alpha=0.7)
+
+            bins = np.arange(0.999*min(mer_m),11.5,(11.5-min(mer_m))/(nbins))
+            bins = np.concatenate((bins,np.array([12.0])))
+            mer_cen,mer_median,mer_var,mer_std = plotmedian(mer_m,mer,bins=bins,pos=mer_pos,boxsize=data['boxsize_in_kpccm'])
+            msq_cen,msq_median,msq_var,msq_std = plotmedian(msq_m,msq,bins=bins,pos=msq_pos,boxsize=data['boxsize_in_kpccm'])
+
+            axes[i].plot(mer_cen, mer_median, color = colour_lines[0], linewidth=2.5)
+            axes[i].plot(msq_cen, msq_median, color=colours[1])
+            axes[i].fill_between(msq_cen, msq_median-msq_std, msq_median+msq_std, facecolor=colours[1], alpha=0.25)
+
+            axes[i].text(0.05, 0.05, titles[i], transform=axes[i].transAxes, fontsize=14,
+                            verticalalignment='bottom', bbox=props)
+            axes[i].margins(.2)
+            axes[i].set_xlim([9.5,12.0])
+
+            distance = mer_median - msq_median
+            distance_std = np.sqrt(mer_var**2+msq_var**2)
+            axes2[l].plot(mer_cen, distance, label=titles[i], color=colours2[i])
+            axes2[l].fill_between(mer_cen, distance-distance_std, distance+distance_std, facecolor=colours2[i], alpha=0.25)
+
+        fig.subplots_adjust(hspace=0)
+        cb = fig.colorbar(sc, ax=axes.ravel().tolist(), orientation='horizontal', pad=0.08)
+        cb.set_label(label=r'$\log(M_{BH}/M_*)$', fontsize=16)
+        axes[len(titles)-1].set_xlabel(r'$\log(M_{*}[M_{\odot}])$', fontsize=16)
+        fig.savefig(str(results_folder)+'merger_'+str(names[l])+'.png', format='png', dpi=200, bbox_inches='tight')
+    axes2[1].legend(loc='best', prop={'size': 12})
+    fig2.savefig(str(results_folder)+'distance_msq.png', format='png', dpi=200, bbox_inches='tight')
+
+compare_MergMSQ(galaxies,10)
