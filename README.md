@@ -1,4 +1,4 @@
-# SH_Project
+# MGR_simba
 Codes for the finding of mergers and quenching events in SIMBA progen data
 -----------------------------------
 In this repository I include the codes that were developed for the SH Project at the Institute of Astronomy, Edinburgh
