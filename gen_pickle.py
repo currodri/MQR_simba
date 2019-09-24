@@ -24,6 +24,14 @@ from quenchingFinder import quenchingFinder
 sys.path.insert(0, '../photo/SCA_simba')
 from loser_extractor import read_mags, crossmatch_loserandquench
 
+"""Setting multiprocessing capabilities"""
+import sys
+import multiprocessing
+
+#Let's create a pool of workers, that is a set of processes that we can use to handle computation.
+num_proc = multiprocessing.cpu_count()
+p_workers = multiprocessing.Pool(num_proc)
+
 MODEL = sys.argv[1]  # e.g. m50n512
 WIND = sys.argv[2]   # e.g. s50
 SNAP_0 = int(sys.argv[3]) # e.g. 125
@@ -70,16 +78,16 @@ max_redshift_mergers = 2.5
 d_results['mass_limit'], d_results['min_merger_ratio'], d_results['max_redshift_mergers'] = mass_limit,min_merger_ratio,max_redshift_mergers
 
 # Perform the search for mergers
-d_results['galaxies'] = merger_finder(d_results['galaxies'][0:max_ngal], min_merger_ratio, 10**mass_limit, max_redshift_mergers)
+d_results['galaxies'] = merger_finder(d_results['galaxies'][0:max_ngal], min_merger_ratio, 10**mass_limit, max_redshift_mergers, p_workers)
 
 print('Merger analysis done.')
 
 # Perform the quenching and rejuvenation analysis
-d_results['galaxies'] = quenchingFinder(d_results['galaxies'][0:max_ngal], 1, mass_limit)
+d_results['galaxies'] = quenchingFinder(d_results['galaxies'][0:max_ngal], 1, mass_limit, p_workers)
 
 print('Performing interpolation of quenching data...')
 
-d_results['galaxies'] = quenchingFinder(d_results['galaxies'][0:max_ngal], 1, mass_limit, interpolation=True)
+d_results['galaxies'] = quenchingFinder(d_results['galaxies'][0:max_ngal], 1, mass_limit, p_workers, interpolation=True)
 
 print('Quenching analysis done.')
 

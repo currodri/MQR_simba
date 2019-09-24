@@ -15,7 +15,6 @@ from scipy import interpolate
 import cPickle as pickle
 from galaxy_class import GalaxyData, Quench
 
-
 ###########################################################################################
 """
 MAIN FUNCTION FOR THE QUENCHING FINDER OVER THE GALAXIES
@@ -32,8 +31,66 @@ out_file ======= if set to True, the quenching results are saved in a pickle fil
 
 """
 
+def singlegalRoutine(args):
 
-def quenchingFinder(galaxies,sfr_condition, mass_limit, interpolation=False, out_file=False):
+    # Unpack the arguments
+    galaxy, sfr_condition, mass_limit, interpolation, d_indx = args
+
+    quenched_gal = 0
+
+    if not interpolation:
+        lookup_condition = sfr_condition('end', galaxy, -1, d_indx)
+        m = np.log10(galaxy.m[d_indx][-1])
+        ssfr = galaxy.sfr[d_indx][-1]/galaxy.m[d_indx][-1]
+        if ssfr<(10**lookup_condition) and m>=mass_limit:
+            galaxy.get_ssfr()
+            quenched_gal = 1
+            #State of the search
+            state = (0, galaxy.t[d_indx][0], None)
+            #The state has 3 elements.
+            #The first one indicates the stage we are in (initial, pre_quench or quench)
+            #The second one has the inital time of the period we are considering
+            #The third one has the time of the moment we found a pre_quench
+
+            #Set the number of snapshots to be observed
+            last_snapshot = len(galaxy.t[d_indx])
+
+            #Go over each snapshot and save the new data of the galaxy
+            for j in range(0, last_snapshot-3):
+                state = analyseState[state[0]](galaxy,j, state, sfr_condition, d_indx)
+            #Check if the last quenching is a valid one:
+            if galaxy.quenching and galaxy.quenching[-1].below11 == None:
+                del galaxy.quenching[-1]
+            # galaxy_interpolated = ssfr_interpolation(galaxy)
+            if galaxy.quenching:
+                galaxy = ssfr_interpolation(galaxy)
+            galaxy.quenching = []
+            galaxy.rejuvenations = []
+    elif interpolation and not isinstance(galaxy.t[d_indx], int):
+        galaxy.interpolation = True
+        galaxy.get_ssfr()
+        quenched_gal = 1
+        #State of the search
+        state = (0, galaxy.t[d_indx][0], None)
+        #The state has 3 elements.
+        #The first one indicates the stage we are in (initial, pre_quench or quench)
+        #The second one has the inital time of the period we are considering
+        #The third one has the time of the moment we found a pre_quench
+
+
+        #Set the number of snapshots to be observed
+        last_snapshot = len(galaxy.t[d_indx])
+
+        #Go over each snapshot and save the new data of the galaxy
+        for j in range(0, last_snapshot):
+            state = analyseState[state[0]](galaxy,j, state, sfr_condition, d_indx, interpolation=True)
+
+        #Check if the last quenching is a valid one:
+        if galaxy.quenching and galaxy.quenching[-1].below11 == None:
+            del galaxy.quenching[-1]
+    return quenched_gal
+        
+def quenchingFinder(galaxies,sfr_condition, mass_limit, p_workers, interpolation=False, out_file=False):
 
     sfr_conditions = [sfr_condition_1, sfr_condition_2]
     sfr_condition = sfr_conditions[int(sfr_condition)]
@@ -43,59 +100,11 @@ def quenchingFinder(galaxies,sfr_condition, mass_limit, interpolation=False, out
         d_indx = 1
     else:
         d_indx = 0
-    for i in range(0, len(galaxies)):
-        #Galaxy we are considering
-        galaxy = galaxies[i]
-        if not interpolation:
-            lookup_condition = sfr_condition('end', galaxy, -1, d_indx)
-            m = np.log10(galaxy.m[d_indx][-1])
-            ssfr = galaxy.sfr[d_indx][-1]/galaxy.m[d_indx][-1]
-            if ssfr<(10**lookup_condition) and m>=mass_limit:
-                galaxy.get_ssfr()
-                total_quenched = total_quenched + 1
-                #State of the search
-                state = (0, galaxy.t[d_indx][0], None)
-                #The state has 3 elements.
-                #The first one indicates the stage we are in (initial, pre_quench or quench)
-                #The second one has the inital time of the period we are considering
-                #The third one has the time of the moment we found a pre_quench
+    args = [(galaxies[i], sfr_condition, mass_limit, interpolation, d_indx) for i in range(0,len(galaxies))]
+    quenched_gals = np.array(p_workers.map(singlegalRoutine, args))
 
-                #Set the number of snapshots to be observed
-                last_snapshot = len(galaxy.t[d_indx])
+    total_quenched = np.sum(quenched_gals)
 
-                #Go over each snapshot and save the new data of the galaxy
-                for j in range(0, last_snapshot-3):
-                    state = analyseState[state[0]](galaxy,j, state, sfr_condition, d_indx)
-                #Check if the last quenching is a valid one:
-                if galaxy.quenching and galaxy.quenching[-1].below11 == None:
-                    del galaxy.quenching[-1]
-                # galaxy_interpolated = ssfr_interpolation(galaxy)
-                if galaxy.quenching:
-                    galaxy = ssfr_interpolation(galaxy)
-                galaxy.quenching = []
-                galaxy.rejuvenations = []
-        elif interpolation and not isinstance(galaxy.t[d_indx], int):
-            galaxy.interpolation = True
-            galaxy.get_ssfr()
-            total_quenched = total_quenched + 1
-            #State of the search
-            state = (0, galaxy.t[d_indx][0], None)
-            #The state has 3 elements.
-            #The first one indicates the stage we are in (initial, pre_quench or quench)
-            #The second one has the inital time of the period we are considering
-            #The third one has the time of the moment we found a pre_quench
-
-
-            #Set the number of snapshots to be observed
-            last_snapshot = len(galaxy.t[d_indx])
-
-            #Go over each snapshot and save the new data of the galaxy
-            for j in range(0, last_snapshot):
-                state = analyseState[state[0]](galaxy,j, state, sfr_condition, d_indx, interpolation=True)
-
-            #Check if the last quenching is a valid one:
-            if galaxy.quenching and galaxy.quenching[-1].below11 == None:
-                del galaxy.quenching[-1]
     print ('Total number of quenched galaxies at z=0 : '+str(total_quenched))
     # if out_file:
     #     d = {}

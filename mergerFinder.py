@@ -48,30 +48,41 @@ out_file ======= if set to True, the merger results are saved in a pickle file f
 
 
 """
-def merger_finder(galaxies, merger_ratio, mass_limit, redshift_limit, out_file=False):
-    for gal in galaxies:
-        mass = gal.m[0]
-        z = gal.z
-        t = gal.t[0]
-        sfr = gal.sfr[0]
-        fgas = gal.h2_gas[0]/gal.m[0]
-        for i in range(1, len(mass)-3):
-            if z[i]<=redshift_limit:
-                delta_t = t[i+1]-t[i]
-                condition,ratio = merger_condition(sfr[i], delta_t, mass, i, merger_ratio, mass_limit)
-                sfcondition = sfr_condition_2('end', gal, i+1, 0)
-                ssfr = sfr/mass
-                if condition == True and ssfr[i+1]>=(10**sfcondition):
-                    boost = (fgas[i+1]-fgas[i-1])/fgas[i-1]
-                    # Save data at the merger
-                    merger = Merger(i,ratio,boost)
-                    gal.mergers.append(merger)
-                # else:
-                #     if mass[i]>mass_limit and ssfr[i]>=(10**sfcondition) and fgas[i]>0:
-                #         sf_gal = GalaxyData(id,sfr[i],sfe[i],z[i],time[i],mass[i],fgas[i],type[i], pos[i], c_id[i])
-                #         # Add star forming galaxy to the list
-                #         sf_galaxies.append(sf_gal)
+def singlegalRoutine(args):
+    # Unpack arguments
+    gal, redshift_limit, merger_condition, merger_ratio, mass_limit, sfr_condition_2 = args
+    mass = gal.m[0]
+    z = gal.z
+    t = gal.t[0]
+    sfr = gal.sfr[0]
+    fgas = gal.h2_gas[0]/gal.m[0]
+    n_merg = 0
+    for i in range(1, len(mass)-3):
+        if z[i]<=redshift_limit:
+            delta_t = t[i+1]-t[i]
+            condition,ratio = merger_condition(sfr[i], delta_t, mass, i, merger_ratio, mass_limit)
+            sfcondition = sfr_condition_2('end', gal, i+1, 0)
+            ssfr = sfr/mass
+            if condition == True and ssfr[i+1]>=(10**sfcondition):
+                boost = (fgas[i+1]-fgas[i-1])/fgas[i-1]
+                # Save data at the merger
+                merger = Merger(i,ratio,boost)
+                gal.mergers.append(merger)
+                n_merg = n_merg + 1
+            # else:
+            #     if mass[i]>mass_limit and ssfr[i]>=(10**sfcondition) and fgas[i]>0:
+            #         sf_gal = GalaxyData(id,sfr[i],sfe[i],z[i],time[i],mass[i],fgas[i],type[i], pos[i], c_id[i])
+            #         # Add star forming galaxy to the list
+            #         sf_galaxies.append(sf_gal)
+    return n_merg
+def merger_finder(galaxies, merger_ratio, mass_limit, redshift_limit, p_workers, out_file=False):
+
+    args = [(galaxies[i], redshift_limit, merger_condition, merger_ratio, mass_limit, sfr_condition_2) for i in range(0, len(galaxies))]
+
+    n_mergs = np.array(p_workers.map(singlegalRoutine, args))
+
     print('Star-forming main sequence and mergers found up to z = '+str(redshift_limit))
+    print('Total number of mergers = '+str(np.sum(n_mergs)))
     # if out_file:
     #     d = {}
     #     d['mergers'] = mergers
