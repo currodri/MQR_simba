@@ -15,4 +15,4 @@ If you would like to use any of this package, please cite the original paper abo
 
 https://arxiv.org/abs/1907.12680
 
-For any questions about the code, please don't hesitate to contact me: Curro Rodriguez Montero (s1650043@ed.ac.uk).
+For any questions about the code, please don't hesitate to contact me: Curro Rodriguez Montero (currodri@gmail.com).
